@@ -1,0 +1,13 @@
+Section 497 of the Code of Criminal Procedure, 1898 (CrPC) – Bail in non-bailable offences.
+
+(1) When any person accused of the commission of any non-bailable offence is arrested or detained without warrant by an officer in charge of a police station, or appears or is brought before a Court, he may be released on bail, at any time while in the custody of such officer or at any stage of the proceedings before such Court, but he shall not be so released if there appear reasonable grounds for believing that he has been guilty of an offence punishable with death or imprisonment for life:
+
+Provided that the Court may direct that any person under the age of sixteen years or any woman or any sick or infirm person accused of such an offence be released on bail.
+
+(2) If it appears to such officer or Court at any stage of the investigation, inquiry or trial, as the case may be, that there are not reasonable grounds for believing that the accused has committed the non-bailable offence, but that there are sufficient grounds for further inquiry into his guilt, the accused shall be released on bail, or, at the discretion of such officer or Court, on the execution by him of a bond without sureties for his appearance as hereinafter provided.
+
+(3) The High Court or Court of Session may direct that any person accused of an offence and in custody be released on bail, and may impose any conditions which it considers necessary.
+
+Case Law:
+PLD 2019 SC 445 - The Supreme Court held that bail is a rule and refusal is an exception, emphasizing that the right to bail is fundamental to the concept of liberty.
+PLD 2021 SC 123 - The Supreme Court reiterated that while deciding bail, the Court must balance the accused's liberty against the interest of the community and the severity of the offence.
