@@ -4,8 +4,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv(), override=True)
+
 # Use PostgreSQL (or fallback to SQLite for local testing)
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://jurista:jurista_pass@localhost:5432/jurista")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///jurista.db")
 
 # For sync operations (Celery, etc.)
 engine = create_engine(DATABASE_URL)
