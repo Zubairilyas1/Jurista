@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv, find_dotenv
 
 dotenv_path = find_dotenv()
-load_dotenv(dotenv_path)
+load_dotenv(dotenv_path, override=True)
 
 from app.core.rag_engine import RAGEngine
 from app.core.overrule_graph import OverruleGraph
