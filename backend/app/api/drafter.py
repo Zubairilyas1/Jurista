@@ -41,3 +41,23 @@ async def generate_draft(request: DraftRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.post("/generate_html")
+async def generate_draft_html(request: DraftRequest):
+    try:
+        html_content = engine.generate_petition_html(request.dict())
+        return Response(content=html_content, media_type="text/html")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class LLMDraftRequest(BaseModel):
+    document_type: str = "Pre-emption Plaint"
+    context_text: str
+
+@router.post("/generate_json")
+async def generate_draft_json_endpoint(request: LLMDraftRequest):
+    try:
+        draft_json = engine.generate_draft_json(request.context_text, request.document_type)
+        return draft_json
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
