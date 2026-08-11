@@ -43,7 +43,7 @@ export const CauseListTracker: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('http://localhost:8000/api/v1/tracker/cases');
+      const res = await fetch('http://127.0.0.1:8000/api/v1/tracker/cases');
       if (!res.ok) throw new Error('Failed to fetch cases');
       const data = await res.json();
       setCases(data.cases || []);
@@ -58,7 +58,7 @@ export const CauseListTracker: React.FC = () => {
     setRefreshing(true);
     setError(null);
     try {
-      const res = await fetch('http://localhost:8000/api/v1/tracker/refresh', { method: 'POST' });
+      const res = await fetch('http://127.0.0.1:8000/api/v1/tracker/refresh', { method: 'POST' });
       if (!res.ok) throw new Error('Failed to refresh cause list');
       const data = await res.json();
       setLastRefresh(new Date());
@@ -74,7 +74,7 @@ export const CauseListTracker: React.FC = () => {
     const message = prompt(`Enter alert message for case ${caseNumber}:`);
     if (!message) return;
     try {
-      const res = await fetch('http://localhost:8000/api/v1/tracker/alert', {
+      const res = await fetch('http://127.0.0.1:8000/api/v1/tracker/alert', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ case_number: caseNumber, message }),
