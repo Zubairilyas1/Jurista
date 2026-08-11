@@ -1,4 +1,4 @@
-﻿# Python
+# Python
 __pycache__/
 *.pyc
 venv/
@@ -17,3 +17,20 @@ out/
 *.log
 backend/data/chroma_db/
 backend/jurista.db
+
+# Risky / Credentials
+*.env*
+*.pem
+*.key
+credentials.json
+client_secret*.json
+
+# Databases & Vector Stores
+*.sqlite3
+*.db
+backend/data/chroma_db_v2/
+backend/data/chroma_db_v3/
+
+# OS Files
+.DS_Store
+Thumbs.db
