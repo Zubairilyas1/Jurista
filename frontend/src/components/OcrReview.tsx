@@ -62,7 +62,7 @@ export const OcrReview: React.FC = () => {
     formData.append('file', file);
 
     try {
-      const res = await fetch('http://localhost:8000/api/v1/ocr/process', {
+      const res = await fetch('http://127.0.0.1:8000/api/v1/ocr/process', {
         method: 'POST',
         body: formData,
       });
