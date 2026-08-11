@@ -3,20 +3,97 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --border: 214.3 31.8% 91.4%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
+  body {
+    @apply bg-[#0D0D0E] text-white antialiased overflow-hidden;
+    font-family: 'Inter', sans-serif;
   }
 }
 
-body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
+@layer utilities {
+  .font-sans-hero {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  }
+
+  /* Utility classes for the new dark theme */
+  .card-dark {
+    @apply bg-[#18181C] rounded-3xl border border-white/5 shadow-md relative overflow-hidden;
+  }
+  
+  .pill-dark {
+    @apply bg-[#26262B] rounded-full flex items-center justify-center text-white/90 hover:bg-[#323238] transition-colors cursor-pointer border border-white/5;
+  }
+
+  .text-muted {
+    @apply text-[#8E8E93];
+  }
+
+  .text-lime {
+    @apply text-[#B0FF2A];
+  }
+
+  .text-orange {
+    @apply text-[#FF881B];
+  }
+
+  .bg-lime {
+    @apply bg-[#B0FF2A];
+  }
+
+  .bg-orange {
+    @apply bg-[#FF881B];
+  }
+
+  /* Custom scrollbar for dark theme */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-[#26262B] rounded-full;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-[#36363E];
+  }
+
+  /* Glowing Orb Animation (used in Chat) */
+  .glowing-orb {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #d8b4fe 0%, #a855f7 50%, #7e22ce 100%);
+    box-shadow: 
+      0 0 40px 10px rgba(168, 85, 247, 0.3),
+      inset -10px -10px 20px rgba(0,0,0,0.1),
+      inset 10px 10px 20px rgba(255,255,255,0.8);
+    animation: float 6s ease-in-out infinite;
+    position: relative;
+  }
+
+  .glowing-orb::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border-radius: 50%;
+    background: inherit;
+    filter: blur(20px);
+    opacity: 0.4;
+    z-index: -1;
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-10px) scale(1.02); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
 }
