@@ -22,13 +22,12 @@ class DataIngestor:
         self.model_name = "all-MiniLM-L6-v2"
         
         self.client = chromadb.PersistentClient(path=str(self.chroma_path))
-        self.embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(model_name=self.model_name)
+        self.model = SentenceTransformer(self.model_name)
         try:
             self.collection = self.client.get_collection("pakistani_law")
         except:
             self.collection = self.client.create_collection(
                 name="pakistani_law",
-                embedding_function=self.embedding_fn,
                 metadata={"hnsw:space": "cosine"}
             )
 
@@ -43,28 +42,44 @@ class DataIngestor:
             else:
                 raise ValueError(f"Unsupported file type: {ext}")
             
+            text = self._clean_text(text)
+            
             if not text or len(text) < 100:
                 raise ValueError("Extracted text is too short or empty")
             
             # Extract a meaningful title from the text
             title = self._extract_title(text, file_path)
             
+            # Extract Domain if present
+            domain_match = re.search(r'(?i)Domain:\s*([^\n]+)', text)
+            domain_prefix = f"[Domain: {domain_match.group(1).strip()}]\n" if domain_match else ""
+            
             chunks = self._chunk_text(text)
+            
+            # Prepend domain prefix to chunks
+            if domain_prefix:
+                chunks = [domain_prefix + c for c in chunks]
             
             metadatas = []
             ids = []
             for idx, chunk in enumerate(chunks):
-                metadatas.append({
+                meta = {
                     "source": title,
                     "type": category,
                     "citation": f"{title} ? Section {idx+1}",
                     "file_name": file_path.name,
                     "indexed_at": datetime.now().isoformat()
-                })
+                }
+                if domain_match:
+                    meta["domain"] = domain_match.group(1).strip()
+                metadatas.append(meta)
                 ids.append(f"{title}_{idx}_{datetime.now().timestamp()}")
+            
+            embeddings = self.model.encode(chunks).tolist()
             
             self.collection.add(
                 documents=chunks,
+                embeddings=embeddings,
                 metadatas=metadatas,
                 ids=ids
             )
@@ -93,40 +108,55 @@ class DataIngestor:
                 raise ValueError(f"Failed to extract PDF text: {e}")
         return full_text
 
+    def _clean_text(self, text: str) -> str:
+        # Replace special invisible characters and weird spacing from bad OCR/PDFs
+        text = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f\ufffd]', ' ', text)
+
+        # Un-glue common words like safetyhelmet -> safety helmet
+        text = text.replace('safetyhelmet', 'safety helmet')
+        text = text.replace('crashhelmet', 'crash helmet')
+        text = text.replace('withouthelmet', 'without helmet')
+        # Normalize spaces but preserve newlines
+        text = re.sub(r'[ \t\r\f\v]+', ' ', text)
+        # Fix missing spaces after punctuation
+        text = re.sub(r'([a-z])\.([A-Z])', r'\1. \2', text)
+        return text
+
     def _extract_txt(self, file_path: Path) -> str:
         with open(file_path, 'r', encoding='utf-8') as f:
             return f.read()
 
     def _extract_title(self, text: str, file_path: Path) -> str:
         """
-        Try to extract a meaningful title from the first few lines of text.
-        Look for patterns like "Elections Act", "Representation of the People Act", etc.
-        If nothing found, fall back to the filename.
+        Try to extract a meaningful authentic title from the text.
         """
         lines = text.split('\n')
-        # Look through first 30 lines
-        for line in lines[:30]:
+        # Look through first 50 lines
+        for line in lines[:50]:
             line = line.strip()
-            # Common act title patterns
-            if re.search(r'(Elections Act|Representation of the People Act|Ordinance|Act \d+ of \d{4})', line, re.I):
-                # Extract the full act name (until a comma or period)
-                match = re.search(r'((?:Elections Act|Representation of the People Act|Ordinance|Act \d+ of \d{4})[^,.\n]*)', line, re.I)
-                if match:
-                    return match.group(1).strip()
-            # Also look for "THE ... ACT/ORDINANCE" pattern (common in Pakistan laws)
-            if re.search(r'THE\s+([A-Z\s]+)\s+(ACT|ORDINANCE)', line, re.I):
-                match = re.search(r'THE\s+([A-Z\s]+)\s+(ACT|ORDINANCE)', line, re.I)
-                if match:
-                    return match.group(1).strip() + " " + match.group(2).title()
+            # Aggressive match for authentic Pakistani laws: "THE [NAME] ORDINANCE/ACT, 20XX"
+            match = re.search(r'THE\s+([A-Za-z\s]+)\s+(ACT|ORDINANCE|RULES),\s*(\d{4})', line, re.I)
+            if match:
+                return f"The {match.group(1).title().strip()} {match.group(2).title()}, {match.group(3)}"
+            
+            # Match "National Highways Safety Ordinance, 2000" etc.
+            match = re.search(r'([A-Za-z\s]+)\s+(ACT|ORDINANCE|RULES),\s*(\d{4})', line, re.I)
+            if match:
+                return f"{match.group(1).title().strip()} {match.group(2).title()}, {match.group(3)}"
+
         # Fallback: use filename (clean it up)
-        return file_path.stem.replace("_", " ").replace("-", " ")
+        return file_path.stem.replace("_", " ").replace("-", " ").title()
 
     def _chunk_text(self, text: str) -> list:
-        sections = re.split(r'(?i)(?=Section |SECTION |Art\. |Article |THE SCHEDULE)', text)
-        if len(sections) > 1:
-            return [s.strip() for s in sections if len(s.strip()) > 50]
-        paragraphs = text.split("\n\n")
-        return [p.strip() for p in paragraphs if len(p.strip()) > 100]
+        from langchain_text_splitters import RecursiveCharacterTextSplitter
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000,
+            chunk_overlap=200,
+            length_function=len,
+            is_separator_regex=False,
+        )
+        chunks = text_splitter.split_text(text)
+        return [c.strip() for c in chunks if len(c.strip()) > 50]
 
     def scan_and_index(self, category: str = "vehicle_statutes") -> dict:
         pending_dir = self.data_root / category / "pending"
