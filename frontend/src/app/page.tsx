@@ -45,7 +45,7 @@ export default function Dashboard() {
     }
 
     // 2. Fetch Upcoming Hearings
-    fetch('http://127.0.0.1:8000/api/v1/tracker/cases')
+    fetch('http://127.0.0.1:8001/api/v1/tracker/cases')
       .then(res => res.json())
       .then(data => {
         // Sort by next_hearing date and take next 3

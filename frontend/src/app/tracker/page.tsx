@@ -30,7 +30,7 @@ export default function CauseTrackerPage() {
   const fetchCases = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch('http://127.0.0.1:8000/api/v1/tracker/cases');
+      const res = await fetch('http://127.0.0.1:8001/api/v1/tracker/cases');
       if (res.ok) {
         const data = await res.json();
         setCases(data.cases || []);
@@ -49,7 +49,7 @@ export default function CauseTrackerPage() {
   const handleRefresh = async () => {
     try {
       setIsRefreshing(true);
-      const res = await fetch('http://127.0.0.1:8000/api/v1/tracker/refresh', { method: 'POST' });
+      const res = await fetch('http://127.0.0.1:8001/api/v1/tracker/refresh', { method: 'POST' });
       if (res.ok) {
         await fetchCases();
       } else {
@@ -66,7 +66,7 @@ export default function CauseTrackerPage() {
   const handleManualSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/v1/tracker/add', {
+      const res = await fetch('http://127.0.0.1:8001/api/v1/tracker/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newCase)

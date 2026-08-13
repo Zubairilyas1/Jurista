@@ -61,7 +61,7 @@ export default function PetitionDrafterPage() {
         bar_license_no: advocateDetails.barLicense
       };
 
-      const res = await fetch('http://127.0.0.1:8000/api/v1/drafter/generate_html', {
+      const res = await fetch('http://127.0.0.1:8001/api/v1/drafter/generate_html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

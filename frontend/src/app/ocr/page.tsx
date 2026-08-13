@@ -62,7 +62,7 @@ export default function OCRPage() {
     formData.append('file', file);
 
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/v1/ocr/process', {
+      const res = await fetch('http://127.0.0.1:8001/api/v1/ocr/process', {
         method: 'POST',
         body: formData,
       });
@@ -95,7 +95,7 @@ export default function OCRPage() {
         bar_license_no: "1234/HC"
       };
 
-      const res = await fetch('http://127.0.0.1:8000/api/v1/drafter/generate_html', {
+      const res = await fetch('http://127.0.0.1:8001/api/v1/drafter/generate_html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -128,7 +128,7 @@ export default function OCRPage() {
     if (!result?.text) return;
     setIsTranslating(true);
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/v1/ocr/translate', {
+      const res = await fetch('http://127.0.0.1:8001/api/v1/ocr/translate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: result.text })
