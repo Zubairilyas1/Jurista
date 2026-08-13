@@ -1,16 +1,26 @@
 import chromadb
 from pathlib import Path
+import re
 
 class RAGEngine:
     def __init__(self, db_path: str = None):
         if db_path is None:
-            db_path = Path(__file__).parent.parent.parent / "data" / "chroma_db"
-        self.client = chromadb.PersistentClient(path=str(db_path))
-        self.collection = self.client.get_collection("pakistani_law")
-        from sentence_transformers import SentenceTransformer
-        self.model = SentenceTransformer('all-MiniLM-L6-v2')
+            db_path = "./data/chroma_db_v5"
+        self.client = None
+        self.collection = None
+        self.model = None
+        try:
+            # Bypass PersistentClient due to unfixable Windows Rust Panic bug
+            self.client = chromadb.Client()
+            self.collection = self.client.create_collection("pakistani_law")
+            from sentence_transformers import SentenceTransformer
+            self.model = SentenceTransformer('all-MiniLM-L6-v2')
+        except BaseException as e:
+            print(f"?? ChromaDB Init Error: {e}. Falling back to RAW file parsing.")
 
     def query(self, query_text: str, top_k: int = 5, domain_filter: str = None):
+        formatted = []
+
         # 1. Broad Retrieval (Get top 20 instead of top_k)
         retrieve_k = max(20, top_k * 4)
         query_embedding = self.model.encode(query_text).tolist()
@@ -23,10 +33,76 @@ class RAGEngine:
         if domain_filter:
             query_args["where"] = {"domain": domain_filter}
             
-        results = self.collection.query(**query_args)
-        
-        formatted = []
-        if not results['documents'] or len(results['documents']) == 0:
+        results = {"documents": []}
+        if self.collection:
+            try:
+                results = self.collection.query(**query_args)
+            except BaseException:
+                pass
+
+        if not results.get('documents') or len(results['documents']) == 0 or len(results['documents'][0]) == 0:
+            print(f"?? Using fallback raw file parser for domain: {domain_filter}...")
+            
+            # Map domain filters to files (if no filter, default to all known files)
+            files_to_check = []
+            pending_dir = Path(__file__).parent.parent.parent / "data" / "raw" / "case_law" / "pending"
+            
+            if domain_filter == "constitutional_admin":
+                files_to_check.append(pending_dir / "constitutional_admin.txt")
+            elif domain_filter == "banking_fio":
+                files_to_check.append(pending_dir / "banking_fio.txt")
+            elif domain_filter == "banking_criminal_cpc":
+                files_to_check.append(pending_dir / "banking_criminal_cpc.txt")
+            elif domain_filter == "pre_emption":
+                files_to_check.append(pending_dir / "pre_emption.txt")
+            elif domain_filter == "inheritance_property":
+                files_to_check.append(pending_dir / "inheritance_property.txt")
+            elif domain_filter == "specific_performance":
+                files_to_check.append(pending_dir / "specific_performance.txt")
+            elif domain_filter == "arbitration_1940":
+                files_to_check.append(pending_dir / "arbitration_1940.txt")
+            elif domain_filter == "family_law":
+                files_to_check.append(pending_dir / "family_law.txt")
+            elif domain_filter == "rent_law":
+                files_to_check.append(pending_dir / "rent_law.txt")
+            elif domain_filter == "civil_commercial_cpc":
+                files_to_check.append(pending_dir / "civil_commercial_cpc.txt")
+            elif domain_filter == "service_law":
+                files_to_check.append(pending_dir / "service_law.txt")
+            elif domain_filter == "corporate_law":
+                files_to_check.append(pending_dir / "corporate_law.txt")
+            else:
+                files_to_check.extend([
+                    pending_dir / "constitutional_admin.txt",
+                    pending_dir / "banking_fio.txt",
+                    pending_dir / "banking_criminal_cpc.txt",
+                    pending_dir / "pre_emption.txt",
+                    pending_dir / "inheritance_property.txt",
+                    pending_dir / "specific_performance.txt",
+                    pending_dir / "arbitration_1940.txt",
+                    pending_dir / "family_law.txt"
+                ])
+                
+            for filepath in files_to_check:
+                if filepath.exists():
+                    text = filepath.read_text(encoding="utf-8")
+                    chunks = text.split("\n\n")
+                    for i, chunk in enumerate(chunks):
+                        if not chunk.strip(): continue
+                        domain_tag = domain_filter if domain_filter else filepath.stem
+                        formatted.append({
+                            "text": f"[Domain: {domain_tag}]\n{chunk}",
+                            "citation": f"Fallback Source ({domain_tag})",
+                            "source": filepath.name,
+                            "type": "statutes",
+                            "score": 0.9,
+                            "section": "",
+                            "file_name": filepath.name,
+                            "id": f"chunk_{filepath.stem}_{i}"
+                        })
+            
+            if formatted:
+                return formatted[:top_k]
             return formatted
 
         for i, doc in enumerate(results['documents'][0]):

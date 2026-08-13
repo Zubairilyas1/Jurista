@@ -18,10 +18,10 @@ from chromadb.utils import embedding_functions
 class DataIngestor:
     def __init__(self):
         self.data_root = Path(__file__).parent.parent.parent / "data" / "raw"
-        self.chroma_path = self.data_root.parent / "chroma_db"
+        self.chroma_path = self.data_root.parent / "chroma_db_v4"
         self.model_name = "all-MiniLM-L6-v2"
         
-        self.client = chromadb.PersistentClient(path=str(self.chroma_path))
+        self.client = chromadb.PersistentClient(path="./data/chroma_db_v5")
         self.model = SentenceTransformer(self.model_name)
         try:
             self.collection = self.client.get_collection("pakistani_law")
