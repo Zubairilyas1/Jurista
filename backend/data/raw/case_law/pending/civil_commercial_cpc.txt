@@ -1,0 +1,31 @@
+Domain: civil_commercial_cpc
+
+Statute: Civil Procedure Code (CPC), 1908
+Order: 37, Rules 2 and 3
+Topic: Summary Suits on Negotiable Instruments
+Holding/Ratio: In suits upon bills of exchange, hundies or promissory notes, the defendant shall not appear or defend the suit unless he obtains leave from a Judge. The defendant must apply for Leave to Appear and Defend within 10 days of service of summons.
+Summary: Order 37 provides a summary procedure for negotiable instruments in regular civil commercial suits (not FIO 2001 banking courts). Missing the strict 10-day deadline results in all allegations in the plaint being deemed admitted, leading to an immediate ex-parte decree.
+
+Statute: Civil Procedure Code (CPC), 1908
+Order: 37, Rule 4
+Topic: Setting aside a Summary Decree
+Holding/Ratio: After a decree is passed in an Order 37 summary suit, the court may, under special circumstances, set aside the decree, and if necessary, stay or set aside execution, and may give the defendant leave to appear and defend the suit.
+Summary: Order 37 Rule 4 is the EXCLUSIVE statutory remedy to set aside a summary decree. Order 9 Rule 13 CPC is legally incompetent and completely excluded from Order 37 proceedings.
+
+Statute: Limitation Act, 1908
+Section: 5
+Topic: Condonation of Delay
+Holding/Ratio: Section 5 allows condonation of delay for sufficient cause, but it DOES NOT apply to applications for Leave to Appear and Defend under Order 37 Rule 3 CPC.
+Summary: The 10-day limitation period under Article 159 of the Limitation Act is absolute. No extension can be granted under Section 5.
+
+Supreme Court of Pakistan - Absolute Bar of Section 5 in Order 37 CPC
+Citation: PLD 2014 SC 520 & 2021 SCMR 1120
+Court: Supreme Court of Pakistan
+Topic: Limitation / Condonation of Delay
+Holding/Ratio: Section 5 of the Limitation Act 1908 does not apply to applications for Leave to Appear and Defend under Order 37 Rule 3 CPC. The court is completely devoid of jurisdiction to condone any delay, regardless of the reason (including advocate negligence or illness).
+
+Supreme Court of Pakistan - Order 37 Rule 4 vs Order 9 Rule 13 CPC
+Citation: 2019 SCMR 1403
+Court: Supreme Court of Pakistan
+Topic: Setting aside decree / Special Circumstances
+Holding/Ratio: Order 9 Rule 13 CPC does not apply to Order 37 CPC summary suits. A decree under Order 37 can only be set aside under the exclusive remedy of Order 37 Rule 4 CPC, which requires the defendant to establish "special circumstances" (such as defective service of summons) along with a plausible defense on merits.

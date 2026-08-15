@@ -1,0 +1,34 @@
+QANUN-E-SHAHADAT ORDER 1984
+
+Article 117. Burden of proving fact especially within knowledge.
+When any fact is especially within the knowledge of any person, the burden of proving that fact is upon him.
+
+Article 128/129. Burden of proof in civil dispositions.
+In matters concerning civil dispositions, particularly gifts (Hiba) that exclude natural Islamic heirs (such as females), the heavy burden of proof rests on the beneficiary to establish free will, independent advice, offer, acceptance, and immediate transfer of possession (Qabza).
+
+LIMITATION ACT 1908
+
+Article 91. To cancel or set aside an instrument not otherwise provided for.
+Three years from when the facts entitling the plaintiff to have the instrument cancelled or set aside become known to him.
+
+Article 120. Suit for which no period of limitation is provided elsewhere in this schedule.
+Six years from when the right to sue accrues.
+
+SPECIFIC RELIEF ACT 1877
+
+Section 39. When cancellation may be ordered.
+Any person against whom a written instrument is void or voidable, and who has reasonable apprehension that such instrument, if left outstanding may cause him serious injury, may sue to have it adjudged void or voidable; and the Court may, in its discretion, so adjudge it and order it to be delivered up and cancelled.
+
+Section 42. Discretion of Court as to declaration of status or right.
+Any person entitled to any legal character, or to any right as to any property, may institute a suit against any person denying, or interested to deny, his title to such character or right, and the Court may in its discretion make therein a declaration that he is so entitled, and the plaintiff need not in such suit ask for any further relief.
+
+SUPREME COURT PRECEDENT: PLD 2021 SC 812 (Full Bench)
+The Supreme Court held that the law of limitation does not run against female heirs who are fraudulently deprived of their Shari inheritance shares. A suit filed by sisters challenging a fraudulent gift deed (Hiba-nama) or mutation that excludes them from their rightful Islamic inheritance is not barred by time, as fraud vitiates all solemn proceedings.
+
+SUPREME COURT PRECEDENT: 2021 SCMR 1369 & PLD 2017 SC 627
+Beneficiaries of a gift deed (Hiba-nama) that excludes female Islamic heirs face a extremely heavy legal burden. They must conclusively establish independent advice to the donor, a valid offer, unequivocal acceptance, and the immediate transfer of physical possession (Qabza). Failure to prove these elements renders the gift void.
+
+DAY-1 FILINGS STRATEGY
+Primary Suit: Suit for Declaration, Cancellation of Instrument (Hiba-nama), Partition, and Permanent Injunction (Sections 39 & 42, Specific Relief Act 1877).
+Order 39 Rules 1 & 2 CPC: Injunction motion to restrain defendants from alienating or altering the property.
+Notice of Lis Pendens (Section 52 Transfer of Property Act 1882): Immediate registration of litigation notice with the Sub-Registrar / Land Revenue Office to freeze title transfers.

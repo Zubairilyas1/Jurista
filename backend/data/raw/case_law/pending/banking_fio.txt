@@ -1,0 +1,32 @@
+FINANCIAL INSTITUTIONS (RECOVERY OF FINANCES) ORDINANCE, 2001 (FIO 2001)
+
+Section 9. Procedure of Banking Courts.
+Banking Courts shall follow the summary procedure outlined in this Ordinance.
+
+Section 10. Leave to Defend.
+(1) In any case in which the summons has been served, the defendant shall not be entitled to defend the suit unless he obtains leave from the Banking Court.
+(2) An application for leave to defend shall be in the form of a written statement, and shall contain a summary of the substantial questions of law as well as fact in respect of which, in the opinion of the defendant, evidence needs to be recorded.
+(3) In the case of a suit for recovery instituted by a financial institution, the application for leave to defend shall also specifically state the following:
+(a) the amount of finance availed by the defendant from the financial institution;
+(b) the amounts paid by the defendant to the financial institution and the dates of payment;
+(c) the amount of finance and other amounts relating to the finance payable by the defendant to the financial institution up to the date of institution of the suit;
+(d) the amount if any which the defendant disputes as payable to the financial institution and facts in support thereof.
+(4) The application for leave to defend shall be accompanied by all the documents which, in the opinion of the defendant, support the substantial questions of law or fact raised by him.
+(5) An application for leave to defend shall be rejected if the requirements of sub-section (3) and (4) are not fulfilled.
+
+Section 11. Decree.
+If no application for leave to defend is filed within the period of limitation, or if such application is rejected, the Banking Court shall pass a decree in favor of the plaintiff.
+
+LIMITATION ACT 1908
+Section 5. Extension of period in certain cases.
+Any appeal or application for which a period of limitation is prescribed may be admitted after the period of limitation if the appellant or applicant satisfies the Court that he had sufficient cause for not preferring the appeal or making the application within such period.
+
+SUPREME COURT PRECEDENT: PLD 2012 SC 625 & 2023 SCMR 533
+The Supreme Court has definitively held that the Banking Court is a special court governed by a special law (FIO 2001). Therefore, Section 5 of the Limitation Act 1908 (condonation of delay) does NOT apply to an application for leave to defend under Section 10 of FIO 2001. The 30-day statutory deadline is strict and non-extendable.
+
+SUPREME COURT PRECEDENT: 2021 SCMR 1420 & PLD 2020 SC 480
+If the application for leave to defend fails to specifically state the amounts availed, amounts paid, and specifically dispute the markup/penalties with an itemized counter-summary of accounts (as strictly mandated by Section 10(3) and (4) of FIO 2001), the application must be summarily rejected and a decree immediately passed in favor of the bank.
+
+CIVIL PROCEDURE CODE (CPC) 1908
+Section 80. Notice.
+No suit shall be instituted against the Government or against a public officer in respect of any act purporting to be done by such public officer in his official capacity, until the expiration of two months next after notice in writing has been delivered. (This does NOT apply to commercial banks or private financial institutions).

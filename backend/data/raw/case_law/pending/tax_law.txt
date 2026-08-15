@@ -1,0 +1,22 @@
+Domain: tax_law
+
+Statute: Constitution of Pakistan, 1973
+Section: Article 199
+Topic: Maintainability of Writ Petitions in Tax Matters
+Holding/Ratio: A Constitutional Writ Petition under Article 199 is generally NOT maintainable directly against a tax assessment order if the statutory appellate hierarchy (Commissioner Inland Revenue-Appeals -> Appellate Tribunal Inland Revenue -> High Court Reference) has been bypassed.
+Summary: The Supreme Court of Pakistan has consistently held that Article 199 cannot be invoked to bypass the explicit statutory remedies provided under the Sales Tax Act 1990 and Income Tax Ordinance 2001 (e.g. FBR v. Phoenix, Ghani Glass Ltd), even on the grounds of natural justice (Article 10A) violations. Note: Section 492 of the Companies Act has ZERO application to tax recovery or assessment; the Company Bench lacks jurisdiction over FBR.
+
+Statute: Sales Tax Act, 1990
+Section: 48 (read with Section 140 of Income Tax Ordinance 2001)
+Topic: Coercive Pre-Appellate Bank Recovery
+Holding/Ratio: Coercive recovery (e.g., overnight attachment of bank accounts) by the FBR without serving a mandatory 7-day notice under Section 138(1), or before the expiry of the statutory 30-day appeal period, is illegal, ultra vires, and void ab initio.
+Summary: Such pre-appellate coercive recovery violates Article 10A (Right to Fair Trial) and Article 24 (Protection of Property Rights).
+
+Statute: Constitution of Pakistan, 1973
+Section: Article 199
+Topic: High Court Authority to Mandate Refund / Reimbursement
+Holding/Ratio: In an Article 199 Writ Petition specifically challenging the unlawful method of recovery, the High Court has full jurisdiction to declare the bank attachment illegal and order the FBR to reimburse/refund the coercively attached amount directly back to the taxpayer's bank account.
+Summary: Execute a PARALLEL DUAL-TRACK LITIGATION STRATEGY: 
+Track 1 (Assessment Merits): File Statutory Appeal under Sec 45B STA / 127 ITO before CIR (Appeals) to set aside the PKR 1.2B demand. 
+Track 2 (Coercive Recovery): IMMEDIATELY and CONCURRENTLY (in parallel) file a fresh Article 199 Writ Petition in the High Court specifically targeting the illegal S. 48 STA / S. 140 ITO bank attachment, and pray for a mandatory injunction directing FBR to refund the PKR 350 Million. DO NOT wait for the statutory appeal to conclude before filing this Writ.
+For Interim Stay, file before ATIR and deposit the mandatory 10% pre-deposit under Section 134 of the Sales Tax Act.

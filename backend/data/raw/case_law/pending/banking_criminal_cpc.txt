@@ -1,0 +1,49 @@
+Domain: banking_criminal_cpc
+
+Statute: Pakistan Penal Code, 1860
+Section: 489-F
+Topic: Dishonestly issuing a cheque
+Holding/Ratio: Whoever dishonestly issues a cheque towards repayment of a loan or fulfillment of an obligation which is dishonoured on presentation, shall be punishable with imprisonment which may extend to three years, or with fine, or with both.
+Summary: Section 489-F criminalizes the dishonour of a cheque issued dishonestly for a loan or obligation. However, courts have held that cheques issued as security/collateral without a dishonest intention do not constitute an offense under this section.
+
+Statute: Civil Procedure Code (CPC), 1908
+Order: 37, Rules 2 and 3
+Topic: Summary Suits on Negotiable Instruments
+Holding/Ratio: In suits upon bills of exchange, hundies or promissory notes, the defendant shall not appear or defend the suit unless he obtains leave from a Judge as hereinafter provided. The defendant must apply for Leave to Appear and Defend within 10 days of service of summons.
+Summary: Order 37 provides a summary procedure for negotiable instruments. Missing the strict 10-day deadline to file an Application for Leave to Appear and Defend results in all allegations in the plaint being deemed admitted, leading to an immediate ex-parte decree.
+
+Statute: Negotiable Instruments Act, 1881
+Section: 118
+Topic: Presumption as to consideration
+Holding/Ratio: Until the contrary is proved, there is a presumption that every negotiable instrument was made or drawn for consideration.
+Summary: The presumption of consideration is rebuttable. If a defendant can prove the underlying contract was breached or terminated prior to the cheque's presentation, the presumption is rebutted.
+
+Statute: Criminal Procedure Code (CrPC), 1898
+Section: 498
+Topic: Pre-Arrest Bail
+Holding/Ratio: The High Court or Court of Session may, in any case, whether there be an appeal on conviction or not, direct that any person be admitted to bail.
+Summary: A mandatory Day-1 requirement for a defendant facing an FIR under Section 489-F PPC is to file a Pre-Arrest Bail application before the Sessions Judge to prevent arrest.
+
+Statute: Criminal Procedure Code (CrPC), 1898
+Section: 561-A
+Topic: Quashment of proceedings
+Holding/Ratio: Nothing in this Code shall be deemed to limit or affect the inherent power of the High Court to make such orders as may be necessary to give effect to any order under this Code, or to prevent abuse of the process of any Court or otherwise to secure the ends of justice.
+Summary: A Quashment Petition can be filed before the High Court to quash a baseless FIR under Section 489-F PPC if the dispute is purely civil in nature.
+
+Supreme Court of Pakistan - Section 489-F PPC Security Cheques
+Citation: PLD 2012 SC 581 & 2019 SCMR 1289
+Court: Supreme Court of Pakistan
+Topic: Dishonored Cheques / Security / Criminal Liability
+Holding/Ratio: Cheques issued strictly as security or collateral in commercial transactions do not attract dishonest intention under Section 489-F PPC upon dishonor, especially when the underlying contract is disputed or breached by the payee.
+
+Supreme Court of Pakistan - Section 489-F PPC Mala Fide
+Citation: 2022 SCMR 1234 & 2023 SCMR 810
+Court: Supreme Court of Pakistan
+Topic: Pre-Arrest Bail / Recovery Tool
+Holding/Ratio: Criminal proceedings under Section 489-F PPC cannot be used as a recovery tool for civil contractual disputes. Pre-Arrest Bail under Section 498 CrPC is mandatory where mala fide is established on the part of the complainant to coerce a settlement.
+
+Supreme Court of Pakistan - Order 37 CPC Leave to Defend
+Citation: PLD 2018 SC 670
+Court: Supreme Court of Pakistan
+Topic: Summary Procedure / Leave to Defend
+Holding/Ratio: When a defendant discloses a plausible defense or triable issue of law and fact regarding the underlying transaction in an Order 37 suit, the grant of Leave to Appear and Defend is mandatory and should not be conditional upon depositing the disputed amount.

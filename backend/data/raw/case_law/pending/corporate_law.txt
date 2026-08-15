@@ -1,0 +1,57 @@
+Domain: corporate_law
+
+Statute: Companies Act, 2017
+Section: 492
+Topic: Ouster of Civil Court Jurisdiction
+Holding/Ratio: No civil court shall have jurisdiction to entertain any suit or proceeding in respect of any matter which the High Court or the Commission (SECP) is empowered to determine by or under this Act or the Securities Act, 2015.
+Summary: General civil suits under Section 9 CPC or Section 42 Specific Relief Act regarding corporate mismanagement, oppression, or shareholder disputes are non-maintainable ab initio. They are liable to immediate rejection under Order 7 Rule 11 CPC. The exclusive jurisdiction lies with the High Court (Company Bench).
+
+Statute: Companies Act, 2017
+Section: 286
+Topic: Prevention of Oppression and Mismanagement
+Holding/Ratio: A member or members holding not less than 10% of the issued share capital of a company may apply to the Court (High Court Company Bench) for an order if the affairs of the company are being conducted in an unlawful or fraudulent manner, or in a manner oppressive to the members.
+Summary: This is the primary statutory remedy for minority shareholders against illegal capital dilution, fraudulent transfer of assets, or oppressive board resolutions.
+
+Statute: Companies Act, 2017
+Section: 287 & 288
+Topic: Powers of the Court in Oppression/Mismanagement
+Holding/Ratio: Under Section 287(2), the Court may make an interim order which it thinks fit for regulating the conduct of the company's affairs. Section 288 grants the court powers to regulate future affairs, order purchase of shares, or set aside fraudulent transfers.
+Summary: These sections provide the statutory basis for seeking Interim Relief (e.g., suspending a board resolution or restraining asset siphoning) pending the final adjudication of a Section 286 petition.
+
+Statute: Companies Act, 2017
+Section: 126
+Topic: Power of Court to Rectify Register
+Holding/Ratio: If the name of any person is fraudulently or without sufficient cause entered in or omitted from the register of members, the aggrieved party may apply to the Court for rectification of the register.
+Summary: Used alongside Section 286 to restore illegally diluted shareholding or reverse fraudulent share transfers.
+
+Statute: Companies Act, 2017
+Section: 163
+Topic: Removal of Directors
+Holding/Ratio: A company may by resolution in general meeting remove a director appointed under this Act.
+Summary: Outlines the statutory mechanism for removing a director via Special Resolution, rather than a general civil suit.
+
+Supreme Court of Pakistan - Corporate Law & Jurisdiction
+Citation: PLD 2021 SC 512 & 2022 SCMR 890
+Court: Supreme Court of Pakistan
+Topic: Companies Act 2017 / Ouster of Civil Courts
+Holding/Ratio: The Supreme Court has categorically held that matters falling within the purview of the Companies Act 2017 (such as oppression, mismanagement, or shareholding disputes) fall within the exclusive jurisdiction of the Company Bench of the High Court. Section 492 operates as an absolute bar, and Civil Courts have no jurisdiction under Section 9 CPC to entertain such disputes.
+
+Statute: National Accountability Ordinance (NAO) 1999
+Section: 12, 31B, 32
+Topic: Overriding effect of NAB Freeze Orders over High Court Company Jurisdiction
+Holding/Ratio: Orders passed by Accountability Courts and freeze orders issued by NAB take precedence over civil and corporate proceedings. The High Court Company Bench cannot sanction a Scheme of Amalgamation that transfers assets frozen under Section 12 of NAO 1999. The correct legal recourse is an application under Section 12(2) NAO 1999 before the Accountability Court or an Article 199 Writ Petition in the High Court. Section 286 of the Companies Act 2017 does NOT apply against NAB.
+
+Statute: Competition Act 2010
+Section: 11
+Topic: Merger Control & High Court Sanction
+Holding/Ratio: Prior Phase-II merger clearance by the CCP is a mandatory statutory condition precedent for any concentration exceeding market-share dominance thresholds. The High Court Company Bench will refuse final sanction under Section 279/282 to a scheme violating the Competition Act. Section 286 of the Companies Act does NOT apply against the CCP.
+
+Statute: Companies Act, 2017
+Section: 279, 282
+Topic: Class Voting & Statutory Cram-Down
+Holding/Ratio: A compromise or arrangement is valid if approved by a majority in number representing three-fourths (75%) in value of the class present and voting. 100% unanimity is not required. The statutory cram-down doctrine binds the dissenting minority once the 75% threshold is achieved.
+
+Statute: Law Reforms Ordinance, 1972
+Section: 3(2)
+Topic: Appellate Forum Mechanics for Company Bench Orders
+Holding/Ratio: An order passed by a Single Judge of the High Court sitting as the Company Bench must first be appealed via an Intra-Court Appeal (ICA) before a Division Bench of the same High Court. A direct Civil Petition for Leave to Appeal (CPLA) under Article 185(3) in the Supreme Court is non-maintainable. Section 492 of the Companies Act 2017 applies only to ordinary Civil Courts, not to appellate routes from the High Court.

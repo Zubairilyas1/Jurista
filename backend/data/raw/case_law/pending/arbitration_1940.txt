@@ -1,0 +1,41 @@
+ARBITRATION ACT 1940
+
+Section 14. Award to be signed and filed.
+(2) The arbitrators or umpire shall, at the request of any party to the arbitration agreement or any person claiming under such party or if so directed by the Court and upon payment of the fees and charges due in respect of the arbitration and award and of the costs and charges of filing the award, cause the award or a signed copy of it, together with any depositions and documents which may have been taken and proved before them, to be filed in Court, and the Court shall thereupon give notice to the parties of the filing of the award.
+
+Section 17. Judgment in terms of award.
+Where the Court sees no cause to remit the award or any of the matters referred to arbitration for reconsideration or to set aside the award, the Court shall, after the time for making an application to set aside the award has expired, or such application having been made, after refusing it, proceed to pronounce judgment according to the award, and upon the judgment so pronounced a decree shall follow, and no appeal shall lie from such decree except on the ground that it is in excess of, or not otherwise in accordance with, the award.
+
+Section 30. Grounds for setting aside award.
+An award shall not be set aside except on one or more of the following grounds, namely:-
+(a) that an arbitrator or umpire has misconducted himself or the proceedings;
+(b) that an award has been made after the issue of an order by the Court superseding the arbitration or after arbitration proceedings have become invalid under section 35;
+(c) that an award has been improperly procured or is otherwise invalid.
+
+Section 33. Arbitration agreement or award to be contested by application.
+Any party to an arbitration agreement or any person claiming under him desiring to challenge the existence or validity of an arbitration agreement or an award or to have the effect of either determined shall apply to the Court and the Court shall decide the question on affidavits.
+
+Section 34. Power to stay legal proceedings where there is an arbitration agreement.
+Where any party to an arbitration agreement or any person claiming under him commences any legal proceedings against any other party to the agreement or any person claiming under him in respect of any matter agreed to be referred, any party to such legal proceedings may, at any time before filing a written statement or taking any other steps in the proceedings, apply to the judicial authority before which the proceedings are pending to stay the proceedings; and if satisfied that there is no sufficient reason why the matter should not be referred in accordance with the arbitration agreement and that the applicant was, at the time when the proceedings were commenced, and still remains, ready and willing to do all things necessary to the proper conduct of the arbitration, such authority may make an order staying the proceedings.
+
+Section 39. Appealable orders.
+(1) An appeal shall lie from the following orders passed under this Act (and from no others) to the Court authorised by law to hear appeals from original decrees of the Court passing the order:
+(v) staying or refusing to stay legal proceedings where there is an arbitration agreement;
+
+Section 41. Procedure and powers of Court.
+Subject to the provisions of this Act and of rules made thereunder-
+(a) the provisions of the Code of Civil Procedure, 1908 (V of 1908), shall apply to all proceedings before the Court, and to all appeals, under this Act, and
+(b) the Court shall have, for the purpose of, and in relation to, arbitration proceedings, the same power of making orders in respect of any of the matters set out in the Second Schedule as it has for the purpose of, and in relation to, any proceedings before the Court:
+
+LIMITATION ACT 1908
+Article 158. Under the Arbitration Act, 1940, to set aside an award or to get an award remitted for reconsideration. Thirty days from the date of service of the notice of filing of the award.
+
+SUPREME COURT PRECEDENTS
+PLD 2018 SC 345, PLD 2015 SC 212
+The Supreme Court has authoritatively established that seeking an extension of time or filing an application for an adjournment to submit a Written Statement constitutes "taking a step in the proceedings" under Section 34 of the Arbitration Act 1940. This action demonstrates an unequivocal intention to submit to the civil court's jurisdiction, resulting in a complete and irrevocable waiver of the arbitration clause. Once a step in the proceedings is taken, the court loses statutory power to stay the suit under Section 34.
+
+PLD 2018 SC 345, 2021 SCMR 980, PLD 2015 SC 212, 2010 SCMR 1289, PLD 2007 SC 204
+The Supreme Court has authoritatively held that Section 5 of the Limitation Act 1908 (condonation of delay) DOES NOT apply to an application filed under Article 158 of the Limitation Act 1908 for setting aside an award. An objection petition filed after the 30-day period is fatally time-barred, and the court must proceed to make the award a Rule of Court under Section 17. The only exceptions where the 30-day bar can be bypassed are if the award is challenged as a total nullity (void ab initio), coram non judice, or if the mandatory notice under Section 14(2) was never validly served.
+
+PROCEDURAL FILINGS MANDATE
+Any application for interim relief, stay, or injunction concerning arbitration proceedings MUST be filed under Section 41 read with the Second Schedule of the Arbitration Act 1940. General civil court mechanisms like Section 52 Transfer of Property Act 1882 (Lis Pendens) or standalone Order 39 Rules 1 & 2 CPC applications do not apply to arbitration awards in the same manner as standard property suits. Section 151 CPC cannot be used to condone delays barred by Article 158.

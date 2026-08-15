@@ -1,0 +1,18 @@
+﻿SPECIFIC RELIEF ACT 1877
+
+Section 12. Cases in which specific performance enforceable.
+Except as otherwise provided in this Chapter, the specific performance of any contract may in the discretion of the Court be enforced when the act agreed to be done is such that pecuniary compensation for its non-performance would not afford adequate relief. In contracts for the transfer of immovable property, it is presumed that damages cannot be adequate relief.
+
+Section 24(b). Personal bars to the relief.
+Specific performance of a contract cannot be enforced in favour of a person who has become incapable of performing, or violates any essential term of, the contract that on his part remains to be performed. (This includes failing to demonstrate continuous readiness and willingness to pay the balance consideration).
+
+Section 35. When rescission may be adjudged.
+Any person interested in a contract may sue to have it rescinded, and such rescission may be adjudged by the Court where the contract is voidable or terminable by the plaintiff.
+
+SUPREME COURT PRECEDENT: PLD 2021 SC 707, 2021 SCMR 686, & 2017 SCMR 2022
+The Supreme Court has firmly laid down that in suits for specific performance of an agreement to sell immovable property, the plaintiff (purchaser) must prove continuous "readiness and willingness" to perform their part of the contract. This requires the immediate deposit of the balance sale consideration in the Court. Failure to deposit the balance amount demonstrates a lack of readiness and willingness, barring relief under Section 24(b) of the Specific Relief Act 1877. In such cases, the plaint is liable to be rejected under Order VII Rule 11 of the CPC.
+
+PROCEDURAL FILINGS MANDATE (DAY-1)
+1. Section 151 CPC Motion: An urgent application under the inherent powers of the court offering to deposit the entire balance sale consideration immediately to prove continuous readiness and willingness.
+2. Section 52 Transfer of Property Act 1882: Immediate Notice of Lis Pendens to freeze the property title.
+3. Order 39 Rules 1 & 2 CPC: Application for ad-interim injunction to prevent the seller from creating third-party interests.

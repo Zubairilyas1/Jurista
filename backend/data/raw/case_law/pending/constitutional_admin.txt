@@ -1,0 +1,30 @@
+CONSTITUTION OF THE ISLAMIC REPUBLIC OF PAKISTAN, 1973
+
+Article 199. Jurisdiction of High Court.
+(1) Subject to the Constitution, a High Court may, if it is satisfied that no other adequate remedy is provided by law, on the application of any aggrieved person, make an order directing a person performing, within the territorial jurisdiction of the Court, functions in connection with the affairs of the Federation, a Province or a local authority, to refrain from doing anything he is not permitted by law to do, or to do anything he is required by law to do; or declaring that any act done or proceeding taken within the territorial jurisdiction of the Court by a person performing functions in connection with the affairs of the Federation, a Province or a local authority has been done or taken without lawful authority and is of no legal effect.
+
+Article 10A. Right to fair trial.
+For the determination of his civil rights and obligations or in any criminal charge against him a person shall be entitled to a fair trial and due process.
+
+CUSTOMS ACT, 1969
+
+Section 193. Appeals to Collector (Appeals).
+Any person aggrieved by any decision or order passed under this Act by an officer of Customs lower in rank than a Collector of Customs, may appeal to the Collector (Appeals) within thirty days of the date of communication to him of such decision or order.
+
+GENERAL CLAUSES ACT, 1897
+
+Section 24A. Exercise of power under enactments.
+(1) Where, by or under any enactment, a power to make any order or give any direction is conferred on any authority, office or person such power shall be exercised reasonably, fairly, justly and for the advancement of the purposes of the enactment.
+(2) The authority, office or person making any order or issuing any direction under the powers conferred by or under any enactment shall, so far as necessary or appropriate, give reasons for making the order or, as the case may be, for issuing the direction and shall provide a copy of the order or, as the case may be, the direction to the person affected thereby.
+
+SUPREME COURT PRECEDENTS ON WRIT MAINTAINABILITY (ALTERNATE REMEDY)
+
+PLD 2021 SC 540, PLD 2016 SC 121, 2022 SCMR 822, & PLD 2018 SC 189
+The Supreme Court has definitively held that while Article 199 generally requires the exhaustion of alternate statutory remedies (such as a statutory appeal under Section 193 of the Customs Act), a Constitutional Writ Petition is immediately maintainable and bypassing the alternate remedy is legally justified IF the executive action or administrative order is:
+1. Coram non judice (wholly without jurisdiction).
+2. Malafide (in bad faith).
+3. In violation of the principles of natural justice (audi alteram partem), such as taking adverse action (like suspending a WeBOC ID) without issuing a prior Show Cause Notice, which violates Article 10A (Right to Fair Trial) and Section 24A of the General Clauses Act.
+
+DAY-1 FILINGS STRATEGY
+Primary Suit: Constitutional Writ Petition under Article 199 of the Constitution.
+Interim Relief: Civil Miscellaneous Application (CMA) for ad-interim relief to suspend the adverse administrative order (e.g., to immediately restore the suspended WeBOC ID) pending final adjudication of the petition.

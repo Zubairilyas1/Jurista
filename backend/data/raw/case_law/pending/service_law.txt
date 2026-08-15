@@ -1,0 +1,25 @@
+Domain: service_law
+
+Statute: Constitution of Pakistan, 1973
+Article: 212
+Topic: Administrative Courts and Tribunals
+Holding/Ratio: Notwithstanding anything hereinbefore contained, no other court shall grant an injunction, make any order or entertain any proceedings in respect of any matter to which the jurisdiction of such Administrative Court or Tribunal extends.
+Summary: Article 212 creates an absolute, insurmountable constitutional bar that completely ousts the jurisdiction of Civil Courts and the High Court (under Article 199 writ jurisdiction) in matters relating to the terms and conditions of service of civil servants.
+
+Statute: Service Tribunals Act, 1973
+Section: 4
+Topic: Appeals to Tribunals
+Holding/Ratio: Section 4(1)(a) Proviso: Where an appeal, review or representation to a departmental authority is provided under the Civil Servants Act, 1973, or any rules against any such order, no appeal shall lie to a Tribunal unless the aggrieved civil servant has preferred an appeal or application for review or representation to such departmental authority and a period of ninety days has elapsed from the date on which such appeal, application or representation was so preferred.
+Summary: An appeal to the FST cannot be filed directly. The civil servant MUST first exhaust the departmental remedy by filing a Departmental Appeal within 30 days. They must then wait 90 days for a decision. If rejected, they have 30 days to file before the FST. If no decision is made within 90 days, they gain a 30-day window (Days 91 to 120) to file the FST appeal.
+
+Supreme Court of Pakistan - Article 212 Constitutional Bar
+Citation: PLD 2015 SC 380 & 2021 SCMR 1320
+Court: Supreme Court of Pakistan
+Topic: Service Matters / Ouster of Jurisdiction
+Holding/Ratio: Article 212 creates an absolute and insurmountable constitutional bar against the jurisdiction of Civil Courts and the High Court under Article 199 for any matter touching upon the terms and conditions of a civil servant. All pending civil suits or writ petitions concerning service matters are non-maintainable ab initio and must be withdrawn immediately.
+
+Supreme Court of Pakistan - Section 4 STA Mandatory Exhaustion
+Citation: 2020 SCMR 2045
+Court: Supreme Court of Pakistan
+Topic: Departmental Appeal / Jurisdiction of FST
+Holding/Ratio: The requirement to file a Departmental Appeal under Section 4(1)(a) of the Service Tribunals Act 1973 is a mandatory statutory precondition. An appeal filed directly before the Service Tribunal without exhausting the departmental remedy is incurably defective and liable to summary dismissal for lack of statutory jurisdiction.

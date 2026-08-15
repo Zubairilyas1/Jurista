@@ -1,0 +1,21 @@
+RECOGNITION AND ENFORCEMENT (ARBITRATION AGREEMENTS AND FOREIGN ARBITRAL AWARDS) ACT, 2011 (ACT XVII OF 2011)
+
+Section 3. Jurisdiction.
+(1) Notwithstanding anything contained in any other law for the time being in force, the High Court shall exercise exclusive jurisdiction to adjudicate and settle matters related to or arising from this Act.
+
+Section 4. Enforcement of arbitration agreements.
+(1) A party to an arbitration agreement against whom legal proceedings have been brought in respect of a matter which is covered by the arbitration agreement may, upon notice to the other party to the proceedings, apply to the court in which the proceedings have been brought to stay the proceedings in so far as they concern that matter.
+(2) On an application under sub-section (1), the court shall refer the parties to arbitration unless it finds that the arbitration agreement is null and void, inoperative or incapable of being performed.
+
+Section 6. Enforcement of foreign arbitral awards.
+(1) A foreign arbitral award shall be recognized as binding and, upon application in writing to the High Court, shall be enforced.
+
+Section 7. Grounds for refusal of recognition and enforcement.
+(1) Recognition and enforcement of a foreign arbitral award may be refused, at the request of the party against whom it is invoked, only if that party furnishes to the High Court proof that:
+(b) the party against whom the award is invoked was not given proper notice of the appointment of the arbitrator or of the arbitration proceedings or was otherwise unable to present his case;
+(2) Recognition and enforcement of an arbitral award may also be refused if the High Court finds that:
+(b) the recognition or enforcement of the award would be contrary to the public policy of Pakistan.
+
+SUPREME COURT / HIGH COURT PRECEDENTS: Orient Power Co., Taisei Corp, Far Eastern Impex
+Ouster of Domestic Jurisdiction: Domestic Civil Courts completely lack subject-matter jurisdiction under Sections 30 and 33 of the Arbitration Act 1940 to set aside or interfere with a foreign arbitral award. Any such application is coram non judice. The High Court holds exclusive jurisdiction under Section 3 of the 2011 Act.
+Waiver & Step in Proceedings: Under Section 4, a party must apply for a stay before filing a written statement or taking any other step on the merits. Filing a Written Statement without unconditionally reserving arbitration rights constitutes submission to domestic jurisdiction, which provides a potent Public Policy objection under Article V(2)(b) against subsequent enforcement of a foreign award.

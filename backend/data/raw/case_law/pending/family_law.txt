@@ -1,0 +1,25 @@
+Domain: family_law
+
+Statute: West Pakistan Family Courts Act, 1964
+Section: 17
+Topic: Exclusion of CPC Provisions
+Holding/Ratio: The provisions of the Code of Civil Procedure (CPC), 1908, with the exception of Sections 10 and 11, are explicitly excluded from Family Court proceedings.
+Summary: Therefore, invoking Section 151 or Section 148 CPC for extension of time or condonation of delay is incompetent ab initio. The Family Court commits no error in dismissing such applications.
+
+Statute: West Pakistan Family Courts Act, 1964
+Section: 17A
+Topic: Absolute Obligation of Interim Maintenance
+Holding/Ratio: Interim maintenance under Section 17A is an absolute statutory obligation meant for the immediate subsistence of minor children. Account freezes, business losses, or financial hardship do not constitute valid legal defenses to prevent or set aside the striking off of a defense.
+Summary: Binding Supreme Court jurisprudence (PLD 2021 SC 321, 2023 SCMR 1012) completely rejects "mitigating circumstances" or "financial hardship" as grounds to avoid Section 17A compliance.
+
+Statute: West Pakistan Family Courts Act, 1964
+Section: 17A
+Topic: Mandatory Tender Mechanics for Reinstatement
+Holding/Ratio: The Family Court loses all discretion and MUST strike off the defense unless the defendant physically tenders/deposits the entire accrued arrears (100% of the amount) in cash or bank draft prior to the execution of the striking-off order.
+Summary: A verbal offer or partial payment (e.g., offering PKR 50,000 out of PKR 300,000) is legally meaningless under Section 17A (2020 SCMR 2024 and 2018 SCMR 1755).
+
+Statute: West Pakistan Family Courts Act, 1964
+Section: 14
+Topic: Appellate Strategy against Striking Off Defense
+Holding/Ratio: An appeal against a summary judgment/decree resulting from a striking-off order under Section 17A lies before the District Judge under Section 14.
+Summary: The Memorandum of Appeal MUST be accompanied by an unconditional Pay Order / Cash deposit of the FULL 100% arrears into court. Without this physical tender, the appeal is non-maintainable. The appeal must abandon all CPC arguments and hardship pleas, and be framed strictly around this unconditional physical deposit.

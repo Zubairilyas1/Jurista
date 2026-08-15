@@ -1,0 +1,39 @@
+PUNJAB RENTED PREMISES ACT, 2009
+
+Section 15. Obligations of tenant.
+A tenant shall pay the rent, rates, taxes and charges in accordance with the tenancy agreement.
+
+Section 24. Leave to defend and tentative rent.
+(1) The Rent Tribunal shall not allow a respondent to defend the application unless he obtains leave to defend.
+(2) If the Rent Tribunal grants leave to defend, it shall direct the tenant to deposit the arrears of rent and future rent on a date fixed by the Tribunal (tentative rent order).
+(4) If a tenant fails to comply with an order made under this section, the Rent Tribunal shall forthwith pass an order of eviction against the tenant.
+
+Section 27. Execution of orders.
+A Rent Tribunal shall execute an order passed under this Act. The Rent Tribunal may issue warrants for possession and utilize police force for eviction.
+
+Section 28. Appeal.
+(1) Any person aggrieved by a final order of the Rent Tribunal may, within thirty days, prefer an appeal in writing to the District Judge.
+(2) No appeal shall lie against an interlocutory order passed by a Rent Tribunal.
+(3) The Appellate Court may, pending the final disposal of the appeal, suspend the operation of the order of the Rent Tribunal (interim stay of eviction).
+
+SUPREME COURT PRECEDENT: PLD 2020 SC 241 & 2022 SCMR 1150
+Strict Compliance with Tentative Rent Order: The Supreme Court held that compliance with a tentative rent deposit order under Section 24 of the PRPA 2009 is mandatory and strict. The Rent Tribunal is powerless to grant time extensions or condone delay under Section 148 CPC or Section 5 Limitation Act. However, appellate courts can examine technical bank failures to determine if payment was constructively tendered.
+
+SUPREME COURT PRECEDENT: 2018 SCMR 1928 & 2021 SCMR 945
+Appellate Forum Exhaustion: An aggrieved party must exhaust the statutory appeal provided under Section 28 of the PRPA 2009 before the District Judge. A direct Constitutional Writ Petition under Article 199 of the Constitution before the High Court is barred and incompetent due to the availability of an adequate alternate remedy.
+
+SINDH RENTED PREMISES ORDINANCE, 1979
+
+Section 16. Arrears of rent.
+(1) Where a case for eviction of a tenant has been instituted, the Controller shall, on application by the landlord, pass a tentative rent order directing the tenant to deposit the arrears of rent and future monthly rent.
+(2) If the tenant fails to deposit the rent as required under sub-section (1), his defence shall be struck off and the Controller shall pass an order of eviction.
+
+Section 21. Appeal.
+(1) Any party aggrieved by an order passed by a Controller may, within thirty days, prefer an appeal to the High Court (Sindh).
+(3) The High Court may, pending the final disposal of the appeal, suspend the operation of the order of the Controller (stay).
+
+SUPREME COURT PRECEDENT: PLD 1983 SC 21 & PLD 1989 SC 222
+Persona Designata & Section 5 Limitation Act: A Rent Controller under SRPO 1979 is a tribunal of limited statutory jurisdiction (persona designata), not a Civil Court. Therefore, Section 5 of the Limitation Act 1908 does not apply to condone delay in depositing tentative rent under Section 16(1). A default of even a single day triggers mandatory striking off of defense under Section 16(2). Defenses against striking off must attack the structural validity of the initial Section 16(1) order itself, rather than pleading condonation of delay.
+
+SUPREME COURT PRECEDENT: 2021 SCMR 1980
+Article 199 Bar against SRPO Orders: An Article 199 Constitutional Writ Petition is non-maintainable against an eviction order (e.g., under Section 16(2) SRPO) because an adequate statutory appellate remedy exists under Section 21 directly before the High Court. Writ petitions in such cases must be withdrawn or converted to Rent Appeals.
