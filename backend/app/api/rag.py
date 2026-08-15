@@ -17,6 +17,140 @@ router = APIRouter(prefix="/api/v1/rag", tags=["RAG"])
 rag = RAGEngine()
 overrule = OverruleGraph()
 
+# ── Semantic Domain Classifier ──────────────────────────────────────────────
+# Each domain has a rich natural-language description. At startup, we encode
+# them with the same SentenceTransformer the RAG engine uses. At query time,
+# we encode the FULL user query and pick the domain with the highest cosine
+# similarity — no keyword hacking, no priority ordering.
+
+import numpy as np
+
+DOMAIN_DESCRIPTIONS = {
+    "family_law": (
+        "Family Court proceedings under the West Pakistan Family Courts Act 1964, "
+        "Section 17A interim maintenance for wife and children, striking off defense "
+        "for non-payment of maintenance arrears, dower (mahr), dissolution of marriage, "
+        "khula, custody of minors, guardian courts, recovery of maintenance suit, "
+        "summary judgment in family matters, Section 14 appeal to District Judge"
+    ),
+    "tax_law": (
+        "Federal Board of Revenue FBR tax assessment, Sales Tax Act 1990, Income Tax "
+        "Ordinance 2001, Section 11 assessment order, Section 48 coercive bank recovery, "
+        "Section 140 attachment of bank accounts, Commissioner Inland Revenue Appeals, "
+        "Appellate Tribunal Inland Revenue ATIR, Section 134 mandatory pre-deposit, "
+        "Article 199 writ against illegal tax recovery, refund of coercively seized amounts"
+    ),
+    "corporate_law": (
+        "Companies Act 2017, SECP, High Court Company Bench, Section 279 scheme of "
+        "arrangement compromise amalgamation merger, Section 282 secured creditor rights, "
+        "Section 286 oppression and mismanagement, Section 492 ouster of civil courts, "
+        "shareholder disputes, director removal, winding up petition, corporate governance"
+    ),
+    "constitutional_admin": (
+        "Article 199 Constitutional Writ Petition in the High Court, judicial review of "
+        "executive action, customs disputes, WeBOC, administrative law, vires of subordinate "
+        "legislation, fundamental rights enforcement, government contracts disputes"
+    ),
+    "international_arbitration_2011": (
+        "Recognition and Enforcement of Arbitration Agreements and Foreign Arbitral Awards "
+        "Act 2011, New York Convention 1958, foreign arbitral award enforcement in Pakistan, "
+        "international commercial arbitration, cross-border arbitration, sovereign immunity"
+    ),
+    "arbitration_1940": (
+        "Arbitration Act 1940, domestic arbitral award, Section 30 grounds for setting aside "
+        "arbitral award, Section 33 filing objections, Article 158 limitation, step in "
+        "proceedings waiver, umpire appointment, Rule of Court"
+    ),
+    "banking_criminal_cpc": (
+        "Section 489-F PPC dishonored cheque, bounced cheque criminal prosecution, "
+        "dishonest issuance of cheque, cheque as security vs cheque for payment, "
+        "pre-arrest bail under Section 498 CrPC for cheque dishonour"
+    ),
+    "banking_fio": (
+        "Financial Institutions Ordinance 2001 FIO, Banking Court jurisdiction, "
+        "leave to defend under Section 10, recovery of finance facility, mortgage "
+        "foreclosure, bank guarantee enforcement, hypothecation"
+    ),
+    "civil_commercial_cpc": (
+        "Order 37 CPC summary suit, leave to appear and defend, unconditional leave, "
+        "commercial debt recovery through summary procedure, negotiable instruments, "
+        "promissory note, bill of exchange, Order 37 Rule 4 application to set aside decree"
+    ),
+    "pre_emption": (
+        "Right of pre-emption Shuf'a, Punjab Pre-emption Act 1991, Talab-i-Mowasibat, "
+        "Talab-i-Ishhad, Talab-i-Tamlik, Shafi-Sharik co-sharer, Shafi-Khalit, "
+        "Zar-i-Shoof deposit of sale consideration, adjacent land right"
+    ),
+    "inheritance_property": (
+        "Islamic inheritance law, Muslim personal law succession, female heir rights, "
+        "sister's share in inheritance, Hiba gift inter vivos, Marz-ul-Maut deathbed gift, "
+        "mutation of inherited property, benami transaction, partition of joint property"
+    ),
+    "specific_performance": (
+        "Specific Relief Act 1877, suit for specific performance of agreement to sell "
+        "immovable property, readiness and willingness to perform, part performance, "
+        "time as essence of contract, Section 12 specific performance conditions"
+    ),
+    "service_law": (
+        "Service Tribunals Act 1973, Article 212 Constitution ouster of court jurisdiction, "
+        "Federal Service Tribunal, civil servant termination removal dismissal, departmental "
+        "inquiry, disciplinary proceedings, pension grievance, seniority dispute"
+    ),
+    "rent_law": (
+        "Sindh Rented Premises Ordinance SRPO 1979, Punjab Rented Premises Act PRPA, "
+        "Rent Controller Rent Tribunal, eviction of tenant, tentative rent deposit "
+        "Section 16, Section 21 appeal to High Court, landlord tenant dispute, "
+        "fair rent determination, ejectment"
+    ),
+}
+
+# Pre-compute domain embeddings at startup using the RAG engine's model
+_domain_embeddings = {}
+_domain_names = []
+
+def _init_domain_embeddings():
+    """Compute embeddings for all domain descriptions once at startup."""
+    global _domain_embeddings, _domain_names
+    if rag.model is None:
+        print("⚠️ SentenceTransformer not available; semantic classifier disabled.")
+        return
+    for domain, description in DOMAIN_DESCRIPTIONS.items():
+        _domain_embeddings[domain] = rag.model.encode(description)
+        _domain_names.append(domain)
+    print(f"[CLASSIFIER] Semantic Domain Classifier initialized with {len(_domain_names)} domains.")
+
+_init_domain_embeddings()
+
+def classify_domain_semantic(query: str, threshold: float = 0.25) -> str:
+    """
+    Classify a legal query into the best-matching domain by computing cosine
+    similarity between the full query embedding and each domain description
+    embedding. Returns None if no domain exceeds the confidence threshold.
+    """
+    if not _domain_embeddings or rag.model is None:
+        return None
+
+    query_embedding = rag.model.encode(query)
+
+    best_domain = None
+    best_score = -1.0
+
+    for domain, domain_emb in _domain_embeddings.items():
+        # Cosine similarity
+        score = float(np.dot(query_embedding, domain_emb) / (
+            np.linalg.norm(query_embedding) * np.linalg.norm(domain_emb) + 1e-10
+        ))
+        if score > best_score:
+            best_score = score
+            best_domain = domain
+
+    print(f"[CLASSIFIER] Top domain: {best_domain} (score: {best_score:.4f})")
+    if best_score >= threshold:
+        return best_domain
+    return None
+
+
+
 class QueryRequest(BaseModel):
     query: str
     top_k: Optional[int] = 5
@@ -98,8 +232,33 @@ def post_with_rotation(payload: dict, timeout: int = 60) -> dict:
             
     raise Exception("All API keys and fallback models exhausted due to rate limits.")
 
-def generate_with_llm(prompt: str, history: List[dict] = None) -> str:
-    messages = [{"role": "system", "content": "You are a Senior Pakistani Legal Expert and Advocate. Answer the user's question based on the provided legal texts, or your own expert knowledge if the provided text is insufficient. You handle all areas of Pakistani law, including Criminal (PPC/CrPC), Civil, Family, and Traffic laws. Provide a clear, comprehensive, and practical answer in plain English. Include the relevant law, the offence/issue, and practical advice. Keep it concise but thorough. PROCEDURAL FILINGS MANDATE: Whenever providing a litigation strategy, explicitly list all mandatory Day-1 court applications, procedural attachments, and deposit motions required alongside the main plaint. EVIDENCE LAW MANDATE: Whenever analyzing the burden of proof, especially in transactions involving illiterate, bedridden, or vulnerable donors (such as Marz-ul-Maut gifts), you MUST explicitly cite the Qanun-e-Shahadat Order 1984 (e.g. Articles 114 and 121). APPELLATE HIERARCHY GUARDRAIL: Whenever a special statute provides an explicit appeal to a lower appellate forum (e.g., District Judge under Section 28 PRPA 2009 for rent eviction), you MUST NEVER recommend an Article 199 Writ Petition directly in the High Court as a Day-1 remedy, because the alternate statutory remedy must be exhausted first. FATAL DEFECTS MANDATE: In Pre-emption cases (Punjab Pre-emption Act 1991), if Talabs are defective or 1/3rd deposit is missed, NEVER recommend condonation of delay, filing a fresh notice, or filing a new suit; state that the right is permanently extinguished and the suit is dead on arrival. In Arbitration Act 1940 cases, NEVER recommend Section 5 Limitation Act condonation for Section 30/33 objections, as it is strictly barred. In Arbitration Act 1940 cases, seeking an extension of time to file a Written Statement constitutes 'taking a step in the proceedings' and results in an irrevocable waiver of the right to arbitrate under Section 34 (PLD 2018 SC 345, PLD 2015 SC 212). The remedy against refusal to stay is an appeal under Section 39(1)(v). In Service Law cases, Article 212 bars all Civil Court and High Court writ jurisdiction (PLD 2015 SC 380, 2021 SCMR 1320). Furthermore, NEVER recommend a direct appeal to the Federal Service Tribunal (FST) against a dismissal order; Section 4 of the Service Tribunals Act 1973 mandates exhausting a Departmental Appeal first, followed by a 90-day waiting period, and only then an FST appeal within 30 days (2020 SCMR 2045). In Corporate Law cases (Companies Act 2017), Section 492 absolutely bars Civil Court jurisdiction. You MUST mandate filing in the High Court (Company Bench). Under Section 286, you must seek remedies for Oppression & Mismanagement. DO NOT EVER cite NCLT, NCLAT, or Indian Companies Act Sections 397/398—these belong to Indian Law and are strictly banned. In Family Law cases under the 1964 Act, NEVER suggest CPC provisions (e.g., Section 151, Order 39, Section 148 CPC) as the CPC is explicitly excluded by Section 17. In Family Law Section 17A cases, you MUST cite PLD 2021 SC 321, 2023 SCMR 1012, and 2020 SCMR 2024, and state that financial hardship is not a defense; physical tender of full arrears (Pay Order/Cash) is the only legal escape. NEVER recommend an application for time extension or financial hardship. In Section 489-F PPC (Dishonored Cheque) cases, you MUST cite PLD 2012 SC 581 and 2022 SCMR 1234, and state that cheques issued strictly as security/collateral do not attract dishonest intention, and that Pre-Arrest Bail under Section 498 CrPC is mandatory for mala fide FIRs. In Order 37 CPC summary suits, NEVER recommend Order 9 Rule 13 CPC to set aside a decree; the EXCLUSIVE remedy is Order 37 Rule 4 CPC (2019 SCMR 1403). State that Section 5 of the Limitation Act is absolutely barred for extending the 10-day leave to defend period (PLD 2014 SC 520). STRICT GUARDRAIL 1: If the user asks an ethical, moral, political, or off-topic question, you MUST politely reject it. STRICT GUARDRAIL 2: If the user explicitly asks you to draft a petition, you MUST respond by briefly acknowledging it and strictly adding the exact text `[OPEN_PETITION_DRAFTER]` at the very end of your response. Do not draft the entire document yourself."}]
+def generate_with_llm(prompt: str, history: List[dict] = None, domain_filter: str = None) -> str:
+    base_system_prompt = "You are a Senior Pakistani Legal Expert and Advocate. Answer the user's question based on the provided legal texts, or your own expert knowledge if the provided text is insufficient. You handle all areas of Pakistani law, including Criminal (PPC/CrPC), Civil, Family, and Traffic laws. Provide a clear, comprehensive, and practical answer in plain English. Include the relevant law, the offence/issue, and practical advice. Keep it concise but thorough. PROCEDURAL FILINGS MANDATE: Whenever providing a litigation strategy, explicitly list all mandatory Day-1 court applications, procedural attachments, and deposit motions required alongside the main plaint. EVIDENCE LAW MANDATE: Whenever analyzing the burden of proof, especially in transactions involving illiterate, bedridden, or vulnerable donors (such as Marz-ul-Maut gifts), you MUST explicitly cite the Qanun-e-Shahadat Order 1984 (e.g. Articles 114 and 121). APPELLATE HIERARCHY GUARDRAIL: Whenever a special statute provides an explicit appeal to a lower appellate forum, you MUST NEVER recommend an Article 199 Writ Petition directly in the High Court as a Day-1 remedy, because the alternate statutory remedy must be exhausted first. STRICT GUARDRAIL 1: If the user asks an ethical, moral, political, or off-topic question, you MUST politely reject it. STRICT GUARDRAIL 2: If the user explicitly asks you to draft a petition, you MUST respond by briefly acknowledging it and strictly adding the exact text `[OPEN_PETITION_DRAFTER]` at the very end of your response."
+
+    if domain_filter == "pre_emption":
+        base_system_prompt += " FATAL DEFECTS MANDATE: In Pre-emption cases, if Talabs are defective or 1/3rd deposit is missed, NEVER recommend condonation of delay. The right is permanently extinguished."
+    elif domain_filter == "arbitration_1940":
+        base_system_prompt += " In Arbitration 1940 cases, NEVER recommend Section 5 Limitation Act condonation for Section 30/33 objections. Seeking an extension of time to file a Written Statement constitutes 'taking a step' and waives the right to arbitrate."
+    elif domain_filter == "service_law":
+        base_system_prompt += " In Service Law cases, Article 212 bars all Civil Court and High Court writ jurisdiction. NEVER recommend a direct appeal to the FST; Section 4 of the Service Tribunals Act 1973 mandates exhausting a Departmental Appeal first."
+    elif domain_filter == "corporate_law":
+        base_system_prompt += " In Corporate Law (Companies Act 2017), Section 492 absolutely bars Civil Court jurisdiction. File in High Court (Company Bench). DO NOT EVER cite Indian Law. Under Section 279, a 75% majority binds the minority (cram-down); 100% unanimity is not required. The Company Bench under Sec 279 CANNOT issue injunctive relief against independent statutory regulators like NAB or CCP. For NAB freeze orders (Sec 12 NAO 1999), file Sec 12(2) in Accountability Court or Art 199 Writ in High Court. For CCP (Sec 11 Competition Act 2010), Phase-II clearance is a mandatory condition precedent; file application with CCP and adjourn HC sanction. If an opposing party files a direct Supreme Court CPLA against a Single Judge Company Bench order, you MUST advise filing a Motion to Dismiss the CPLA in the Supreme Court for bypassing the mandatory Intra-Court Appeal (ICA) under Law Reforms Ordinance 1972."
+    elif domain_filter == "family_law":
+        base_system_prompt += " In Family Law (1964 Act), CPC provisions (Sec 151/148) are explicitly excluded by Section 17. The Family Court MUST dismiss CPC applications for time extension. Under Sec 17A, interim maintenance is an absolute statutory obligation (PLD 2021 SC 321). Financial hardship or frozen accounts are legally irrelevant. A verbal offer or partial payment is legally meaningless (2020 SCMR 2024). The defense must be struck off unless there is an unconditional physical tender/deposit of 100% of accrued arrears (e.g. PKR 300,000) in cash/bank draft prior to execution. STRATEGY: 1) File Statutory Appeal before the District Judge under Section 14 against the summary judgment. 2) The Memorandum of Appeal MUST be accompanied by a Pay Order/Cash deposit of the FULL 100% arrears. 3) Abandon CPC and hardship arguments; frame the appeal strictly around the unconditional physical deposit of full arrears."
+    elif domain_filter == "rent_law":
+        base_system_prompt += " In Rent Law (SRPO 1979), Section 5 Limitation Act NEVER applies to tentative rent deposits under Section 16(1). First Rent Appeal under Section 21 SRPO lies directly to the High Court. Article 199 Writ is barred."
+    elif domain_filter == "tax_law":
+        base_system_prompt += " In Tax Law (STA 1990 / ITO 2001), NEVER cite Section 492 of the Companies Act; Company Bench has ZERO jurisdiction over FBR tax matters. Article 199 Writs are NOT maintainable against assessment orders on merits (FBR v. Phoenix); exhaust statutory appeals. Execute DUAL-TRACK STRATEGY: Track 1 (Merits): File Statutory Appeal before CIR-Appeals (Sec 45B STA / 127 ITO) to set aside Ex-Parte Demand. Track 2 (Coercive Recovery): IMMEDIATELY and CONCURRENTLY (in parallel) file Art 199 Writ in High Court specifically challenging the unlawful Sec 48 STA / Sec 140 ITO bank attachment (without mandatory Sec 138 notice) and explicitly mandate FBR to REFUND the coercively attached amount. DO NOT wait for statutory appeals to conclude before filing the Art 199 Writ against the recovery. For Interim Stay, file before ATIR and deposit the mandatory 10% pre-deposit under Section 134 STA."
+    elif domain_filter == "international_arbitration_2011":
+        base_system_prompt += " In International Arbitration (2011 Act), Domestic Civil Courts have ZERO jurisdiction under Sec 30/33 of the 1940 Act. High Court has EXCLUSIVE jurisdiction. Filing a Written Statement without reserving rights submits to domestic jurisdiction."
+    elif domain_filter == "banking_criminal_cpc":
+        base_system_prompt += " In 489-F PPC (Dishonored Cheque), cheques issued strictly as security do not attract dishonest intention. Pre-Arrest Bail under Sec 498 CrPC is mandatory."
+    elif domain_filter == "banking_fio":
+        base_system_prompt += " In Banking/FIO 2001 cases, Section 5 Limitation Act DOES NOT apply to the 30-day PLA deadline. Leave to Defend must strictly comply with Sec 10(3) and (4)."
+    elif domain_filter == "civil_commercial_cpc":
+        base_system_prompt += " In Order 37 CPC summary suits, NEVER recommend Order 9 Rule 13 CPC; the EXCLUSIVE remedy is Order 37 Rule 4 CPC. Section 5 of the Limitation Act is absolutely barred."
+
+    messages = [{"role": "system", "content": base_system_prompt}]
     
     if history:
         for msg in history:
@@ -166,36 +325,11 @@ async def legal_query(request: QueryRequest):
     if request.reset_context:
         request.history = []
         
-    # Dynamic Domain Classifier
-    lower_query = normalized_query.lower()
-    
-    # Prioritize specific domains first to avoid generic terms hijacking the classifier
-    if "arbitration act" in lower_query or "arbitral award" in lower_query or "article 158" in lower_query or "rule of court" in lower_query:
-        request.domain_filter = "arbitration_1940"
-    elif "specific performance" in lower_query or "agreement to sell" in lower_query or "readiness and willingness" in lower_query:
-        request.domain_filter = "specific_performance"
-    elif "article 212" in lower_query or "service tribunal" in lower_query or "civil servant" in lower_query or "departmental appeal" in lower_query:
-        request.domain_filter = "service_law"
-    elif "cheque" in lower_query or "489-f" in lower_query or "dishonored" in lower_query:
-        request.domain_filter = "banking_criminal_cpc"
-    elif "financial institutions ordinance" in lower_query or "fio 2001" in lower_query or "banking court" in lower_query:
-        request.domain_filter = "banking_fio"
-    elif "corporate" in lower_query or "company" in lower_query or "secp" in lower_query or "oppression" in lower_query or "shareholder" in lower_query or "mismanagement" in lower_query:
-        request.domain_filter = "corporate_law"
-    elif "article 199" in lower_query or " writ " in lower_query or "customs" in lower_query or "weboc" in lower_query:
-        request.domain_filter = "constitutional_admin"
-    elif "order 37" in lower_query or "summary suit" in lower_query or "leave to appear and defend" in lower_query:
-        request.domain_filter = "civil_commercial_cpc"
-    elif "pre-emption" in lower_query or "talab" in lower_query or "shafi-sharik" in lower_query or "zar-i-shoof" in lower_query:
-        request.domain_filter = "pre_emption"
-    elif "female heir" in lower_query or "sister" in lower_query or "hiba" in lower_query or "inheritance" in lower_query:
-        request.domain_filter = "inheritance_property"
-    elif "section 17a" in lower_query or "interim maintenance" in lower_query or "family court" in lower_query or "striking off defense" in lower_query or "dower" in lower_query:
-        request.domain_filter = "family_law"
-    elif "rent tribunal" in lower_query or "tentative rent" in lower_query or "section 24 prpa" in lower_query or "eviction" in lower_query or "landlord and tenant" in lower_query:
-        request.domain_filter = "rent_law"
-    
-    
+    # Semantic Domain Classifier — reads the full query, not keywords
+    if not request.domain_filter:
+        request.domain_filter = classify_domain_semantic(normalized_query)
+        print(f"[CLASSIFIER] Semantic Domain Classification: {request.domain_filter}")
+
     # Condense query if history exists
     if request.history:
         search_query = condense_query(normalized_query, request.history)
@@ -246,7 +380,7 @@ async def legal_query(request: QueryRequest):
 
     # Build the legal context from retrieved chunks with explicit indexing
     context_parts = []
-    for i, chunk in enumerate(valid_chunks[:5]):
+    for i, chunk in enumerate(valid_chunks[:2]):
         context_parts.append(f"--- Text [{i+1}] ---\nSource: {chunk['citation']}\n{chunk['text']}")
     legal_context = "\n\n".join(context_parts)
     
@@ -266,15 +400,9 @@ CRITICAL INSTRUCTIONS FOR THE ABSOLUTE ANSWER:
 - When explaining Penal Codes (e.g., PPC 324 or PPC 302), you MUST explain the exact statutory language. Do not give generic summaries. Explicitly mention nuances like Qisas, Arsh, Daman, or Ta'zir, and whether the crime is Bailable, Non-Bailable, Cognizable, or Compoundable.
 - Distinguish clearly between offenses (e.g., explain that PPC 324 is Attempted Murder with up to 10 years, whereas PPC 302 is Actual Murder with Death/Life imprisonment, and explain the punishment for the Hurt caused).
 - **LEGAL STRATEGY & ROADMAPS:** If the user asks for advice on how to win a case, defend an offender, or what the possibility of winning is, DO NOT give generic bullet points about "strong evidence" or "witness credibility". You MUST provide a COMPLETE STRATEGIC ROADMAP. Break down exactly what specific evidence is needed (e.g., Medico-Legal Certificates, Crime Scene forensics, cross-examination strategies for Section 161 CrPC statements). Give them a step-by-step masterplan for prosecution or defense. Be brutally honest about the realities of Pakistani courts.
-- **STRICT PRE-EMPTION MANDATE:** In any pre-emption (Haq-e-Shufa) scenario, you MUST enforce strictissimi juris. If a Talab-i-Ishhad notice omits the exact date, time, place of Talab-i-Muwathaba, or the names of witnesses, you MUST state that this is a FATAL DEFECT that completely extinguishes the right of pre-emption under PLD 2010 SC 852 (5-Member Bench) and PLD 2007 SC 259. The suit is absolutely NOT maintainable. Do not ever call this a "minor procedural defect." Also, always mandate the Day-1 filing of a Section 14 Zar-i-Shoof (1/3rd deposit) application.
-- **STRICT INHERITANCE MANDATE:** In cases of inheritance or gifts (Hiba) excluding female heirs, you MUST mandate that the burden of proof rests heavily on the beneficiaries under Articles 117 and 128/129 of the Qanun-e-Shahadat Order 1984. NEVER cite Article 121 for civil dispositions. Furthermore, you MUST explicitly state that the suit is NOT barred by limitation under PLD 2021 SC 812 (Full Bench). For procedural Day-1 filings, you MUST mandate a Notice of Lis Pendens under Section 52 Transfer of Property Act 1882 alongside Order 39 Rules 1 & 2 CPC. NEVER recommend a "Section 28 deposit application" or "Zar-i-Shoof" for an inheritance cancellation suit.
-- **STRICT BANKING/FIO MANDATE:** In disputes between commercial banks and customers governed by the Financial Institutions (Recovery of Finances) Ordinance 2001 (FIO 2001), you MUST explicitly state that Section 5 of the Limitation Act 1908 DOES NOT APPLY to the 30-day deadline for Leave to Defend (PLD 2012 SC 625 & 2023 SCMR 533). You MUST mandate that the Leave to Defend application strictly complies with Section 10(3) and (4) FIO 2001 by providing an exact itemized counter-summary of accounts and specifically disputing markup/penalties, otherwise it will be summarily rejected (2021 SCMR 1420). Finally, NEVER recommend serving a Section 80 CPC Notice in commercial banking disputes.
-- **STRICT CONSTITUTIONAL MANDATE:** In cases involving writ petitions against government or administrative authorities (e.g., Customs, FBR, WeBOC suspension) under Article 199, you MUST explicitly state that an Article 199 writ petition is immediately maintainable despite an unexhausted alternate statutory remedy IF the impugned action is Coram Non Judice, Malafide, or violates Natural Justice / Audi Alteram Partem (such as failure to issue a Show Cause Notice under Article 10A and Section 24A of the General Clauses Act) as per PLD 2021 SC 540, PLD 2016 SC 121, 2022 SCMR 822, and PLD 2018 SC 189.
-- **STRICT SPECIFIC PERFORMANCE MANDATE:** In any specific performance suit for immovable property, you MUST explicitly mandate that the plaintiff must prove continuous "readiness and willingness" by immediately depositing the balance sale consideration in court via an urgent Section 151 CPC Motion, failing which relief is barred under Section 24(b) of the Specific Relief Act 1877 and the suit is liable to rejection under Order 7 Rule 11 CPC (PLD 2021 SC 707). Additionally, you MUST always mandate the filing of a Notice of Lis Pendens under Section 52 Transfer of Property Act 1882 alongside an Order 39 Rules 1 & 2 CPC application.
-- **STRICT ARBITRATION MANDATE:** In cases challenging an arbitral award under the Arbitration Act 1940, you MUST explicitly state that Section 5 of the Limitation Act 1908 DOES NOT apply to condone delays for objections filed under Article 158 (30-day limit), per PLD 2018 SC 345, 2021 SCMR 980, and PLD 2015 SC 212. The only exceptions are void awards or coram non judice. You MUST explicitly map stay applications to Section 41 / Schedule II of the Arbitration Act 1940. You MUST NEVER recommend Section 52 TPA (Lis Pendens), Section 151 CPC (for condonation), or standalone Order 39 Rules 1 & 2 CPC applications in an arbitration challenge.
 - Answer in plain, clear English. Use bullet points for readability."""
 
-    llm_answer = generate_with_llm(prompt, history=request.history)
+    llm_answer = generate_with_llm(prompt, history=request.history, domain_filter=request.domain_filter)
 
     if not llm_answer:
         llm_answer = "The LLM service is currently unavailable. Please review the applicable law below."
