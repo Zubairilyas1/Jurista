@@ -41,69 +41,66 @@ class RAGEngine:
                 pass
 
         if not results.get('documents') or len(results['documents']) == 0 or len(results['documents'][0]) == 0:
-            print(f"?? Using fallback raw file parser for domain: {domain_filter}...")
+            print(f"[RETRIEVAL] ChromaDB empty. Using semantic fallback across ALL corpus files...")
             
-            # Map domain filters to files (if no filter, default to all known files)
-            files_to_check = []
+            # Read ALL .txt files in the pending directory — no manual mapping
+            import numpy as np
             pending_dir = Path(__file__).parent.parent.parent / "data" / "raw" / "case_law" / "pending"
             
-            if domain_filter == "constitutional_admin":
-                files_to_check.append(pending_dir / "constitutional_admin.txt")
-            elif domain_filter == "banking_fio":
-                files_to_check.append(pending_dir / "banking_fio.txt")
-            elif domain_filter == "banking_criminal_cpc":
-                files_to_check.append(pending_dir / "banking_criminal_cpc.txt")
-            elif domain_filter == "pre_emption":
-                files_to_check.append(pending_dir / "pre_emption.txt")
-            elif domain_filter == "inheritance_property":
-                files_to_check.append(pending_dir / "inheritance_property.txt")
-            elif domain_filter == "specific_performance":
-                files_to_check.append(pending_dir / "specific_performance.txt")
-            elif domain_filter == "arbitration_1940":
-                files_to_check.append(pending_dir / "arbitration_1940.txt")
-            elif domain_filter == "family_law":
-                files_to_check.append(pending_dir / "family_law.txt")
-            elif domain_filter == "rent_law":
-                files_to_check.append(pending_dir / "rent_law.txt")
-            elif domain_filter == "civil_commercial_cpc":
-                files_to_check.append(pending_dir / "civil_commercial_cpc.txt")
-            elif domain_filter == "service_law":
-                files_to_check.append(pending_dir / "service_law.txt")
-            elif domain_filter == "corporate_law":
-                files_to_check.append(pending_dir / "corporate_law.txt")
-            else:
-                files_to_check.extend([
-                    pending_dir / "constitutional_admin.txt",
-                    pending_dir / "banking_fio.txt",
-                    pending_dir / "banking_criminal_cpc.txt",
-                    pending_dir / "pre_emption.txt",
-                    pending_dir / "inheritance_property.txt",
-                    pending_dir / "specific_performance.txt",
-                    pending_dir / "arbitration_1940.txt",
-                    pending_dir / "family_law.txt"
-                ])
-                
-            for filepath in files_to_check:
-                if filepath.exists():
-                    text = filepath.read_text(encoding="utf-8")
-                    chunks = text.split("\n\n")
-                    for i, chunk in enumerate(chunks):
-                        if not chunk.strip(): continue
-                        domain_tag = domain_filter if domain_filter else filepath.stem
-                        formatted.append({
-                            "text": f"[Domain: {domain_tag}]\n{chunk}",
-                            "citation": f"Fallback Source ({domain_tag})",
-                            "source": filepath.name,
-                            "type": "statutes",
-                            "score": 0.9,
-                            "section": "",
-                            "file_name": filepath.name,
-                            "id": f"chunk_{filepath.stem}_{i}"
-                        })
+            all_chunks = []
+            if pending_dir.exists():
+                for filepath in sorted(pending_dir.glob("*.txt")):
+                    try:
+                        text = filepath.read_text(encoding="utf-8")
+                        chunks = text.split("\n\n")
+                        for i, chunk in enumerate(chunks):
+                            chunk = chunk.strip()
+                            if not chunk or len(chunk) < 20:
+                                continue
+                            domain_tag = filepath.stem
+                            all_chunks.append({
+                                "text_raw": chunk,
+                                "text": f"[Domain: {domain_tag}]\n{chunk}",
+                                "citation": f"Fallback Source ({domain_tag})",
+                                "source": filepath.name,
+                                "type": "statutes",
+                                "section": "",
+                                "file_name": filepath.name,
+                                "id": f"chunk_{filepath.stem}_{i}",
+                                "domain": domain_tag,
+                            })
+                    except Exception as e:
+                        print(f"[RETRIEVAL] Error reading {filepath.name}: {e}")
             
-            if formatted:
-                return formatted[:top_k]
+            print(f"[RETRIEVAL] Loaded {len(all_chunks)} chunks from {len(list(pending_dir.glob('*.txt')))} corpus files.")
+            
+            if not all_chunks:
+                return formatted
+            
+            # Encode all chunks and compute cosine similarity against the query
+            chunk_texts = [c["text_raw"] for c in all_chunks]
+            chunk_embeddings = self.model.encode(chunk_texts)
+            query_emb = np.array(query_embedding)
+            
+            similarities = []
+            for idx, emb in enumerate(chunk_embeddings):
+                emb = np.array(emb)
+                cos_sim = float(np.dot(query_emb, emb) / (
+                    np.linalg.norm(query_emb) * np.linalg.norm(emb) + 1e-10
+                ))
+                similarities.append((idx, cos_sim))
+            
+            # Sort by similarity (highest first) and take top results
+            similarities.sort(key=lambda x: x[1], reverse=True)
+            
+            for idx, score in similarities[:top_k]:
+                chunk = all_chunks[idx]
+                chunk["score"] = score
+                formatted.append(chunk)
+                print(f"[RETRIEVAL]   #{len(formatted)}: {chunk['domain']} (sim={score:.4f}) — {chunk['text_raw'][:80]}...")
+            
             return formatted
+
 
         for i, doc in enumerate(results['documents'][0]):
             meta = results['metadatas'][0][i]
