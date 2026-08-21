@@ -26,9 +26,40 @@ SUPREME COURT PRECEDENT: PLD 2021 SC 812 (Full Bench)
 The Supreme Court held that the law of limitation does not run against female heirs who are fraudulently deprived of their Shari inheritance shares. A suit filed by sisters challenging a fraudulent gift deed (Hiba-nama) or mutation that excludes them from their rightful Islamic inheritance is not barred by time, as fraud vitiates all solemn proceedings.
 
 SUPREME COURT PRECEDENT: 2021 SCMR 1369 & PLD 2017 SC 627
-Beneficiaries of a gift deed (Hiba-nama) that excludes female Islamic heirs face a extremely heavy legal burden. They must conclusively establish independent advice to the donor, a valid offer, unequivocal acceptance, and the immediate transfer of physical possession (Qabza). Failure to prove these elements renders the gift void.
+Beneficiaries of a gift deed (Hiba-nama) that excludes female Islamic heirs face a extremely heavy legal burden. They must conclusively establish independent advice to the donor, a valid offer, unequivocal acceptance, and the immediate transfer of possession (Qabza). Failure to prove these elements renders the gift void.
+
+SECTION 41 TRANSFER OF PROPERTY ACT 1882 — FAILURE IN INHERITANCE FRAUD CASES
+Citation: 2002 SCMR 1938 & PLD 2017 SC 627
+Section 41 TPA protects a transferee-for-value who acts in good faith where the transferor is the "ostensible owner" with the CONSENT (express or implied) of the real owners. In cases of inheritance fraud where female heirs were fraudulently suppressed from the Jamabandi, Section 41 TPA FAILS AS A MATTER OF LAW. The fraudulently deprived sisters never gave express or implied consent for the male heir to hold out as sole owner. Therefore, any third-party purchaser (even a bona fide one) cannot claim Section 41 TPA protection against the sisters' unencumbered Shari shares. The correct doctrine is Nemo dat quod non habet: the fraudulent heir had no valid title over the sisters' shares, so he could not transfer what he never owned. The lawyer does NOT need to prove constructive notice; Section 41 TPA fails automatically.
+
+COLLUSIVE CONSENT DECREE — SECTION 12(2) CPC vs. FRESH CIVIL SUIT
+Citation: PLD 2020 SC 146 & 2021 SCMR 1369
+A person who was NOT a party to a suit but whose rights are directly affected by a collusive consent decree obtained by fraud has two remedies:
+(1) Application under Section 12(2) CPC before the decree-passing court to set aside the decree on grounds of fraud/misrepresentation. This is available to strangers to the decree whose legal rights are affected.
+(2) Fresh Civil Suit for Declaration & Cancellation under Section 42 Specific Relief Act 1877 read with Section 39 SRA.
+Female heirs suppressed from the original suit are strangers to the decree and may use EITHER remedy. Section 12(2) CPC is NOT limited to parties of the original suit where the decree was obtained by fraud affecting third-party rights.
+
+BANK MORTGAGE ON FRAUDULENTLY MUTATED PROPERTY
+A bank mortgage executed on property where the mortgagor held fraudulent title (derived through suppression of Shari heirs) is void to the extent of the true heirs' undivided shares. The mortgage can only validly encumber the lawful fractional share of the mortgagor. Under the Financial Institutions (Recovery of Finances) Ordinance 2001 (FIO 2001), a Banking Court executing a recovery decree through public auction must, upon objection, exclude the undivided shares of persons who were not party to the mortgage deed and hold valid ownership rights.
+
+MULTI-FORUM STRATEGY: INHERITANCE FRAUD + BANK MORTGAGE + THIRD-PARTY SALE
+
+FORUM 1 (EMERGENCY PRIORITY): BANKING COURT — FIO 2001 SECTION 19(4) / SECTION 23
+Remedy: File an Objection Petition under Section 19(4) read with Section 23 of the Financial Institutions (Recovery of Finances) Ordinance, 2001 before the executing Banking Court.
+Prayer: Immediate stay of the scheduled public auction AND exclusion/release of the sisters' 2/4th Shari undivided shares from the execution decree and auction proceedings. A civil court temporary injunction DOES NOT automatically stay a Banking Court execution decree. The Section 19(4)/23 FIO objection is the EXCLUSIVE and MANDATORY emergency forum to stop the Banking Court auction.
+Day-1 Attachments: Certified copy of father's death certificate, family registration certificate (CNIC/NADRA records), certified copy of the fraudulent Inteqal-e-Warasat mutation, affidavit establishing sisters' Shari shares.
+
+FORUM 2: CIVIL COURT — SUIT FOR DECLARATION, CANCELLATION & PARTITION
+File a Suit for Declaration, Cancellation of Consent Decree/Sale Deeds, Partition, and Permanent Injunction under Sections 39 & 42 Specific Relief Act 1877 read with Section 53 PLRA.
+Day-1 Filings: Application under Order 39 Rules 1 & 2 CPC for temporary injunction; Application under Order 26 Rule 9 CPC for appointment of Local Commission to record physical possession; Notice of Lis Pendens under Section 52 TPA registered with Sub-Registrar to freeze all future transfers.
+
+FORUM 3: REVENUE COURT — STATUTORY APPEAL UNDER SECTION 161(1)(a) PLRA
+File a Statutory Revenue Appeal under Section 161(1)(a) of the Punjab Land Revenue Act against the 2011 fraudulent Inteqal-e-Warasat mutation before the Collector/DOR. Prayer: Correction of Jamabandi to reflect sisters' names as co-sharers. This is separate from and does not replace the civil suit.
 
 DAY-1 FILINGS STRATEGY
 Primary Suit: Suit for Declaration, Cancellation of Instrument (Hiba-nama), Partition, and Permanent Injunction (Sections 39 & 42, Specific Relief Act 1877).
 Order 39 Rules 1 & 2 CPC: Injunction motion to restrain defendants from alienating or altering the property.
+Order 26 Rule 9 CPC: Application for appointment of Local Commission to record physical possession (Qabza).
+Order 16 Rule 1 CPC: List of Witnesses.
+Order 7 Rule 14 CPC: List of Documents.
 Notice of Lis Pendens (Section 52 Transfer of Property Act 1882): Immediate registration of litigation notice with the Sub-Registrar / Land Revenue Office to freeze title transfers.

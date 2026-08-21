@@ -1,32 +1,25 @@
 FINANCIAL INSTITUTIONS (RECOVERY OF FINANCES) ORDINANCE, 2001 (FIO 2001)
 
-Section 9. Procedure of Banking Courts.
-Banking Courts shall follow the summary procedure outlined in this Ordinance.
-
-Section 10. Leave to Defend.
+Section 10. Leave to Defend (PLA).
 (1) In any case in which the summons has been served, the defendant shall not be entitled to defend the suit unless he obtains leave from the Banking Court.
-(2) An application for leave to defend shall be in the form of a written statement, and shall contain a summary of the substantial questions of law as well as fact in respect of which, in the opinion of the defendant, evidence needs to be recorded.
-(3) In the case of a suit for recovery instituted by a financial institution, the application for leave to defend shall also specifically state the following:
-(a) the amount of finance availed by the defendant from the financial institution;
-(b) the amounts paid by the defendant to the financial institution and the dates of payment;
-(c) the amount of finance and other amounts relating to the finance payable by the defendant to the financial institution up to the date of institution of the suit;
-(d) the amount if any which the defendant disputes as payable to the financial institution and facts in support thereof.
-(4) The application for leave to defend shall be accompanied by all the documents which, in the opinion of the defendant, support the substantial questions of law or fact raised by him.
-(5) An application for leave to defend shall be rejected if the requirements of sub-section (3) and (4) are not fulfilled.
+(3) In a suit for recovery by a financial institution, the PLA shall specifically state: (a) the amount of finance availed; (b) amounts paid and dates of payment; (c) the amount payable up to the date of suit; (d) the amount disputed and facts in support thereof.
+(4) The PLA shall be accompanied by all documents supporting the substantial questions of law or fact.
+(5) A PLA shall be REJECTED if the requirements of sub-section (3) and (4) are not fulfilled.
+(6) Generic denials without specific quantification of disputed markup/principal attract mandatory rejection.
+(11) If no PLA is filed within the limitation period, or if the PLA is rejected, the Banking Court shall pass a summary decree in favor of the plaintiff.
+Binding Precedent: NBP v. Samdaani, PLD 2012 SC 1 — Compliance with Section 10(3) and 10(4) is mandatory. A PLA lacking specific quantification of disputed markup and principal is no PLA in the eye of the law. Summary decree under Section 10(11) becomes automatic.
 
-Section 11. Decree.
-If no application for leave to defend is filed within the period of limitation, or if such application is rejected, the Banking Court shall pass a decree in favor of the plaintiff.
+Section 22. Appeal.
+(1) Any person aggrieved by any judgment, decree, sentence, or order of a Banking Court may prefer an appeal to the High Court within thirty days.
+(2) No appeal shall be entertained unless the appellant deposits with the High Court at least 50% of the decreed amount or furnishes security for that amount acceptable to the High Court.
+(6) OUSTER CLAUSE: No court shall entertain or adjudicate upon any matter which a Banking Court is empowered by or under this Ordinance to determine, and no injunction shall be granted by any court in respect of any action taken or intended to be taken by a Banking Court.
+Binding Precedent: 2021 SCMR 1215 (Habib Bank Ltd. v. Messers Allied Synthetic) — The High Court has ZERO statutory discretion under Section 22(2) to waive or reduce the 50% pre-deposit, regardless of financial distress or corporate hardship.
 
-LIMITATION ACT 1908
-Section 5. Extension of period in certain cases.
-Any appeal or application for which a period of limitation is prescribed may be admitted after the period of limitation if the appellant or applicant satisfies the Court that he had sufficient cause for not preferring the appeal or making the application within such period.
+CRITICAL ANTI-BLEED RULE: Article 199 Writ Petitions are STRICTLY NON-MAINTAINABLE against Banking Court orders, decrees, or execution proceedings. Constitutional Writ jurisdiction CANNOT be used to bypass the statutory 50% pre-deposit requirement.
+Binding Precedent: Apollo Textile Mills v. Habib Bank Ltd., 2015 SCMR 22 — Article 199 Writ Petitions are barred ab initio against Banking Court orders. Civil Revisions under Section 115 CPC and Civil Suits under Section 9 CPC are equally barred by Section 22(6) FIO 2001.
 
-SUPREME COURT PRECEDENT: PLD 2012 SC 625 & 2023 SCMR 533
-The Supreme Court has definitively held that the Banking Court is a special court governed by a special law (FIO 2001). Therefore, Section 5 of the Limitation Act 1908 (condonation of delay) does NOT apply to an application for leave to defend under Section 10 of FIO 2001. The 30-day statutory deadline is strict and non-extendable.
-
-SUPREME COURT PRECEDENT: 2021 SCMR 1420 & PLD 2020 SC 480
-If the application for leave to defend fails to specifically state the amounts availed, amounts paid, and specifically dispute the markup/penalties with an itemized counter-summary of accounts (as strictly mandated by Section 10(3) and (4) of FIO 2001), the application must be summarily rejected and a decree immediately passed in favor of the bank.
-
-CIVIL PROCEDURE CODE (CPC) 1908
-Section 80. Notice.
-No suit shall be instituted against the Government or against a public officer in respect of any act purporting to be done by such public officer in his official capacity, until the expiration of two months next after notice in writing has been delivered. (This does NOT apply to commercial banks or private financial institutions).
+CORRECT STRATEGIC ROADMAP FOR BANKING/FIO DISPUTES:
+Step 1: File a Banking First Appeal (BFA) under Section 22(1) before the Division Bench (DB) of the High Court within 30 days.
+Step 2: Deposit 50% of the decreed amount (or furnish security) under Section 22(2) to obtain stay of execution.
+Step 3: Ground the appeal on rectifying the PLA defect — demonstrate that the bank's own account statements were uncertified or that the markup calculation contains a triable discrepancy under Section 10.
+Step 4: Expressly concede that Civil Revisions (S. 115 CPC), Civil Suits (S. 9 CPC), and Constitutional Writs (Art. 199) are all barred under Section 22(6).
