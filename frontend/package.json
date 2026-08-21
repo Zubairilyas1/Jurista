@@ -23,6 +23,7 @@
     "@mui/x-charts": "^9.10.1",
     "@mui/x-data-grid": "^9.10.1",
     "@mui/x-date-pickers": "^9.10.1",
+    "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
@@ -34,9 +35,12 @@
     "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-markdown": "^10.1.0",
     "react-quill": "^2.0.0",
     "recharts": "^3.10.1",
+    "remark-gfm": "^4.0.1",
     "tailwindcss": "^3.3.6",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.3.2"
   },
   "devDependencies": {

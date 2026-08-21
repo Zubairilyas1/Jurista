@@ -3,6 +3,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Sparkles, Mic, FileText, Settings, HelpCircle, CheckCircle2, AlertTriangle, Send, ChevronDown, Database } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
   id: string;
@@ -285,7 +287,7 @@ ${ocrData.text}`,
       const thinkMatch = content.match(/<think>([\s\S]*?)<\/think>/);
       if (thinkMatch) {
         thinking = thinkMatch[1].trim();
-        content = content.replace(/<think>[\s\S]*?<\/think>/, '').trim();
+        content = content.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
       }
 
       // Extract suggested questions
@@ -304,47 +306,48 @@ ${ocrData.text}`,
         content = content.replace('[OPEN_PETITION_DRAFTER]', '').trim();
       }
 
-      const renderTextWithCitations = (text: string) => {
-        if (!msg.citations) return text;
-        const parts = text.split(/(\[\d+\])/g);
-        return parts.map((part, index) => {
-          const match = part.match(/\[(\d+)\]/);
-          if (match) {
-            const citeIdx = parseInt(match[1], 10) - 1;
-            const citation = msg.citations![citeIdx];
-            if (citation) {
-              const isOverruled = citation.validity_status === 'OVERRULED_FILTERED';
-              const colorClass = isOverruled ? 'text-red-500 bg-red-500/10' : 'text-lime bg-lime/10';
-              const badgeClass = isOverruled ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-lime/20 text-lime border-lime/30';
-              
-              return (
-                <span key={index} className="relative group inline-block cursor-pointer mx-1">
-                  <span className={`${colorClass} text-xs font-bold px-1.5 py-0.5 rounded`}>
-                    {part}
-                  </span>
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-96 p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all bg-[#09090B] border border-white/10 shadow-2xl rounded-2xl z-50 pointer-events-none">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-xs text-white/50 uppercase tracking-widest font-bold">{citation.citation}</p>
-                      <span className={`px-2 py-0.5 rounded border text-[10px] font-bold uppercase tracking-widest ${badgeClass}`}>
-                        {isOverruled ? 'Overruled - Do Not Cite' : 'Good Law'}
-                      </span>
-                    </div>
-                    <p className="text-sm text-white/90 leading-relaxed max-h-48 overflow-hidden">{citation.raw_text}</p>
-                  </div>
-                </span>
-              );
-            }
-          }
-          return <span key={index}>{part}</span>;
-        });
-      };
+      const markdownContent = content.replace(/\[(\d+)\]/g, '[$1](#cite-$1)');
 
       return (
         <div className="flex flex-col gap-4 w-full">
           <ThinkingBlock thinking={thinking} verification={msg.status === 'GROUNDED' ? 'Citations successfully cross-referenced with Jurista Legal Graph.' : undefined} />
           
-          <div className="text-white/90 leading-relaxed font-medium">
-            {renderTextWithCitations(content)}
+          <div className="text-white/90 leading-relaxed font-medium prose prose-invert prose-lime prose-p:mb-4 prose-ul:mb-4 prose-li:my-1 prose-headings:text-lime max-w-none">
+            <ReactMarkdown 
+               remarkPlugins={[remarkGfm]}
+               components={{
+                 a: ({node, href, children, ...props}) => {
+                   if (href?.startsWith('#cite-')) {
+                     const citeIdx = parseInt(href.replace('#cite-', ''), 10) - 1;
+                     const citation = msg.citations?.[citeIdx];
+                     if (citation) {
+                        const isOverruled = citation.validity_status === 'OVERRULED_FILTERED';
+                        const colorClass = isOverruled ? 'text-red-500 bg-red-500/10' : 'text-lime bg-lime/10';
+                        const badgeClass = isOverruled ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-lime/20 text-lime border-lime/30';
+                        return (
+                          <span className="relative group inline-block cursor-pointer mx-1 no-underline">
+                            <span className={`${colorClass} text-xs font-bold px-1.5 py-0.5 rounded`}>
+                              [{citeIdx + 1}]
+                            </span>
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-96 p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all bg-[#09090B] border border-white/10 shadow-2xl rounded-2xl z-50 pointer-events-none text-left font-sans">
+                              <div className="flex items-center justify-between mb-3">
+                                <p className="text-xs text-white/50 uppercase tracking-widest font-bold m-0">{citation.citation}</p>
+                                <span className={`px-2 py-0.5 rounded border text-[10px] font-bold uppercase tracking-widest ${badgeClass} m-0`}>
+                                  {isOverruled ? 'Overruled - Do Not Cite' : 'Good Law'}
+                                </span>
+                              </div>
+                              <p className="text-sm text-white/90 leading-relaxed max-h-48 overflow-hidden m-0">{citation.raw_text}</p>
+                            </div>
+                          </span>
+                        );
+                     }
+                   }
+                   return <a href={href} className="text-blue-400 hover:underline" {...props}>{children}</a>;
+                 }
+               }}
+            >
+              {markdownContent}
+            </ReactMarkdown>
           </div>
           
           {/* Show Your Work Panel */}
@@ -500,7 +503,7 @@ ${ocrData.text}`,
                     {/* Content */}
                     <div className="flex-1 min-w-0 flex flex-col pt-1">
                       {msg.type === 'assistant' && renderStatus(msg.status, messages.indexOf(msg), msg.content)}
-                      <div className="text-[15px] lg:text-[17px] leading-[1.8] whitespace-pre-wrap font-medium text-white/90">
+                      <div className="text-[15px] lg:text-[17px] leading-[1.8] font-medium text-white/90">
                         {renderMessageContent(msg)}
                       </div>
 
