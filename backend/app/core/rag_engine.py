@@ -43,13 +43,38 @@ class RAGEngine:
         if not results.get('documents') or len(results['documents']) == 0 or len(results['documents'][0]) == 0:
             print(f"[RETRIEVAL] ChromaDB empty. Using semantic fallback across ALL corpus files...")
             
-            # Read ALL .txt files in the pending directory — no manual mapping
+            # Domain → allowed corpus files mapping.
+            # When a domain is identified, ONLY load files from that domain's
+            # allow-list so cross-domain bleed (family_law in a land_revenue
+            # result, etc.) is structurally impossible.
+            DOMAIN_CORPUS_MAP = {
+                "land_revenue":               ["land_revenue", "civil_commercial_cpc", "inheritance_property", "specific_performance", "banking_fio"],
+                "family_law":                 ["family_law", "inheritance_property"],
+                "tax_law":                    ["tax_law", "constitutional_admin"],
+                "corporate_law":              ["corporate_law", "constitutional_admin", "civil_commercial_cpc"],
+                "banking_fio":                ["banking_fio", "inheritance_property", "land_revenue"],
+                "banking_criminal_cpc":       ["banking_criminal_cpc", "civil_commercial_cpc"],
+                "constitutional_admin":       ["constitutional_admin"],
+                "arbitration_1940":           ["arbitration_1940"],
+                "international_arbitration_2011": ["international_arbitration_2011", "arbitration_1940"],
+                "civil_commercial_cpc":       ["civil_commercial_cpc"],
+                "pre_emption":                ["pre_emption", "land_revenue", "civil_commercial_cpc"],
+                "inheritance_property":       ["inheritance_property", "family_law", "banking_fio", "land_revenue"],
+                "specific_performance":       ["specific_performance", "civil_commercial_cpc"],
+                "service_law":                ["service_law", "constitutional_admin"],
+                "rent_law":                   ["rent_law", "civil_commercial_cpc"],
+            }
+            allowed_stems = DOMAIN_CORPUS_MAP.get(domain_filter, None)
+
             import numpy as np
             pending_dir = Path(__file__).parent.parent.parent / "data" / "raw" / "case_law" / "pending"
             
             all_chunks = []
             if pending_dir.exists():
                 for filepath in sorted(pending_dir.glob("*.txt")):
+                    # If a domain is identified, skip files outside the allow-list
+                    if allowed_stems is not None and filepath.stem not in allowed_stems:
+                        continue
                     try:
                         text = filepath.read_text(encoding="utf-8")
                         chunks = text.split("\n\n")
@@ -72,7 +97,7 @@ class RAGEngine:
                     except Exception as e:
                         print(f"[RETRIEVAL] Error reading {filepath.name}: {e}")
             
-            print(f"[RETRIEVAL] Loaded {len(all_chunks)} chunks from {len(list(pending_dir.glob('*.txt')))} corpus files.")
+            print(f"[RETRIEVAL] Loaded {len(all_chunks)} chunks from allowed corpus files (domain={domain_filter}).")
             
             if not all_chunks:
                 return formatted
