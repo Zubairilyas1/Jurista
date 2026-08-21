@@ -68,8 +68,11 @@ DOMAIN_DESCRIPTIONS = {
     ),
     "banking_fio": (
         "Financial Institutions Ordinance 2001 FIO, Banking Court jurisdiction, "
-        "leave to defend under Section 10, recovery of finance facility, mortgage "
-        "foreclosure, bank guarantee enforcement, hypothecation"
+        "leave to defend PLA under Section 10, recovery of finance facility, mortgage "
+        "foreclosure, bank guarantee enforcement, hypothecation, Section 22 appeal "
+        "to High Court Division Bench, 50 percent pre-deposit for stay of execution, "
+        "Banking Court summary decree, attachment and auction of factory industrial assets, "
+        "banking first appeal BFA, ouster of civil revision and writ jurisdiction"
     ),
     "civil_commercial_cpc": (
         "Order 37 CPC summary suit, leave to appear and defend, unconditional leave, "
@@ -84,7 +87,11 @@ DOMAIN_DESCRIPTIONS = {
     "inheritance_property": (
         "Islamic inheritance law, Muslim personal law succession, female heir rights, "
         "sister's share in inheritance, Hiba gift inter vivos, Marz-ul-Maut deathbed gift, "
-        "mutation of inherited property, benami transaction, partition of joint property"
+        "mutation of inherited property, Inteqal-e-Warasat inheritance mutation, "
+        "fraudulent suppression of female heirs, collusive consent decree, "
+        "Section 41 TPA ostensible owner, nemo dat quod non habet, "
+        "bank mortgage on inherited property, FIO Banking Court auction of ancestral land, "
+        "benami transaction, partition of joint property, Section 12(2) CPC fraud decree"
     ),
     "specific_performance": (
         "Specific Relief Act 1877, suit for specific performance of agreement to sell "
@@ -101,6 +108,12 @@ DOMAIN_DESCRIPTIONS = {
         "Rent Controller Rent Tribunal, eviction of tenant, tentative rent deposit "
         "Section 16, Section 21 appeal to High Court, landlord tenant dispute, "
         "fair rent determination, ejectment"
+    ),
+    "land_revenue": (
+        "West Pakistan Land Revenue Act 1967, Section 172 ouster of civil court jurisdiction, "
+        "revenue mutation Intiqal, Jamabandi record of rights, District Collector, "
+        "Commissioner Board of Revenue appeals Section 161, Section 80 CPC notice to Provincial "
+        "Government, summary powers of revenue officer, state land Nazool encroachment"
     ),
 }
 
@@ -233,7 +246,18 @@ def post_with_rotation(payload: dict, timeout: int = 60) -> dict:
     raise Exception("All API keys and fallback models exhausted due to rate limits.")
 
 def generate_with_llm(prompt: str, history: List[dict] = None, domain_filter: str = None) -> str:
-    base_system_prompt = "You are a Senior Pakistani Legal Expert and Advocate. Answer the user's question based on the provided legal texts, or your own expert knowledge if the provided text is insufficient. You handle all areas of Pakistani law, including Criminal (PPC/CrPC), Civil, Family, and Traffic laws. Provide a clear, comprehensive, and practical answer in plain English. Include the relevant law, the offence/issue, and practical advice. Keep it concise but thorough. PROCEDURAL FILINGS MANDATE: Whenever providing a litigation strategy, explicitly list all mandatory Day-1 court applications, procedural attachments, and deposit motions required alongside the main plaint. EVIDENCE LAW MANDATE: Whenever analyzing the burden of proof, especially in transactions involving illiterate, bedridden, or vulnerable donors (such as Marz-ul-Maut gifts), you MUST explicitly cite the Qanun-e-Shahadat Order 1984 (e.g. Articles 114 and 121). APPELLATE HIERARCHY GUARDRAIL: Whenever a special statute provides an explicit appeal to a lower appellate forum, you MUST NEVER recommend an Article 199 Writ Petition directly in the High Court as a Day-1 remedy, because the alternate statutory remedy must be exhausted first. STRICT GUARDRAIL 1: If the user asks an ethical, moral, political, or off-topic question, you MUST politely reject it. STRICT GUARDRAIL 2: If the user explicitly asks you to draft a petition, you MUST respond by briefly acknowledging it and strictly adding the exact text `[OPEN_PETITION_DRAFTER]` at the very end of your response."
+    base_system_prompt = ("You are a Senior Pakistani Legal Expert and Advocate. Answer the user's question based on the provided legal texts, or your own expert knowledge if the provided text is insufficient. You handle all areas of Pakistani law, including Criminal (PPC/CrPC), Civil, Family, and Traffic laws. Provide a clear, comprehensive, and practical answer in plain English. Include the relevant law, the offence/issue, and practical advice. Keep it concise but thorough. "
+        "PROCEDURAL FILINGS MANDATE: Whenever providing a litigation strategy, explicitly list all mandatory Day-1 court applications, procedural attachments, and deposit motions required alongside the main plaint. For List of Witnesses cite Order 16 Rule 1 CPC. For List of Documents cite Order 7 Rule 14 CPC. "
+        "EVIDENCE LAW MANDATE — CORRECT QSO CITATIONS ONLY: The Qanun-e-Shahadat Order 1984 uses ARTICLES not Sections. NEVER use the word 'Section' when citing QSO. The correct articles are: "
+        "(a) Civil burden of proof → Article 117 (burden lies on who asserts) and Article 118 (burden shifts on proof of fact). "
+        "(b) Court presumptions → Article 129 (court may presume existence of certain facts). "
+        "(c) Expert opinion on handwriting/documents → Article 59 QSO (Expert Opinion). "
+        "(d) Article 114 is ESTOPPEL — do NOT cite it for presumptions. "
+        "(e) Article 121 is the CRIMINAL burden of proof (accused claiming PPC General Exception) — do NOT cite it for civil cases. "
+        "APPELLATE HIERARCHY GUARDRAIL: Whenever a special statute provides an explicit appeal to a lower appellate forum, you MUST NEVER recommend an Article 199 Writ Petition directly in the High Court as a Day-1 remedy, because the alternate statutory remedy must be exhausted first. "
+        "STRICT GUARDRAIL 1: If the user asks an ethical, moral, political, or off-topic question, you MUST politely reject it. "
+        "STRICT GUARDRAIL 2: If the user explicitly asks you to draft a petition, you MUST respond by briefly acknowledging it and strictly adding the exact text `[OPEN_PETITION_DRAFTER]` at the very end of your response."
+    )
 
     if domain_filter == "pre_emption":
         base_system_prompt += " FATAL DEFECTS MANDATE: In Pre-emption cases, if Talabs are defective or 1/3rd deposit is missed, NEVER recommend condonation of delay. The right is permanently extinguished."
@@ -249,36 +273,66 @@ def generate_with_llm(prompt: str, history: List[dict] = None, domain_filter: st
         base_system_prompt += " In Rent Law (SRPO 1979), Section 5 Limitation Act NEVER applies to tentative rent deposits under Section 16(1). First Rent Appeal under Section 21 SRPO lies directly to the High Court. Article 199 Writ is barred."
     elif domain_filter == "tax_law":
         base_system_prompt += " In Tax Law (STA 1990 / ITO 2001), NEVER cite Section 492 of the Companies Act; Company Bench has ZERO jurisdiction over FBR tax matters. Article 199 Writs are NOT maintainable against assessment orders on merits (FBR v. Phoenix); exhaust statutory appeals. Execute DUAL-TRACK STRATEGY: Track 1 (Merits): File Statutory Appeal before CIR-Appeals (Sec 45B STA / 127 ITO) to set aside Ex-Parte Demand. Track 2 (Coercive Recovery): IMMEDIATELY and CONCURRENTLY (in parallel) file Art 199 Writ in High Court specifically challenging the unlawful Sec 48 STA / Sec 140 ITO bank attachment (without mandatory Sec 138 notice) and explicitly mandate FBR to REFUND the coercively attached amount. DO NOT wait for statutory appeals to conclude before filing the Art 199 Writ against the recovery. For Interim Stay, file before ATIR and deposit the mandatory 10% pre-deposit under Section 134 STA."
+    elif domain_filter == "inheritance_property":
+        base_system_prompt += (
+            " In Inheritance/Property Fraud cases:"
+            " SECTION 41 TPA GUARDRAIL: NEVER instruct the lawyer to 'prove constructive notice' against a third-party purchaser in inheritance fraud cases."
+            " Section 41 TPA (ostensible owner protection) FAILS AS A MATTER OF LAW when female heirs were fraudulently suppressed from the Jamabandi."
+            " The suppressed sisters never gave express or implied consent for the male heir to hold out as sole owner."
+            " Apply the absolute doctrine of Nemo dat quod non habet: the fraudulent heir had zero title over the sisters' shares; he could not transfer what he never owned (2002 SCMR 1938, PLD 2017 SC 627)."
+            " BANKING COURT MANDATE: If a bank auction of the property is imminent, the EXCLUSIVE emergency remedy is an Objection Petition under Section 19(4) read with Section 23 of the Financial Institutions (Recovery of Finances) Ordinance 2001 (FIO 2001) before the executing Banking Court."
+            " A civil court temporary injunction (Order 39 Rules 1 & 2 CPC) DOES NOT automatically stay a Banking Court execution decree."
+            " The Banking Court objection must seek: (1) immediate stay of the auction, and (2) exclusion/release of the sisters' 2/4th Shari undivided shares from the execution proceedings."
+            " CONSENT DECREE: Female heirs suppressed from a collusive suit may file EITHER a Section 12(2) CPC application before the decree-passing court OR a fresh Civil Suit under Section 42 SRA. They are strangers to the decree and Section 12(2) is available to them (PLD 2020 SC 146)."
+            " LIMITATION: Under PLD 2021 SC 812 (Full Bench), limitation does not run against fraudulently deprived female heirs. Upon father's death, sisters automatically become co-sharers; Tariq's possession is legally deemed possession on behalf of all co-sharers."
+        )
     elif domain_filter == "international_arbitration_2011":
         base_system_prompt += " In International Arbitration (2011 Act), Domestic Civil Courts have ZERO jurisdiction under Sec 30/33 of the 1940 Act. High Court has EXCLUSIVE jurisdiction. Filing a Written Statement without reserving rights submits to domestic jurisdiction."
     elif domain_filter == "banking_criminal_cpc":
         base_system_prompt += " In 489-F PPC (Dishonored Cheque), cheques issued strictly as security do not attract dishonest intention. Pre-Arrest Bail under Sec 498 CrPC is mandatory."
     elif domain_filter == "banking_fio":
-        base_system_prompt += " In Banking/FIO 2001 cases, Section 5 Limitation Act DOES NOT apply to the 30-day PLA deadline. Leave to Defend must strictly comply with Sec 10(3) and (4)."
+        base_system_prompt += " In Banking/FIO 2001 cases: ANTI-BLEED GUARDRAIL: Article 199 Writ Petitions are STRICTLY NON-MAINTAINABLE against Banking Court decrees or execution proceedings (Apollo Textile Mills v. HBL, 2015 SCMR 22). DO NOT import the tax law Art 199 Writ strategy into banking law. Civil Revisions (S. 115 CPC), Civil Suits (S. 9 CPC), and Constitutional Writs (Art. 199) are ALL barred ab initio under Section 22(6) FIO 2001. EXCLUSIVE FORUM: Section 22(1) FIO 2001 — File a Banking First Appeal (BFA) before the Division Bench (DB) of the High Court within 30 days. STAY OF EXECUTION: Under Section 22(2), deposit 50% of the decreed amount into court or furnish security; the High Court has ZERO discretion to waive or reduce this (2021 SCMR 1215). PLA PLEADING MANDATE: Under Section 10(3) and 10(4), a Leave to Defend application MUST specifically quantify disputed amounts, separate principal from markup/cost-of-funds, and attach certified bank statements. Generic denials trigger mandatory rejection under S. 10(6) and automatic summary decree under S. 10(11) (NBP v. Samdaani, PLD 2012 SC 1)."
     elif domain_filter == "civil_commercial_cpc":
         base_system_prompt += " In Order 37 CPC summary suits, NEVER recommend Order 9 Rule 13 CPC; the EXCLUSIVE remedy is Order 37 Rule 4 CPC. Section 5 of the Limitation Act is absolutely barred."
+    elif domain_filter == "land_revenue":
+        base_system_prompt += " In Land Revenue matters: ANTI-BLEED GUARDRAIL: Civil Courts have NO jurisdiction to directly entertain a Suit for Declaration/Injunction (Section 42 Specific Relief Act / Sec 9 CPC) against a Revenue Officer's order cancelling a mutation under Section 172 of the Land Revenue Act 1967. HOWEVER, Section 53 LRA creates an explicit statutory exception for title disputes based on registered sale deeds (2012 SCMR 1613). Furthermore, filing a civil suit against the Provincial Government without serving a 2-month statutory notice under Section 80(1) CPC (or obtaining an exemption under 80(2)) renders the plaint liable to immediate rejection under Order 7 Rule 11 CPC. CORRECT STRATEGY IS DUAL-TRACK: 1) REVENUE TRACK (Administrative): File statutory Revenue Appeal before the Commissioner under Section 161(1)(b) LRA for immediate stay. Do NOT apply Section 80 CPC here; CPC does not apply to executive revenue appeals. 2) CIVIL TRACK (Judicial Title): Concurrently file a Civil Suit for Declaration under Section 53 LRA read with Section 42 SRA. For the Civil Suit ONLY, you MUST issue a Section 80 CPC Notice to the Provincial Government, and file an application under Section 80(2) CPC to dispense with the notice period for emergency temporary injunctions (Order 39 Rules 1 & 2 CPC)."
 
-    messages = [{"role": "system", "content": base_system_prompt}]
+    from google import genai
+    from google.genai import types
+
+    gemini_key = os.getenv("GEMINI_API_KEY")
+    if not gemini_key:
+        return "The LLM service is currently unavailable. (Missing GEMINI_API_KEY)"
+        
+    client = genai.Client(api_key=gemini_key)
     
-    if history:
-        for msg in history:
-            content = msg.get("content", "")
-            messages.append({"role": msg.get("role", "user"), "content": content})
-            
-    messages.append({"role": "user", "content": prompt})
+    config = types.GenerateContentConfig(
+        system_instruction=base_system_prompt,
+        temperature=0.1,
+        max_output_tokens=8192,
+    )
 
-    payload = {
-        "model": HEAVY_LLM_MODEL,
-        "messages": messages,
-        "temperature": 0.3,
-        "max_tokens": 4000,
-        "stream": False
-    }
+    contents = []
+    if history:
+        for msg in history[-2:]:
+            import re
+            content = msg.get("content", "")
+            content = re.sub(r'<think>[\s\S]*?</think>', '', content).strip()
+            # Map roles to Gemini roles
+            role = "user" if msg.get("role") == "user" else "model"
+            contents.append(types.Content(role=role, parts=[types.Part.from_text(text=content)]))
+            
+    contents.append(types.Content(role="user", parts=[types.Part.from_text(text=prompt)]))
+
     try:
-        response_data = post_with_rotation(payload, timeout=60)
-        return response_data["choices"][0]["message"]["content"]
+        response = client.models.generate_content(
+            model='gemini-3.6-flash',
+            contents=contents,
+            config=config
+        )
+        return response.text
     except Exception as e:
-        print(f"? LLM Service Unavailable: {e}")
+        print(f"? Gemini API Exception: {e}")
         return "The LLM service is currently unavailable. Please review the applicable law below."
 
 def condense_query(query: str, history: List[dict]) -> str:
@@ -390,10 +444,7 @@ async def legal_query(request: QueryRequest):
 Relevant legal texts (retrieved from Pakistani law databases):
 {legal_context}
 
-Provide a complete, authoritative answer strictly following this format:
-
-1. First, you MUST output a <think>...</think> block. Inside this block, do all of your verbose reasoning and fact-checking. Check if the conversation history contains an attached document (like an FIR). If the user is asking about the attached document, YOU MUST BASE YOUR ANSWER ON THE ATTACHED DOCUMENT IN THE HISTORY, NOT ON THE RETRIEVED LEGAL TEXTS! The retrieved legal texts (listed above) might be irrelevant if the user is just asking you to summarize or analyze the document they attached.
-2. Immediately after the </think> tag, output the ABSOLUTE ANSWER to the user's question. This answer MUST be direct, concise, and highly actionable.
+Provide a complete, authoritative answer. Check if the conversation history contains an attached document (like an FIR). If the user is asking about the attached document, YOU MUST BASE YOUR ANSWER ON THE ATTACHED DOCUMENT IN THE HISTORY, NOT ON THE RETRIEVED LEGAL TEXTS!
 
 CRITICAL INSTRUCTIONS FOR THE ABSOLUTE ANSWER:
 - Act as a Senior High Court Advocate. Provide highly detailed, authoritative legal breakdowns.
