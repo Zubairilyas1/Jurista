@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Sparkles, Mic, FileText, Settings, HelpCircle, CheckCircle2, AlertTriangle, Send, ChevronDown, Database } from 'lucide-react';
+import { Sparkles, Mic, FileText, Settings, HelpCircle, CheckCircle2, AlertTriangle, Send, ChevronDown, Database, Bot } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -59,7 +59,7 @@ const ThinkingBlock = ({ thinking, verification }: { thinking?: string, verifica
   );
 };
 
-const CitationsBlock = ({ citations, searchQuery }: { citations: any[], searchQuery: string }) => {
+const CitationsBlock = ({ citations, searchQuery, onHover }: { citations: any[], searchQuery: string, onHover?: (c: string | null) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedCitation, setExpandedCitation] = useState<number | null>(null);
 
@@ -103,7 +103,12 @@ const CitationsBlock = ({ citations, searchQuery }: { citations: any[], searchQu
             className="flex flex-col gap-2 overflow-hidden mt-4"
           >
             {citations.map((c, i) => (
-              <div key={i} className="flex flex-col bg-black/40 border border-white/5 rounded-xl overflow-hidden transition-colors">
+              <div 
+                key={i} 
+                className="flex flex-col bg-black/40 border border-white/5 rounded-xl overflow-hidden transition-colors"
+                onMouseEnter={() => onHover?.(c.citation)}
+                onMouseLeave={() => onHover?.(null)}
+              >
                 <div 
                   onClick={() => setExpandedCitation(expandedCitation === i ? null : i)}
                   className="flex items-center justify-between p-3 cursor-pointer hover:bg-white/5"
@@ -135,10 +140,12 @@ const CitationsBlock = ({ citations, searchQuery }: { citations: any[], searchQu
     </div>
   );
 };
-export const LegalChat: React.FC<{onGenerateDraft?: (context: string) => void}> = ({onGenerateDraft}) => {
+
+export const LegalChat: React.FC<LegalChatProps> = ({onGenerateDraft, onCitationHover}) => {
   const [query, setQuery] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -148,6 +155,28 @@ export const LegalChat: React.FC<{onGenerateDraft?: (context: string) => void}> 
   useEffect(() => {
     scrollToBottom();
   }, [messages, loading]);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    setIsDraggingOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+    try {
+      const data = JSON.parse(e.dataTransfer.getData('application/json'));
+      if (data && data.value) {
+        setQuery(prev => prev + (prev ? ' ' : '') + `"${data.value}"`);
+      }
+    } catch (err) {
+      // ignore non-json drops
+    }
+  };
 
   const triggerApiCall = async (currentMessages: Message[]) => {
     setLoading(true);
@@ -409,155 +438,179 @@ ${ocrData.text}`,
       );
     };
 
-    return (
-      <div className="w-full h-full bg-transparent flex flex-col relative overflow-hidden text-white">
+  return (
+    <div 
+      className={`w-full h-full bg-transparent flex flex-col relative overflow-hidden text-white ${isDraggingOver ? 'ring-2 ring-emerald-500/50 bg-emerald-500/5' : ''}`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
+      {/* Drop Zone Overlay */}
+      <AnimatePresence>
+        {isDraggingOver && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-50 bg-emerald-500/10 backdrop-blur-sm border-2 border-dashed border-emerald-500/50 rounded-xl flex items-center justify-center pointer-events-none"
+          >
+            <div className="bg-zinc-950 px-6 py-4 rounded-xl shadow-2xl flex flex-col items-center gap-3 border border-emerald-500/30">
+              <Database size={32} className="text-emerald-500 animate-bounce" />
+              <span className="text-sm font-black uppercase tracking-widest text-emerald-400">Drop Fact to Insert</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
         {messages.length === 0 ? (
-          /* Empty State (Sleek Dashboard Vibe) */
-          <div className="flex-1 flex flex-col items-center justify-center p-8 z-10">
+          /* Empty State */
+          <div className="flex-1 flex flex-col items-center justify-center p-4 z-10 w-full overflow-hidden bg-zinc-950">
             <motion.div 
               initial={{ scale: 0.9, opacity: 0 }} 
               animate={{ scale: 1, opacity: 1 }} 
               transition={{ duration: 0.5 }}
-              className="flex flex-col items-center text-center max-w-2xl w-full"
+              className="flex flex-col items-center text-center w-full"
             >
-              
-              <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center mb-8 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]">
-                <Mic className="text-white/40" size={40} strokeWidth={1.5} />
+              <div className="w-12 h-12 rounded-xl bg-zinc-900 flex items-center justify-center mb-6 border border-zinc-800 shadow-sm">
+                <Bot className="text-zinc-400" size={20} />
               </div>
               
-              <h1 className="font-sans-hero text-4xl lg:text-5xl font-black tracking-wider uppercase mb-4 text-white">
-                LEGAL ASSISTANT
+              <h1 className="text-xl font-bold tracking-tight mb-1 text-zinc-100">
+                AI Copilot
               </h1>
-              <h2 className="text-xl font-medium text-muted mb-12 uppercase tracking-widest">
-                AI-POWERED RESEARCH & ANALYSIS
+              <h2 className="text-xs font-medium text-zinc-500 mb-8">
+                How can I assist your case today?
               </h2>
 
               {/* Input Box for Empty State */}
-              <form onSubmit={handleSubmit} className="w-full max-w-3xl relative mb-12 card-dark p-2 border-white/10">
-                <input 
-                  type="text" 
+              <form onSubmit={handleSubmit} className="w-full max-w-sm relative mb-8 bg-zinc-900 border border-zinc-800 rounded-xl shadow-lg flex flex-col overflow-hidden">
+                <textarea 
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Ask a legal question..."
-                  className="w-full bg-transparent px-6 py-5 outline-none text-white placeholder-muted font-medium text-lg"
+                  placeholder="Ask a legal question or drop a prompt..."
+                  className="w-full bg-transparent px-4 py-3 outline-none text-zinc-100 placeholder-zinc-500 text-sm resize-none"
+                  rows={3}
                 />
-                <div className="flex items-center justify-between px-4 pb-2 pt-2 border-t border-white/10">
+                <div className="flex items-center justify-between px-3 py-2 border-t border-zinc-800 bg-zinc-950/50">
                   <div className="flex items-center gap-2">
-                    <button type="button" className="pill-dark px-4 py-2 text-sm gap-2 text-lime border-lime/30 hover:bg-lime/10 bg-transparent uppercase font-bold tracking-wider">
-                      <Sparkles size={14} /> Deep Research
+                    <button type="button" className="flex items-center gap-1.5 rounded px-2 py-1 text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors uppercase tracking-wider">
+                      <Sparkles size={10} /> Research
                     </button>
                   </div>
-                  <div className="flex items-center gap-3 text-muted">
-                    <button type="button" className="hover:text-white transition-colors"><Mic size={20} /></button>
-                    <button type="submit" disabled={!query.trim()} className="pill-dark w-10 h-10 bg-white/10 hover:bg-white/20 text-white disabled:opacity-50">
-                      <Send size={18} />
+                  <div className="flex items-center gap-2">
+                    <button type="button" className="text-zinc-500 hover:text-zinc-300 transition-colors"><Mic size={14} /></button>
+                    <button type="submit" disabled={!query.trim()} className="w-7 h-7 rounded-md flex items-center justify-center bg-emerald-500 text-white hover:bg-emerald-600 disabled:opacity-50 disabled:bg-zinc-700 disabled:text-zinc-500 transition-colors">
+                      <Send size={12} />
                     </button>
                   </div>
                 </div>
               </form>
 
               {/* Suggested Prompts */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl text-left">
+              <div className="flex flex-col gap-2 w-full max-w-sm text-left px-2">
                 {[
-                  { title: "Analyze Statute", desc: "Check if a 16-year old can drive a motorcycle under NHSO." },
-                  { title: "Draft Petition", desc: "Create a standard bail petition for a traffic offense." },
-                  { title: "Check Fines", desc: "List the fines for overspeeding in Punjab." }
+                  { title: "Analyze Statute", desc: "Check if a 16-year old can drive..." },
+                  { title: "Draft Petition", desc: "Create a standard bail petition..." },
+                  { title: "Check Fines", desc: "List the fines for overspeeding..." }
                 ].map((card, idx) => (
-                  <div key={idx} className="card-dark bg-[#18181C] p-6 hover:border-lime/50 transition-colors cursor-pointer group">
-                    <div className="text-white/30 group-hover:text-lime transition-colors mb-4"><FileText size={24} /></div>
-                    <h4 className="font-bold font-sans-hero tracking-widest text-sm uppercase text-white mb-2">{card.title}</h4>
-                    <p className="text-sm text-muted leading-relaxed font-medium">{card.desc}</p>
+                  <div key={idx} className="bg-zinc-900 p-3 border border-zinc-800 hover:border-emerald-500/50 transition-colors cursor-pointer rounded-lg flex items-center gap-3 group">
+                    <div className="w-8 h-8 rounded bg-zinc-800 flex items-center justify-center shrink-0 group-hover:bg-emerald-500/10 transition-colors">
+                      <FileText size={14} className="text-zinc-400 group-hover:text-emerald-500 transition-colors" />
+                    </div>
+                    <div>
+                      <h3 className="text-zinc-200 text-xs font-semibold mb-0.5">{card.title}</h3>
+                      <p className="text-zinc-500 text-[10px] truncate">{card.desc}</p>
+                    </div>
                   </div>
                 ))}
               </div>
-
             </motion.div>
           </div>
         ) : (
           /* Chat History State */
-          <div className="flex-1 flex flex-col h-full w-full max-w-5xl mx-auto z-10 relative">
-            
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-8 pb-40">
-              <AnimatePresence initial={false}>
-                {messages.map((msg) => (
-                  <motion.div 
-                    key={msg.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-12 flex items-start gap-6 w-full max-w-4xl mx-auto"
-                  >
-                    {/* Avatar */}
-                    <div className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-lg border border-white/5 mt-1">
-                      {msg.type === 'user' ? (
-                        <div className="w-full h-full bg-white text-black rounded-full flex items-center justify-center font-sans-hero font-black text-sm">
-                          JN
-                        </div>
-                      ) : (
-                        <div className="w-full h-full bg-lime/10 text-lime rounded-full flex items-center justify-center">
-                          <Sparkles size={18} strokeWidth={2.5} />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1 min-w-0 flex flex-col pt-1">
-                      {msg.type === 'assistant' && renderStatus(msg.status, messages.indexOf(msg), msg.content)}
-                      <div className="text-[15px] lg:text-[17px] leading-[1.8] font-medium text-white/90">
-                        {renderMessageContent(msg)}
+          <>
+            <div className="flex-1 flex flex-col h-full w-full max-w-5xl mx-auto z-10 relative bg-zinc-950">
+              <div className="flex-1 overflow-y-auto custom-scrollbar p-6 pb-40">
+                <AnimatePresence initial={false}>
+                  {messages.map((msg) => (
+                    <motion.div 
+                      key={msg.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mb-8 flex items-start gap-4 w-full"
+                    >
+                      {/* Avatar */}
+                      <div className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border border-zinc-800 mt-0.5">
+                        {msg.type === 'user' ? (
+                          <div className="w-full h-full bg-zinc-800 text-zinc-300 rounded-lg flex items-center justify-center font-bold text-xs">
+                            JN
+                          </div>
+                        ) : (
+                          <div className="w-full h-full bg-emerald-500/10 text-emerald-500 rounded-lg flex items-center justify-center">
+                            <Bot size={16} />
+                          </div>
+                        )}
                       </div>
 
-                    {/* Citations */}
-                    {msg.citations && msg.citations.length > 0 && (
-                      <CitationsBlock citations={msg.citations} searchQuery={messages[messages.indexOf(msg) - 1]?.content || ''} />
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-              
-              {loading && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start mb-8">
-                  <div className="card-dark bg-[#18181C] border-white/5 rounded-[24px] rounded-tl-sm p-6 flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-lime animate-bounce"></div>
-                    <div className="w-2 h-2 rounded-full bg-lime animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 rounded-full bg-lime animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                  </div>
-                </motion.div>
-              )}
-              <div ref={messagesEndRef} />
-            </AnimatePresence>
-          </div>
+                      {/* Content */}
+                      <div className="flex-1 min-w-0 flex flex-col pt-1">
+                        {msg.type === 'assistant' && renderStatus(msg.status, messages.indexOf(msg), msg.content)}
+                        <div className="text-[14px] leading-relaxed font-medium text-zinc-300">
+                          {renderMessageContent(msg)}
+                        </div>
 
-          {/* Sticky Input for Chat State */}
-          <div className="absolute bottom-0 left-0 right-0 p-8 pt-20 bg-gradient-to-t from-[#0D0D0E] via-[#0D0D0E]/90 to-transparent pointer-events-none">
-            <div className="max-w-4xl mx-auto pointer-events-auto">
-              <form onSubmit={handleSubmit} className="w-full card-dark p-2 border-white/10 shadow-2xl bg-[#18181C]">
-                <input 
-                  type="text" 
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Ask a follow-up question..."
-                  className="w-full bg-transparent px-6 py-4 outline-none text-white placeholder-muted font-medium text-lg"
-                />
-                <div className="flex items-center justify-between px-4 pb-2 pt-2 border-t border-white/5">
-                  <div className="flex items-center gap-2">
-                    <button type="button" className="pill-dark px-4 py-2 text-sm gap-2 text-lime border-lime/30 hover:bg-lime/10 bg-transparent uppercase font-bold tracking-wider">
-                      <Sparkles size={14} /> Deep Research
-                    </button>
-                  </div>
-                  <div className="flex items-center gap-3 text-muted">
-                    <button type="button" className="hover:text-white transition-colors"><Mic size={20} /></button>
-                    <button type="submit" disabled={!query.trim() || loading} className="pill-dark w-10 h-10 bg-white/10 hover:bg-white/20 text-white disabled:opacity-50">
-                      <Send size={18} />
-                    </button>
-                  </div>
-                </div>
-              </form>
+                        {/* Citations */}
+                        {msg.citations && msg.citations.length > 0 && (
+                          <CitationsBlock citations={msg.citations} searchQuery={messages[messages.indexOf(msg) - 1]?.content || ''} onHover={onCitationHover} />
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                  
+                  {loading && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start mb-8 ml-12">
+                      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                      </div>
+                    </motion.div>
+                  )}
+                  <div ref={messagesEndRef} />
+                </AnimatePresence>
+              </div>
             </div>
-          </div>
-          
-        </div>
-      )}
-    </div>
-  );
-}
+
+            {/* Sticky Input for Chat State */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-zinc-950 via-zinc-950/95 to-transparent pointer-events-none">
+              <div className="w-full mx-auto pointer-events-auto">
+                <form onSubmit={handleSubmit} className="w-full bg-zinc-900 border border-zinc-800 shadow-2xl rounded-xl flex flex-col overflow-hidden">
+                  <textarea 
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Message AI Copilot..."
+                    className="w-full bg-transparent px-4 py-3 outline-none text-zinc-100 placeholder-zinc-500 text-sm resize-none"
+                    rows={2}
+                  />
+                  <div className="flex items-center justify-between px-3 py-2 border-t border-zinc-800 bg-zinc-950/50">
+                    <div className="flex items-center gap-2">
+                      <button type="button" className="flex items-center gap-1.5 rounded px-2 py-1 text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors uppercase tracking-wider">
+                        <Sparkles size={10} /> Research
+                      </button>
+                    </div>
+                    <div className="flex items-center gap-2 text-zinc-500">
+                      <button type="button" className="hover:text-zinc-300 transition-colors"><Mic size={16} /></button>
+                      <button type="submit" disabled={!query.trim() || loading} className="w-8 h-8 rounded-md flex items-center justify-center bg-emerald-500 hover:bg-emerald-600 text-white disabled:opacity-50 disabled:bg-zinc-700 disabled:text-zinc-500 transition-colors">
+                        <Send size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
+
