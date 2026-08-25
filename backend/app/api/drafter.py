@@ -60,4 +60,7 @@ async def generate_draft_json_endpoint(request: LLMDraftRequest):
         draft_json = engine.generate_draft_json(request.context_text, request.document_type)
         return draft_json
     except Exception as e:
+        import traceback
+        print(f"DRAFTER 500 ERROR: {str(e)}")
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))

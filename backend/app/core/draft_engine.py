@@ -327,13 +327,14 @@ class DraftEngine:
     def generate_draft_json(self, context_text: str, document_type: str) -> dict:
         import os
         import json
-        from groq import Groq
+        from google import genai
+        from google.genai import types
         
-        api_key = os.environ.get("LLM_API_KEY", "")
-        if not api_key:
-            raise Exception("LLM_API_KEY not found in environment.")
+        gemini_key = os.getenv("GEMINI_API_KEY")
+        if not gemini_key:
+            raise Exception("GEMINI_API_KEY not found in environment.")
             
-        client = Groq(api_key=api_key)
+        client = genai.Client(api_key=gemini_key)
         
         doc_specific_instructions = ""
         if document_type == "Pre-emption Plaint":
@@ -369,17 +370,20 @@ You must return EXACTLY and ONLY a valid JSON object matching this schema:
 }}
 Do not wrap the JSON in Markdown backticks. Do not include any other text."""
 
-        response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": f"Case Details / Instructions:\n{context_text}"}
-            ],
+        config = types.GenerateContentConfig(
+            system_instruction=system_prompt,
             temperature=0.2,
-            max_tokens=2500
+            max_output_tokens=4000,
+            response_mime_type="application/json"
+        )
+
+        response = client.models.generate_content(
+            model="gemini-3.6-flash",
+            contents=f"Case Details / Instructions:\n{context_text}",
+            config=config
         )
         
-        output_text = response.choices[0].message.content.strip()
+        output_text = response.text.strip()
         if output_text.startswith("```json"):
             output_text = output_text[7:-3].strip()
         elif output_text.startswith("```"):
