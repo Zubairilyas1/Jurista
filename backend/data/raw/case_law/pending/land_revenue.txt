@@ -1,0 +1,25 @@
+WEST PAKISTAN LAND REVENUE ACT, 1967
+
+Section 53. Suit for declaratory decree by persons aggrieved by an entry in a record.
+If any person considers himself aggrieved as to any right of which he is in possession by an entry in a record-of-rights or in a periodical record, he may institute a suit for a declaration of his right under Chapter VI of the Specific Relief Act, 1877.
+Binding Precedent: PLD 1975 SC 331 and 2012 SCMR 1613 — Revenue entries (Intiqal / Jamabandi) are merely fiscal records for tax collection and neither confer nor extinguish title. Title flows from registered sale deeds. Where the Collector cancels a mutation claiming state land, the Civil Court has exclusive jurisdiction under Section 53 LRA read with Section 42 Specific Relief Act to establish ownership based on registered title deeds. Section 172 LRA does not bar Civil Courts from deciding genuine title disputes.
+
+Section 161. Appeals.
+(1) Save as otherwise provided by this Act, an appeal shall lie from an original or appellate order of a Revenue Officer as follows:
+(a) to the Collector when the order is made by an Assistant Collector;
+(b) to the Commissioner when the order is made by a Collector;
+(c) to the Board of Revenue only on a point of law, when the order is made by a Commissioner.
+
+Section 172. Exclusion of jurisdiction of Civil Courts in matters within the jurisdiction of Revenue Officers.
+(1) Except as otherwise provided by this Act, no Civil Court shall have jurisdiction in any matter which the Provincial Government, the Board of Revenue, or any Revenue Officer, is empowered by this Act to dispose of.
+(vi) the correction of any entry in a record-of-rights (Jamabandi), periodical record or register of mutations (Intiqal).
+
+CIVIL PROCEDURE CODE (CPC) 1908
+Section 80. Notice.
+(1) No suit shall be instituted against the Government or against a public officer in respect of any act purporting to be done by such public officer in his official capacity, until the expiration of two months next after notice in writing has been delivered.
+(2) A suit to obtain an urgent or immediate relief against the Government or any public officer in respect of any such act may be instituted, with the leave of the Court, without serving any notice as required by sub-section (1); but the Court shall not grant relief in the suit, whether interim or otherwise, except after giving to the Government or public officer, as the case may be, a reasonable opportunity of showing cause in respect of the relief prayed for in the suit.
+Binding Precedent: 2018 SCMR 1686 — Instituting a civil suit against the Provincial Government without serving a 2-month statutory notice under Section 80(1) CPC, or failing to obtain an explicit exemption under Section 80(2) CPC, renders the plaint liable to immediate rejection under Order 7 Rule 11 CPC.
+
+CORRECT DUAL-TRACK STRATEGIC ROADMAP FOR LAND REVENUE MUTATION & TITLE DISPUTES:
+Track 1 (Revenue Correction / Immediate Relief): File a Statutory Revenue Appeal before the Commissioner under Section 161(1)(b) of the Land Revenue Act against the Collector's cancellation order, accompanied by an emergency stay application to restrain physical possession.
+Track 2 (Title Declaration / Permanent Protection): Concurrently file a Civil Suit under Section 53 of the Land Revenue Act read with Section 42 of the Specific Relief Act seeking a declaration of ownership based on the registered sale deed. MUST issue a formal Section 80 CPC Notice to the Provincial Government. Include an application under Section 80(2) CPC for leave to dispense with the notice period for the purpose of obtaining emergency temporary injunctions under Order 39 Rules 1 & 2 CPC to prevent state dispossession.
