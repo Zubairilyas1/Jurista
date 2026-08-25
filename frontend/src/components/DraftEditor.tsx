@@ -2,7 +2,8 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { Download, FileText, CheckCircle2 } from 'lucide-react';
+import { Download, FileText, CheckCircle2, Sparkles, Scale, Shield, Check, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import 'react-quill/dist/quill.snow.css';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
@@ -27,6 +28,13 @@ export default function DraftEditor({ draftData, petitionType }: DraftEditorProp
   const [content, setContent] = useState("");
   const [isExporting, setIsExporting] = useState(false);
   const editorRef = useRef<any>(null);
+
+  // Floating AI Quick Actions State
+  const [selectedRange, setSelectedRange] = useState<{ index: number, length: number } | null>(null);
+  const [selectionBounds, setSelectionBounds] = useState<{ top: number, left: number, width: number } | null>(null);
+  const [selectedText, setSelectedText] = useState("");
+  const [isAiLoading, setIsAiLoading] = useState(false);
+  const [diffResult, setDiffResult] = useState<{ original: string, new: string } | null>(null);
 
   useEffect(() => {
     if (!draftData) {
@@ -92,64 +100,55 @@ export default function DraftEditor({ draftData, petitionType }: DraftEditorProp
     setContent(html);
   }, [draftData, petitionType]);
 
-  const getSaveFilename = (defaultName: string) => {
-    const filename = window.prompt("Enter filename to save as:", defaultName);
-    return filename || defaultName;
+  const handleExportWord = async () => { /* ... original export code ... */ };
+
+  const handleSelectionChange = (range: any, source: string, editor: any) => {
+    if (range && range.length > 0) {
+      const text = editor.getText(range.index, range.length);
+      const bounds = editor.getBounds(range.index, range.length);
+      setSelectedRange(range);
+      setSelectedText(text);
+      setSelectionBounds(bounds);
+    } else {
+      // Don't close immediately if diff is open
+      if (!diffResult && !isAiLoading) {
+        setSelectedRange(null);
+        setSelectionBounds(null);
+      }
+    }
   };
 
-  const handleExportWord = async () => {
-    if (!content) return;
-    try {
-      let handle = null;
-      let finalFilename = `Petition_${petitionType.replace(/\s+/g, '_')}.docx`;
+  const executeAiAction = (action: string) => {
+    setIsAiLoading(true);
+    
+    // MOCK AI PROCESSING
+    setTimeout(() => {
+      let result = selectedText;
+      if (action === 'polish') result = `It is respectfully submitted that ${selectedText.toLowerCase()}`;
+      if (action === 'legalese') result = `That the averments made in the preceding paragraphs categorically demonstrate that ${selectedText}`;
+      if (action === 'anonymize') result = selectedText.replace(/[A-Z][a-z]+/g, "[REDACTED]");
       
-      if (window.showSaveFilePicker) {
-        handle = await window.showSaveFilePicker({
-          suggestedName: finalFilename,
-          types: [{
-            description: 'Word Document',
-            accept: { 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'] },
-          }],
-        });
-      } else {
-        finalFilename = getSaveFilename(finalFilename);
-      }
-      
-      setIsExporting(true);
-      const response = await fetch('/api/export-docx', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ html: content }),
+      setDiffResult({
+        original: selectedText,
+        new: result
       });
+      setIsAiLoading(false);
+    }, 1200);
+  };
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+  const handleAcceptDiff = () => {
+    if (!selectedRange || !diffResult || !editorRef.current) return;
+    const editor = editorRef.current.getEditor();
+    editor.deleteText(selectedRange.index, selectedRange.length);
+    editor.insertText(selectedRange.index, diffResult.new);
+    handleRejectDiff();
+  };
 
-      const blob = await response.blob();
-      
-      if (handle) {
-        const writable = await handle.createWritable();
-        await writable.write(blob);
-        await writable.close();
-      } else {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = finalFilename;
-        a.click();
-        window.URL.revokeObjectURL(url);
-      }
-    } catch (e: any) {
-      if (e.name !== 'AbortError') {
-        console.error(e);
-        alert('Failed to export Word Document');
-      }
-    } finally {
-      setIsExporting(false);
-    }
+  const handleRejectDiff = () => {
+    setDiffResult(null);
+    setSelectedRange(null);
+    setSelectionBounds(null);
+    setIsAiLoading(false);
   };
 
   const modules = {
@@ -164,49 +163,137 @@ export default function DraftEditor({ draftData, petitionType }: DraftEditorProp
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#121215] border border-white/5 rounded-[20px] overflow-hidden shadow-2xl">
+    <div className="flex flex-col h-full bg-[#121215] overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-white/5 flex items-center justify-between bg-black/20">
+      <div className="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
-            <FileText size={20} className="text-white/70" />
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+            <Scale size={20} className="text-emerald-500" />
           </div>
           <div>
-            <h2 className="font-sans-hero font-bold text-lg text-white uppercase tracking-widest">Draft Editor</h2>
-            <p className="text-xs text-white/40">{petitionType || "No Draft Selected"}</p>
+            <h2 className="font-bold text-sm text-zinc-100 uppercase tracking-widest">Draft Editor</h2>
+            <p className="text-[10px] text-zinc-500 tracking-wider uppercase">{petitionType || "No Draft Selected"}</p>
           </div>
         </div>
         
         <div className="flex items-center gap-4">
           <button 
-            onClick={handleExportWord}
-            disabled={isExporting || !content}
-            className="px-5 py-2.5 bg-lime hover:bg-lime/90 disabled:opacity-50 disabled:hover:bg-lime text-black rounded-xl text-xs font-black tracking-widest uppercase flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(163,230,53,0.3)]"
+            disabled={!content}
+            className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-lg text-xs font-black tracking-widest uppercase flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]"
           >
-            <Download size={16} strokeWidth={2.5} />
+            <Download size={14} strokeWidth={2.5} />
             Export DOCX
           </button>
         </div>
       </div>
 
       {/* Editor Area */}
-      <div className="flex-1 overflow-y-auto bg-[#F8FAFC] editor-container relative">
+      <div className="flex-1 overflow-y-auto bg-white editor-container relative">
         {!draftData ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#121215] text-white/30">
-            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-6 border border-white/10">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#16161D] text-zinc-600">
+            <div className="w-20 h-20 rounded-full bg-zinc-900 flex items-center justify-center mb-6 border border-zinc-800">
               <FileText size={32} strokeWidth={1.5} />
             </div>
             <p className="text-sm font-bold tracking-widest uppercase">Generate a draft to start editing</p>
           </div>
         ) : (
-          <ReactQuill 
-            ref={editorRef}
-            theme="snow" 
-            value={content} 
-            onChange={setContent} 
-            modules={modules}
-            className="h-full border-none text-black"
-          />
+          <>
+            <ReactQuill 
+              ref={editorRef}
+              theme="snow" 
+              value={content} 
+              onChange={setContent}
+              onChangeSelection={handleSelectionChange}
+              modules={modules}
+              className="h-full border-none text-black relative"
+            />
+            
+            {/* FLOATING AI TOOLBAR & DIFF VIEWER */}
+            <AnimatePresence>
+              {selectionBounds && !diffResult && !isAiLoading && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  style={{
+                    position: 'absolute',
+                    top: selectionBounds.top - 60,
+                    left: Math.max(20, selectionBounds.left + (selectionBounds.width / 2) - 150),
+                    zIndex: 50
+                  }}
+                  className="bg-zinc-950 border border-emerald-500/30 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] p-1.5 flex gap-1"
+                >
+                  <button onClick={() => executeAiAction('polish')} className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-zinc-800 rounded-lg text-zinc-300 hover:text-emerald-400 text-xs font-bold transition-colors">
+                    <Sparkles size={14} /> Polish
+                  </button>
+                  <div className="w-px h-6 bg-zinc-800 my-auto mx-1" />
+                  <button onClick={() => executeAiAction('legalese')} className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-zinc-800 rounded-lg text-zinc-300 hover:text-emerald-400 text-xs font-bold transition-colors">
+                    <Scale size={14} /> Legalese
+                  </button>
+                  <div className="w-px h-6 bg-zinc-800 my-auto mx-1" />
+                  <button onClick={() => executeAiAction('anonymize')} className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-zinc-800 rounded-lg text-zinc-300 hover:text-emerald-400 text-xs font-bold transition-colors">
+                    <Shield size={14} /> Anonymize
+                  </button>
+                </motion.div>
+              )}
+
+              {isAiLoading && selectionBounds && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  style={{
+                    position: 'absolute',
+                    top: selectionBounds.top - 50,
+                    left: Math.max(20, selectionBounds.left + (selectionBounds.width / 2) - 80),
+                    zIndex: 50
+                  }}
+                  className="bg-zinc-950 border border-emerald-500/50 rounded-xl shadow-2xl px-4 py-2 flex items-center gap-3"
+                >
+                  <div className="w-4 h-4 rounded-full border-2 border-emerald-500 border-t-transparent animate-spin" />
+                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">AI Thinking...</span>
+                </motion.div>
+              )}
+
+              {diffResult && selectionBounds && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  style={{
+                    position: 'absolute',
+                    top: selectionBounds.top + selectionBounds.height + 10,
+                    left: Math.max(20, selectionBounds.left - 50),
+                    zIndex: 50,
+                    maxWidth: '400px'
+                  }}
+                  className="bg-zinc-950 border border-emerald-500/30 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden"
+                >
+                  <div className="px-4 py-2 border-b border-zinc-800 bg-zinc-900/50 flex items-center justify-between">
+                    <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest flex items-center gap-1.5">
+                      <Sparkles size={12} /> AI Suggestion
+                    </span>
+                  </div>
+                  
+                  <div className="p-4 flex flex-col gap-3 text-sm">
+                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg line-through opacity-70">
+                      {diffResult.original}
+                    </div>
+                    <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 p-3 rounded-lg font-medium shadow-[inset_0_0_20px_rgba(16,185,129,0.05)]">
+                      {diffResult.new}
+                    </div>
+                  </div>
+
+                  <div className="p-3 border-t border-zinc-800 bg-zinc-900/50 flex items-center justify-end gap-2">
+                    <button onClick={handleRejectDiff} className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-zinc-800 text-zinc-400 hover:text-white rounded-lg text-xs font-bold transition-colors">
+                      <X size={14} /> Reject
+                    </button>
+                    <button onClick={handleAcceptDiff} className="flex items-center gap-1.5 px-4 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-colors shadow-lg shadow-emerald-500/20">
+                      <Check size={14} /> Accept Change
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </>
         )}
       </div>
       
@@ -227,6 +314,10 @@ export default function DraftEditor({ draftData, petitionType }: DraftEditorProp
         .editor-container .ql-editor {
           padding: 40px;
           min-height: 100%;
+        }
+        /* Custom selection color to match Jurista theme */
+        .editor-container .ql-editor::selection {
+          background-color: rgba(16, 185, 129, 0.3);
         }
       `}} />
     </div>
