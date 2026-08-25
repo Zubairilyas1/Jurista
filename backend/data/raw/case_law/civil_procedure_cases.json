@@ -1,0 +1,24 @@
+[
+  {
+    "citation": "PLD 2017 SC 187",
+    "court": "Supreme Court of Pakistan",
+    "year": 2017,
+    "topic": "Stay Orders / Tax Recovery",
+    "statutes_cited": [
+      "Code of Civil Procedure 1908 - Order 39 Rules 1 & 2"
+    ],
+    "ratio_decidendi": "Civil Courts and High Courts must not routinely grant ex-parte stay orders suspending the recovery of government taxes or state revenue without issuing notice and hearing the concerned state department.",
+    "summary_text": "In Sindh Revenue Board v. Civil Judge, the Supreme Court took strict notice of lower courts indiscriminately issuing stay orders against tax collection authorities. The Court ruled that an injunction against state revenue collection disrupts the functioning of the state. It established that ex-parte interim injunctions under Order 39 Rules 1 & 2 CPC should rarely be granted in fiscal matters, and courts must issue short notices to the government before granting any such stay, ensuring that the three ingredients (prima facie case, balance of convenience, and irreparable loss) are strictly scrutinized."
+  },
+  {
+    "citation": "PLD 2021 SC 429",
+    "court": "Supreme Court of Pakistan",
+    "year": 2021,
+    "topic": "Rejection of Plaint",
+    "statutes_cited": [
+      "Code of Civil Procedure 1908 - Order 7 Rule 11"
+    ],
+    "ratio_decidendi": "A plaint can be rejected under Order 7 Rule 11 CPC only on the basis of the averments made in the plaint itself, assuming them to be true. The defense set up by the defendant in the written statement cannot be looked into for this purpose.",
+    "summary_text": "The Supreme Court in Haji Din Muhammad v. Mehr Ali clarified the parameters for the summary rejection of a civil suit under Order VII Rule 11 of the CPC. The Court reiterated the established principle that to determine whether a plaint is barred by law or discloses no cause of action, the court must exclusively examine the contents of the plaint and its annexed documents. The court is not permitted to rely on the defendant's written statement, evidence, or pleas at the stage of determining an application under Order 7 Rule 11."
+  }
+]

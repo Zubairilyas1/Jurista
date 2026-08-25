@@ -1,0 +1,37 @@
+[
+  {
+    "citation": "PLD 1995 SC 34",
+    "court": "Supreme Court of Pakistan",
+    "year": 1995,
+    "topic": "Bail / Non-Bailable Offenses",
+    "statutes_cited": [
+      "Code of Criminal Procedure 1898 - Section 497"
+    ],
+    "ratio_decidendi": "Bail is not to be withheld as a punishment. The basic rule is 'bail, not jail' even in non-bailable offenses, provided the case requires further inquiry and the accused is not likely to abscond or tamper with evidence.",
+    "summary_text": "Tariq Bashir v. The State is the foundational judgment on bail jurisprudence in Pakistan. The Supreme Court laid down exhaustive guidelines for granting bail under Section 497 CrPC. It emphasized that refusal of bail before conviction is a departure from the presumption of innocence. For offenses not punishable by death or life imprisonment (falling outside the prohibitory clause), bail should be granted as a rule, and refused only in exceptional circumstances (e.g., danger of absconding, tampering with prosecution witnesses, or repeating the offense)."
+  },
+  {
+    "citation": "1979 SCMR 9",
+    "court": "Supreme Court of Pakistan",
+    "year": 1979,
+    "topic": "Murder / Medical vs Ocular Evidence",
+    "statutes_cited": [
+      "Pakistan Penal Code 1860 - Section 302",
+      "Qanun-e-Shahadat Order 1984 - Article 59"
+    ],
+    "ratio_decidendi": "Where ocular evidence (eyewitness testimony) directly conflicts with medical evidence regarding the time, weapon, or manner of death, the ocular evidence becomes highly doubtful, entitling the accused to the benefit of the doubt.",
+    "summary_text": "In Muhammad Fazal alias Bodi v. The State, the Supreme Court evaluated the relative weight of medical and ocular evidence in a murder trial. The court established that while ocular evidence is generally given preference, if the medical evidence (post-mortem report) completely contradicts the eyewitness account (e.g., regarding the trajectory of the bullet, the nature of the weapon, or the time of death based on stomach contents), it casts serious doubt on the presence and truthfulness of the eyewitnesses. This contradiction creates reasonable doubt, leading to acquittal."
+  },
+  {
+    "citation": "2014 SCMR 1499",
+    "court": "Supreme Court of Pakistan",
+    "year": 2014,
+    "topic": "Narcotics / Safe Custody",
+    "statutes_cited": [
+      "Control of Narcotic Substances Act 1997 - Section 9(c)",
+      "Police Rules 1934 - Rule 22.49"
+    ],
+    "ratio_decidendi": "Failure of the prosecution to prove the unbroken chain of safe custody of recovered narcotics from the point of seizure to the Chemical Examiner vitiates the trial and entitles the accused to acquittal.",
+    "summary_text": "In Zafar Iqbal v. The State, a landmark narcotics ruling, the Supreme Court strictly enforced the requirement of proving 'safe custody' of recovered drugs. The prosecution must definitively prove who kept the contraband in the malkhana, who transported it, and that the parcels were kept sealed and intact until they reached the Chemical Examiner. Any break in this chain of custody (e.g., missing Malkhana register entries or unexplained delays in sending samples) destroys the evidentiary value of the recovery, leading to mandatory acquittal."
+  }
+]

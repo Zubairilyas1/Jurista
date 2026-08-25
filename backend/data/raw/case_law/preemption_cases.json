@@ -1,0 +1,50 @@
+[
+  {
+    "citation": "PLD 2007 SC 274",
+    "court": "Supreme Court of Pakistan",
+    "year": 2007,
+    "topic": "Pre-emption / Talab-i-Muwathaba Pleading",
+    "statutes_cited": [
+      "Punjab Pre-emption Act 1991 - Section 13",
+      "Code of Civil Procedure 1908 - Order 7 Rule 1"
+    ],
+    "ratio_decidendi": "A pre-emption suit must be dismissed outright if the plaint fails to explicitly state the exact date, time, and place of acquiring knowledge of the sale, the source of information, and the names of witnesses present during Talab-i-Muwathaba.",
+    "summary_text": "In this landmark judgment, the Supreme Court strictly interpreted Section 13 of the Punjab Pre-emption Act 1991. The Court held that the right of pre-emption (Haq-e-Shufa) is a feeble right and requires strict procedural compliance. A plaintiff must perform 'Talab-i-Muwathaba' (immediate jumping demand) the exact moment they learn of the sale. To prove this, the plaint itself must contain five mandatory details: date of knowledge, time of knowledge, place of knowledge, the identity of the informer, and the witnesses present when the demand was made. Omission of any of these details is fatal to the suit."
+  },
+  {
+    "citation": "PLD 2011 SC 83",
+    "court": "Supreme Court of Pakistan",
+    "year": 2011,
+    "topic": "Pre-emption / Subsequent Sale",
+    "statutes_cited": [
+      "Punjab Pre-emption Act 1991 - Section 13",
+      "Punjab Pre-emption Act 1991 - Section 24"
+    ],
+    "ratio_decidendi": "A subsequent resale of the property by the original buyer before or during the pendency of the pre-emption period does not defeat the pre-emptor's superior right.",
+    "summary_text": "The Supreme Court ruled that a vendee (buyer) cannot defeat a pre-emptor's right by rapidly reselling the property to a third party. If a pre-emptor (such as a Shafi-i-Shrik or co-sharer) has a superior right of pre-emption and fulfills the demands (Talabs) within time, the intermediate sale is deemed void against the pre-emptor. The pre-emptor effectively steps into the shoes of the original buyer, and the subsequent purchaser takes the property subject to the pre-emptor's prior equity (Lis Pendens principle)."
+  },
+  {
+    "citation": "2019 SCMR 1047",
+    "court": "Supreme Court of Pakistan",
+    "year": 2019,
+    "topic": "Pre-emption / Talab-i-Ishhad",
+    "statutes_cited": [
+      "Punjab Pre-emption Act 1991 - Section 13"
+    ],
+    "ratio_decidendi": "Talab-i-Ishhad must be made by sending a written notice via registered post with acknowledgment due (A.D.) within 14 days of acquiring knowledge, and the notice must be attested by two truthful witnesses.",
+    "summary_text": "The Supreme Court reaffirmed the strict requirements for the second demand (Talab-i-Ishhad). After making the immediate demand (Talab-i-Muwathaba), the pre-emptor must send a written notice to the vendee confirming the first demand. This notice must be sent via registered post A.D. within 14 days and must bear the signatures or thumb impressions of two truthful witnesses. Failure to fulfill these exact statutory requirements extinguishes the right of pre-emption."
+  },
+  {
+    "citation": "Punjab Pre-emption Act 1991",
+    "court": "Statute",
+    "year": 1991,
+    "topic": "Pre-emption / Statutory Provisions",
+    "statutes_cited": [
+      "Punjab Pre-emption Act 1991 - Section 6",
+      "Punjab Pre-emption Act 1991 - Section 13",
+      "Punjab Pre-emption Act 1991 - Section 28"
+    ],
+    "ratio_decidendi": "Statutory framework governing the right of pre-emption in Punjab, defining the classes of pre-emptors, the mandatory demands (Talabs), and the requirement to deposit 1/3rd of the sale price.",
+    "summary_text": "The Punjab Pre-emption Act 1991 governs the Islamic right of pre-emption. Section 6 prioritizes pre-emptors: Shafi-i-Shrik (co-sharer) has the highest right, followed by Shafi-i-Khalit (participator in immunities/appendages), and Shafi-i-Jar (owner of contiguous property). Section 13 mandates three demands: Talab-i-Muwathaba (immediate verbal demand), Talab-i-Ishhad (written notice via registered post A.D. within 14 days with two witnesses), and Talab-i-Khusumat (filing a suit in court). Section 28 requires the pre-emptor to deposit one-third (1/3rd) of the sale price in court as security within the time fixed by the court, failing which the suit shall be dismissed."
+  }
+]

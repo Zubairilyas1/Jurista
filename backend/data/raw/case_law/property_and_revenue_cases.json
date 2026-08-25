@@ -1,0 +1,49 @@
+[
+  {
+    "citation": "PLD 1990 SC 1",
+    "court": "Supreme Court of Pakistan",
+    "year": 1990,
+    "topic": "Inheritance / Adverse Possession against Sisters",
+    "statutes_cited": [
+      "Limitation Act 1908 - Article 142",
+      "West Pakistan Muslim Personal Law (Shariat) Application Act 1962 - Section 2"
+    ],
+    "ratio_decidendi": "Male co-heirs hold property in constructive trust for female heirs. Adverse possession or limitation cannot be claimed by brothers against sisters to deprive them of their Quranic inheritance share.",
+    "summary_text": "In the landmark case of Ghulam Ali v. Mst. Ghulam Sarwar Naqvi, the Supreme Court ruled that upon the death of a Muslim ancestor, the estate automatically vests in the legal heirs according to Sharia. A brother in possession of the inherited property acts as a trustee for his sisters. The court held that a sister's claim to her inheritance cannot be defeated by the plea of adverse possession, ouster, or the law of limitation, because the brothers are deemed to be holding the property on her behalf. Fraudulent mutations excluding female heirs are void."
+  },
+  {
+    "citation": "2021 SCMR 1215",
+    "court": "Supreme Court of Pakistan",
+    "year": 2021,
+    "topic": "Fraudulent Inheritance Mutation / Limitation",
+    "statutes_cited": [
+      "Land Revenue Act 1967 - Section 42",
+      "Limitation Act 1908 - Section 18"
+    ],
+    "ratio_decidendi": "Fraud vitiates the most solemn proceedings. The limitation period for challenging a fraudulent inheritance mutation begins from the date the fraud is discovered, not the date the mutation was sanctioned.",
+    "summary_text": "The Supreme Court (Muhammad Yaseen v. Khalid Mansoor) reaffirmed that an inheritance mutation (Inteqal-e-Warasat) is an administrative entry and does not confer title. Where a legal heir is fraudulently excluded from the mutation, the plea of limitation is inapplicable until the aggrieved party gains knowledge of the fraud. Section 18 of the Limitation Act explicitly protects victims of fraud, resetting the limitation clock to the date of discovery."
+  },
+  {
+    "citation": "PLD 2012 SC 758",
+    "court": "Supreme Court of Pakistan",
+    "year": 2012,
+    "topic": "Specific Relief / Part Performance / Constructive Notice",
+    "statutes_cited": [
+      "Transfer of Property Act 1882 - Section 53A",
+      "Specific Relief Act 1877 - Section 27(b)"
+    ],
+    "ratio_decidendi": "Physical possession of a property by a prior unregistered purchaser constitutes constructive notice to any subsequent registered purchaser, defeating the defense of being a bona fide purchaser without notice.",
+    "summary_text": "In Abdul Majeed v. Muhammad Afzal, the court dealt with a conflict between an unregistered agreement to sell accompanied by possession, and a subsequent registered sale deed. The Supreme Court held that under Section 53A of the Transfer of Property Act, a buyer who has taken possession in part performance of a contract holds a strong equitable right. A subsequent buyer who fails to inspect the property and discover the prior buyer's physical possession cannot claim the protection of Section 27(b) of the Specific Relief Act as a 'bona fide purchaser without notice'."
+  },
+  {
+    "citation": "PLD 2021 SC 429",
+    "court": "Supreme Court of Pakistan",
+    "year": 2021,
+    "topic": "Bona Fide Purchaser / Due Diligence",
+    "statutes_cited": [
+      "Transfer of Property Act 1882 - Section 41"
+    ],
+    "ratio_decidendi": "A buyer purchasing agricultural land from male heirs without verifying the complete family tree (Shajra Nasab) to ensure female heirs are not excluded fails the test of due diligence under Section 41 TPA.",
+    "summary_text": "The Supreme Court clarified the limits of protection for a 'bona fide purchaser' under Section 41 of the Transfer of Property Act. The court held that a buyer must exercise reasonable care and due diligence before purchasing property. Simply relying on a revenue record that lists only male heirs, without independently verifying the family tree (Shajra Nasab) to ensure sisters or daughters were not unlawfully excluded, constitutes a lack of due diligence. Therefore, such a purchaser cannot claim protection against the claims of the defrauded female heirs."
+  }
+]
