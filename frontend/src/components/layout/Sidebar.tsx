@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { 
-  Globe, Scale, ScanText, ScrollText, CalendarClock, Settings, Plus, Briefcase
+  Globe, Scale, ScanText, ScrollText, CalendarClock, Settings, Plus, Briefcase, Gavel, Link2, ShieldAlert, GitCompare
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -13,6 +13,10 @@ const navItems = [
   { label: 'Legal Chat', icon: <Scale size={20} strokeWidth={2.5} />, path: '/chat' },
   { label: 'OCR Review', icon: <ScanText size={20} strokeWidth={2.5} />, path: '/ocr' },
   { label: 'Petition Drafter', icon: <ScrollText size={20} strokeWidth={2.5} />, path: '/petition' },
+  { label: 'Opponent Analyzer', icon: <ShieldAlert size={20} strokeWidth={2.5} />, path: '/analyze' },
+  { label: 'Contradiction Engine', icon: <GitCompare size={20} strokeWidth={2.5} />, path: '/contradiction' },
+  { label: 'Moot Court', icon: <Gavel size={20} strokeWidth={2.5} />, path: '/moot' },
+  { label: 'Legal Links', icon: <Link2 size={20} strokeWidth={2.5} />, path: '/links' },
   { label: 'Cause Tracker', icon: <CalendarClock size={20} strokeWidth={2.5} />, path: '/tracker' },
   { label: 'Settings', icon: <Settings size={20} strokeWidth={2.5} />, path: '/settings' },
 ];
@@ -52,12 +56,12 @@ export function Sidebar() {
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="h-full flex flex-col py-6 shrink-0 relative z-50 bg-[#0D0D0E]"
+      className="h-full flex flex-col py-6 shrink-0 relative z-50 bg-zinc-950 border-r border-zinc-800"
     >
       
       {/* Top Logo Badge */}
-      <div className={`flex items-center ${isHovered ? 'px-6 justify-start' : 'justify-center'} mb-12 h-12 overflow-hidden`}>
-        <div className="w-12 h-12 shrink-0 bg-white rounded-full flex items-center justify-center text-black font-sans-hero font-black text-xl">
+      <div className={`flex items-center ${isHovered ? 'px-6 justify-start' : 'justify-center'} mb-10 h-10 overflow-hidden`}>
+        <div className="w-10 h-10 shrink-0 bg-zinc-100 rounded-lg flex items-center justify-center text-zinc-900 font-bold text-sm">
           {initials}
         </div>
         <AnimatePresence>
@@ -66,7 +70,7 @@ export function Sidebar() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
-              className="ml-4 font-sans-hero font-black tracking-widest uppercase text-lg text-white whitespace-nowrap"
+              className="ml-3 font-bold tracking-tight text-base text-zinc-100 whitespace-nowrap"
             >
               Jurista
             </motion.span>
@@ -75,17 +79,17 @@ export function Sidebar() {
       </div>
 
       {/* Navigation Pills */}
-      <div className="flex flex-col gap-2 px-3">
+      <div className="flex flex-col gap-1.5 px-3">
         {navItems.map((item) => {
           const active = pathname === item.path || (item.path !== '/' && pathname?.startsWith(item.path));
           return (
             <button
               key={item.path}
               onClick={() => router.push(item.path)}
-              className={`h-12 rounded-full flex items-center transition-all overflow-hidden relative ${isHovered ? 'px-4 justify-start' : 'justify-center'} ${
+              className={`h-10 rounded-lg flex items-center transition-colors overflow-hidden relative ${isHovered ? 'px-3 justify-start' : 'justify-center'} ${
                 active 
-                  ? 'bg-lime/10 text-lime border border-lime/20 shadow-[0_0_15px_rgba(204,255,0,0.1)]' 
-                  : 'text-[#8E8E93] hover:bg-[#26262B] hover:text-white'
+                  ? 'bg-zinc-800 text-zinc-100 font-medium' 
+                  : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200'
               }`}
               title={!isHovered ? item.label : undefined}
             >
@@ -96,7 +100,7 @@ export function Sidebar() {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -10 }}
-                    className="ml-4 font-bold text-sm tracking-wide whitespace-nowrap z-10"
+                    className="ml-3 font-medium text-sm tracking-wide whitespace-nowrap z-10"
                   >
                     {item.label}
                   </motion.span>
@@ -108,19 +112,19 @@ export function Sidebar() {
       </div>
 
       {/* Bottom Action Button */}
-      <div className={`mt-auto ${isHovered ? 'px-4' : 'px-3'}`}>
+      <div className={`mt-auto ${isHovered ? 'px-3' : 'px-3'}`}>
         <button 
           onClick={() => router.push('/chat')}
-          className={`h-14 bg-[#26262B] text-white rounded-2xl flex items-center hover:bg-[#323238] transition-colors shadow-lg border border-white/5 overflow-hidden ${isHovered ? 'w-full px-4' : 'w-full justify-center'}`}
+          className={`h-10 bg-zinc-100 text-zinc-900 rounded-lg flex items-center hover:bg-white transition-colors overflow-hidden ${isHovered ? 'w-full px-3' : 'w-full justify-center'}`}
         >
-          <Plus size={24} strokeWidth={2.5} className="shrink-0 text-lime" />
+          <Plus size={18} strokeWidth={2.5} className="shrink-0" />
           <AnimatePresence>
             {isHovered && (
               <motion.span 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="ml-3 font-bold text-sm tracking-widest uppercase whitespace-nowrap text-white/80"
+                className="ml-2 font-semibold text-sm whitespace-nowrap"
               >
                 New Chat
               </motion.span>
