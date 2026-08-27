@@ -16,6 +16,7 @@ interface Message {
     validity_status?: string;
   }[];
   isAttachment?: boolean;
+  status?: string;
 }
 
 const ThinkingBlock = ({ thinking, verification }: { thinking?: string, verification?: string }) => {
@@ -24,12 +25,12 @@ const ThinkingBlock = ({ thinking, verification }: { thinking?: string, verifica
   if (!thinking && !verification) return null;
 
   return (
-    <div className="border border-white/10 rounded-xl bg-black/40 overflow-hidden mb-4">
+    <div className="border border-zinc-800 rounded-xl bg-zinc-900/50 overflow-hidden mb-4">
       <button 
         onClick={() => setIsOpen(!isOpen)} 
-        className="w-full flex items-center justify-between p-3 text-xs uppercase tracking-widest font-bold text-muted hover:bg-white/5 transition-colors"
+        className="w-full flex items-center justify-between p-3 text-xs uppercase tracking-tight font-bold text-muted hover:bg-white/5 transition-colors"
       >
-        <span className="flex items-center gap-2"><Sparkles size={14} className="text-lime" /> AI Thought & Verification</span>
+        <span className="flex items-center gap-2"><Sparkles size={14} className="text-emerald-400" /> AI Thought & Verification</span>
         <ChevronDown size={16} className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
       <AnimatePresence>
@@ -42,13 +43,13 @@ const ThinkingBlock = ({ thinking, verification }: { thinking?: string, verifica
           >
             {thinking && (
               <div>
-                <span className="font-bold text-white/40 not-italic uppercase tracking-widest text-[10px] block mb-1">Reasoning</span>
+                <span className="font-bold text-white/40 not-italic uppercase tracking-tight text-[10px] block mb-1">Reasoning</span>
                 {thinking}
               </div>
             )}
             {verification && (
-              <div className="border-t border-white/5 pt-3">
-                <span className="font-bold text-lime/50 not-italic uppercase tracking-widest text-[10px] block mb-1">Fact-Check Verification</span>
+              <div className="border-t border-zinc-800/50 pt-3">
+                <span className="font-bold text-emerald-400/50 not-italic uppercase tracking-tight text-[10px] block mb-1">Fact-Check Verification</span>
                 {verification}
               </div>
             )}
@@ -78,17 +79,17 @@ const CitationsBlock = ({ citations, searchQuery }: { citations: any[], searchQu
     const parts = text.split(regex);
     return parts.map((part, i) => {
       if (part.toLowerCase().match(regex)) {
-        return <span key={i} className="bg-lime/20 text-lime font-bold rounded px-0.5">{part}</span>;
+        return <span key={i} className="bg-emerald-500/20 text-emerald-400 font-bold rounded px-0.5">{part}</span>;
       }
       return <span key={i}>{part}</span>;
     });
   };
 
   return (
-    <div className="mt-6 pt-5 border-t border-white/5">
+    <div className="mt-6 pt-5 border-t border-zinc-800/50">
       <button 
         onClick={() => setIsOpen(!isOpen)} 
-        className="flex items-center gap-2 text-[10px] font-black text-muted hover:text-white uppercase tracking-widest transition-colors mb-2"
+        className="flex items-center gap-2 text-[10px] font-semibold text-muted hover:text-white uppercase tracking-tight transition-colors mb-2"
       >
         <ChevronDown size={14} className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`} />
         VIEW {citations.length} SOURCES CITED
@@ -103,13 +104,13 @@ const CitationsBlock = ({ citations, searchQuery }: { citations: any[], searchQu
             className="flex flex-col gap-2 overflow-hidden mt-4"
           >
             {citations.map((c, i) => (
-              <div key={i} className="flex flex-col bg-black/40 border border-white/5 rounded-xl overflow-hidden transition-colors">
+              <div key={i} className="flex flex-col bg-zinc-900/50 border border-zinc-800/50 rounded-xl overflow-hidden transition-colors">
                 <div 
                   onClick={() => setExpandedCitation(expandedCitation === i ? null : i)}
                   className="flex items-center justify-between p-3 cursor-pointer hover:bg-white/5"
                 >
                   <div className="flex items-start gap-3 text-sm">
-                    <FileText size={16} className="text-lime mt-0.5 shrink-0" />
+                    <FileText size={16} className="text-emerald-400 mt-0.5 shrink-0" />
                     <span className="text-white/80 font-medium">{c.citation.replace(/\?/g, '—')}</span>
                   </div>
                   <ChevronDown size={14} className={`text-muted transform transition-transform ${expandedCitation === i ? 'rotate-180' : ''}`} />
@@ -121,7 +122,7 @@ const CitationsBlock = ({ citations, searchQuery }: { citations: any[], searchQu
                       initial={{ height: 0 }}
                       animate={{ height: 'auto' }}
                       exit={{ height: 0 }}
-                      className="px-4 pb-4 pt-2 text-sm text-white/60 leading-relaxed border-t border-white/5"
+                      className="px-4 pb-4 pt-2 text-sm text-white/60 leading-relaxed border-t border-zinc-800/50"
                     >
                       {highlightText(c.raw_text, searchQuery)}
                     </motion.div>
@@ -250,8 +251,8 @@ ${ocrData.text}`,
     const renderMessageContent = (msg: Message) => {
       if (msg.isAttachment) {
         return (
-          <div className="bg-black/30 border border-white/5 rounded-2xl p-4 flex items-center gap-4 w-full max-w-sm mt-1 mb-2">
-             <div className="w-12 h-12 bg-lime/10 text-lime flex items-center justify-center rounded-xl shrink-0">
+          <div className="bg-zinc-900/50 border border-zinc-800/50 rounded-lg p-4 flex items-center gap-4 w-full max-w-sm mt-1 mb-2">
+             <div className="w-12 h-12 bg-emerald-500/10 text-emerald-400 flex items-center justify-center rounded-xl shrink-0">
                <FileText size={24} />
              </div>
              <div className="flex flex-col">
@@ -312,7 +313,7 @@ ${ocrData.text}`,
         <div className="flex flex-col gap-4 w-full">
           <ThinkingBlock thinking={thinking || undefined} verification={msg.status === 'GROUNDED' ? 'Citations successfully cross-referenced with Jurista Legal Graph.' : undefined} />
 
-          <div className="prose prose-invert prose-lime prose-p:mb-4 prose-ul:mb-4 prose-li:my-1 prose-headings:text-lime max-w-none text-white/90">
+          <div className="prose prose-invert prose-emerald prose-p:mb-4 prose-ul:mb-4 prose-li:my-1 prose-headings:text-emerald-400 max-w-none text-white/90">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
@@ -322,14 +323,14 @@ ${ocrData.text}`,
                     const citation = msg.citations?.[citeIdx];
                     if (citation) {
                       const isOverruled = citation.validity_status === 'OVERRULED_FILTERED';
-                      const colorClass = isOverruled ? 'text-red-500 bg-red-500/10' : 'text-lime bg-lime/10';
-                      const badgeClass = isOverruled ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-lime/20 text-lime border-lime/30';
+                      const colorClass = isOverruled ? 'text-red-500 bg-zinc-900/50' : 'text-emerald-400 bg-emerald-500/10';
+                      const badgeClass = isOverruled ? 'bg-red-500/20 text-red-400 border-zinc-800' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
                       return (
                         <span className="relative group inline-block cursor-pointer mx-0.5 no-underline">
                           <span className={`${colorClass} text-xs font-bold px-1.5 py-0.5 rounded`}>[{citeIdx + 1}]</span>
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-96 p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all bg-[#09090B] border border-white/10 shadow-2xl rounded-2xl z-50 pointer-events-none text-left font-sans">
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-96 p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all bg-zinc-950 border border-zinc-800 shadow-2xl rounded-lg z-50 pointer-events-none text-left font-sans">
                             <div className="flex items-center justify-between mb-3">
-                              <p className="text-xs text-white/50 uppercase tracking-widest font-bold m-0">{citation.citation}</p>
+                              <p className="text-xs text-white/50 uppercase tracking-tight font-bold m-0">{citation.citation}</p>
                               <span className={`px-2 py-0.5 rounded border text-[10px] font-bold uppercase ${badgeClass}`}>{isOverruled ? 'Overruled' : 'Good Law'}</span>
                             </div>
                             <p className="text-sm text-white/90 leading-relaxed max-h-48 overflow-hidden m-0">{citation.raw_text}</p>
@@ -348,20 +349,20 @@ ${ocrData.text}`,
           
           {/* Show Your Work Panel */}
           {msg.citations && msg.citations.length > 0 && (
-            <div className="mt-4 border border-white/10 rounded-xl overflow-hidden bg-black/20">
+            <div className="mt-4 border border-zinc-800 rounded-xl overflow-hidden bg-zinc-900/30">
               <details className="group">
-                <summary className="flex items-center justify-between p-4 cursor-pointer list-none text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white transition-colors bg-white/5">
+                <summary className="flex items-center justify-between p-4 cursor-pointer list-none text-xs font-bold uppercase tracking-tight text-white/50 hover:text-white transition-colors bg-white/5">
                   <span className="flex items-center gap-2">
                     <Database size={14} /> View AI Source Material ({msg.citations.length} citations)
                   </span>
                   <ChevronDown size={14} className="group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="p-4 border-t border-white/10 flex flex-col gap-4 max-h-96 overflow-y-auto custom-scrollbar">
+                <div className="p-4 border-t border-zinc-800 flex flex-col gap-4 max-h-96 overflow-y-auto custom-scrollbar">
                   {msg.citations.map((cit, idx) => (
-                    <div key={idx} className="flex flex-col gap-2 p-4 bg-[#121215] rounded-lg border border-white/5">
+                    <div key={idx} className="flex flex-col gap-2 p-4 bg-zinc-950 rounded-lg border border-zinc-800/50">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-lime uppercase tracking-widest">[{idx + 1}] {cit.citation}</span>
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest ${cit.validity_status === 'OVERRULED_FILTERED' ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-lime/20 text-lime border border-lime/30'}`}>
+                        <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-tight">[{idx + 1}] {cit.citation}</span>
+                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-tight ${cit.validity_status === 'OVERRULED_FILTERED' ? 'bg-red-500/20 text-red-400 border border-zinc-800' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'}`}>
                           {cit.validity_status === 'OVERRULED_FILTERED' ? 'Overruled' : 'Good Law'}
                         </span>
                       </div>
@@ -377,7 +378,7 @@ ${ocrData.text}`,
             <div className="mt-4 flex">
               <button 
                 onClick={() => window.location.href = '/petition'}
-                className="pill-dark py-4 px-6 text-sm font-bold tracking-widest uppercase bg-blue-500 text-white hover:bg-blue-600 flex items-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all"
+                className="pill-dark py-4 px-6 text-sm font-bold tracking-tight uppercase bg-blue-500 text-white hover:bg-blue-600 flex items-center gap-2 shadow-sm transition-all"
               >
                 <FileText size={18} />
                 Open Petition Drafting Suite
@@ -387,13 +388,13 @@ ${ocrData.text}`,
 
           {suggestedQuestions.length > 0 && (
             <div className="mt-6 flex flex-col gap-2">
-              <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Suggested Follow-ups</span>
+              <span className="text-[10px] font-bold text-white/40 uppercase tracking-tight">Suggested Follow-ups</span>
               <div className="flex flex-wrap gap-2">
                 {suggestedQuestions.map((sq, i) => (
                   <button 
                     key={i} 
                     onClick={() => setQuery(sq)}
-                    className="text-left text-sm text-lime bg-lime/5 border border-lime/20 px-4 py-2 rounded-xl hover:bg-lime/10 transition-colors"
+                    className="text-left text-sm text-emerald-400 bg-emerald-500/5 border border-emerald-500/20 px-4 py-2 rounded-xl hover:bg-emerald-500/10 transition-colors"
                   >
                     {sq}
                   </button>
@@ -424,19 +425,19 @@ ${ocrData.text}`,
               className="flex flex-col items-center text-center max-w-2xl w-full"
             >
               
-              <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center mb-8 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+              <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center mb-8 border border-zinc-800 shadow-sm">
                 <Mic className="text-white/40" size={40} strokeWidth={1.5} />
               </div>
               
-              <h1 className="font-sans-hero text-4xl lg:text-5xl font-black tracking-wider uppercase mb-4 text-white">
+              <h1 className="font-sans-hero text-4xl lg:text-5xl font-semibold tracking-wider uppercase mb-4 text-white">
                 LEGAL ASSISTANT
               </h1>
-              <h2 className="text-xl font-medium text-muted mb-12 uppercase tracking-widest">
+              <h2 className="text-xl font-medium text-muted mb-12 uppercase tracking-tight">
                 AI-POWERED RESEARCH & ANALYSIS
               </h2>
 
               {/* Input Box for Empty State */}
-              <form onSubmit={handleSubmit} className="w-full max-w-3xl relative mb-12 card-dark p-2 border-white/10">
+              <form onSubmit={handleSubmit} className="w-full max-w-3xl relative mb-12 card-dark p-2 border-zinc-800">
                 <input 
                   type="text" 
                   value={query}
@@ -444,9 +445,9 @@ ${ocrData.text}`,
                   placeholder="Ask a legal question..."
                   className="w-full bg-transparent px-6 py-5 outline-none text-white placeholder-muted font-medium text-lg"
                 />
-                <div className="flex items-center justify-between px-4 pb-2 pt-2 border-t border-white/10">
+                <div className="flex items-center justify-between px-4 pb-2 pt-2 border-t border-zinc-800">
                   <div className="flex items-center gap-2">
-                    <button type="button" className="pill-dark px-4 py-2 text-sm gap-2 text-lime border-lime/30 hover:bg-lime/10 bg-transparent uppercase font-bold tracking-wider">
+                    <button type="button" className="pill-dark px-4 py-2 text-sm gap-2 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10 bg-transparent uppercase font-bold tracking-wider">
                       <Sparkles size={14} /> Deep Research
                     </button>
                   </div>
@@ -466,9 +467,9 @@ ${ocrData.text}`,
                   { title: "Draft Petition", desc: "Create a standard bail petition for a traffic offense." },
                   { title: "Check Fines", desc: "List the fines for overspeeding in Punjab." }
                 ].map((card, idx) => (
-                  <div key={idx} className="card-dark bg-[#18181C] p-6 hover:border-lime/50 transition-colors cursor-pointer group">
-                    <div className="text-white/30 group-hover:text-lime transition-colors mb-4"><FileText size={24} /></div>
-                    <h4 className="font-bold font-sans-hero tracking-widest text-sm uppercase text-white mb-2">{card.title}</h4>
+                  <div key={idx} className="card-dark bg-[#18181C] p-6 hover:border-emerald-500/50 transition-colors cursor-pointer group">
+                    <div className="text-white/30 group-hover:text-emerald-400 transition-colors mb-4"><FileText size={24} /></div>
+                    <h4 className="font-bold font-sans-hero tracking-tight text-sm uppercase text-white mb-2">{card.title}</h4>
                     <p className="text-sm text-muted leading-relaxed font-medium">{card.desc}</p>
                   </div>
                 ))}
@@ -490,13 +491,13 @@ ${ocrData.text}`,
                     className="mb-12 flex items-start gap-6 w-full max-w-4xl mx-auto"
                   >
                     {/* Avatar */}
-                    <div className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-lg border border-white/5 mt-1">
+                    <div className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-lg border border-zinc-800/50 mt-1">
                       {msg.type === 'user' ? (
-                        <div className="w-full h-full bg-white text-black rounded-full flex items-center justify-center font-sans-hero font-black text-sm">
+                        <div className="w-full h-full bg-white text-black rounded-full flex items-center justify-center font-sans-hero font-semibold text-sm">
                           JN
                         </div>
                       ) : (
-                        <div className="w-full h-full bg-lime/10 text-lime rounded-full flex items-center justify-center">
+                        <div className="w-full h-full bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center">
                           <Sparkles size={18} strokeWidth={2.5} />
                         </div>
                       )}
@@ -519,10 +520,10 @@ ${ocrData.text}`,
               
               {loading && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start mb-8">
-                  <div className="card-dark bg-[#18181C] border-white/5 rounded-[24px] rounded-tl-sm p-6 flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-lime animate-bounce"></div>
-                    <div className="w-2 h-2 rounded-full bg-lime animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 rounded-full bg-lime animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                  <div className="card-dark bg-[#18181C] border-zinc-800/50 rounded-[24px] rounded-tl-sm p-6 flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-bounce"></div>
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                   </div>
                 </motion.div>
               )}
@@ -533,7 +534,7 @@ ${ocrData.text}`,
           {/* Sticky Input for Chat State */}
           <div className="absolute bottom-0 left-0 right-0 p-8 pt-20 bg-gradient-to-t from-[#0D0D0E] via-[#0D0D0E]/90 to-transparent pointer-events-none">
             <div className="max-w-4xl mx-auto pointer-events-auto">
-              <form onSubmit={handleSubmit} className="w-full card-dark p-2 border-white/10 shadow-2xl bg-[#18181C]">
+              <form onSubmit={handleSubmit} className="w-full card-dark p-2 border-zinc-800 shadow-2xl bg-[#18181C]">
                 <input 
                   type="text" 
                   value={query}
@@ -541,9 +542,9 @@ ${ocrData.text}`,
                   placeholder="Ask a follow-up question..."
                   className="w-full bg-transparent px-6 py-4 outline-none text-white placeholder-muted font-medium text-lg"
                 />
-                <div className="flex items-center justify-between px-4 pb-2 pt-2 border-t border-white/5">
+                <div className="flex items-center justify-between px-4 pb-2 pt-2 border-t border-zinc-800/50">
                   <div className="flex items-center gap-2">
-                    <button type="button" className="pill-dark px-4 py-2 text-sm gap-2 text-lime border-lime/30 hover:bg-lime/10 bg-transparent uppercase font-bold tracking-wider">
+                    <button type="button" className="pill-dark px-4 py-2 text-sm gap-2 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10 bg-transparent uppercase font-bold tracking-wider">
                       <Sparkles size={14} /> Deep Research
                     </button>
                   </div>
