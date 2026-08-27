@@ -45,7 +45,7 @@ export const PetitionDrafter: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+  const handleChange = (e: any) => {
     const name = e.target.name as string;
     const value = e.target.value as string;
     setForm({ ...form, [name]: value });
@@ -111,7 +111,7 @@ export const PetitionDrafter: React.FC = () => {
 
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <FormControl fullWidth>
                 <InputLabel>Petition Type</InputLabel>
                 <Select name="petition_type" value={form.petition_type} onChange={handleChange} label="Petition Type" sx={{ borderRadius: 2 }}>
@@ -121,22 +121,22 @@ export const PetitionDrafter: React.FC = () => {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField fullWidth label="Court" name="court" value={form.court} onChange={handleChange} sx={{ borderRadius: 2 }} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField fullWidth label="Case Number" name="case_number" value={form.case_number} onChange={handleChange} sx={{ borderRadius: 2 }} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField fullWidth label="Bar License No." name="bar_license_no" value={form.bar_license_no} onChange={handleChange} sx={{ borderRadius: 2 }} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField fullWidth label="Petitioner / Plaintiff" name="petitioner" value={form.petitioner} onChange={handleChange} sx={{ borderRadius: 2 }} />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField fullWidth label="Respondent / Defendant" name="respondent" value={form.respondent} onChange={handleChange} sx={{ borderRadius: 2 }} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Facts"
@@ -148,7 +148,7 @@ export const PetitionDrafter: React.FC = () => {
                 sx={{ borderRadius: 2 }}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Prayer"
@@ -160,7 +160,7 @@ export const PetitionDrafter: React.FC = () => {
                 sx={{ borderRadius: 2 }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField fullWidth label="Party Type (for signature)" name="party_type" value={form.party_type} onChange={handleChange} sx={{ borderRadius: 2 }} />
             </Grid>
           </Grid>
@@ -185,3 +185,4 @@ export const PetitionDrafter: React.FC = () => {
     </Box>
   );
 };
+
