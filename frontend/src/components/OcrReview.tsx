@@ -154,11 +154,11 @@ export const OcrReview: React.FC = () => {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }}>
               <Grid container spacing={3}>
                 {/* Text with correction */}
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                   <Card variant="outlined" sx={{ borderRadius: 2, borderColor: '#e8ecf0', height: '100%' }}>
                     <CardContent>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                        <Typography variant="subtitle2" fontWeight={600}>OCR Text (edit below)</Typography>
+                        <Typography variant="subtitle2" >OCR Text (edit below)</Typography>
                         <Chip icon={<EditIcon />} label="Editable" size="small" sx={{ bgcolor: '#e3f0fd', color: '#4a90d9' }} />
                       </Box>
                       <TextField
@@ -180,10 +180,10 @@ export const OcrReview: React.FC = () => {
                 </Grid>
 
                 {/* Summary and confidence */}
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                   <Card variant="outlined" sx={{ borderRadius: 2, borderColor: '#e8ecf0', height: '100%' }}>
                     <CardContent>
-                      <Typography variant="subtitle2" fontWeight={600} sx={{ mb: 2 }}>Extracted Summary</Typography>
+                      <Typography variant="subtitle2"  sx={{ mb: 2 }}>Extracted Summary</Typography>
                       <Box sx={{ bgcolor: '#f5f7fa', p: 2, borderRadius: 2, mb: 2 }}>
                         <Typography variant="body2"><strong>Parties:</strong> {result.summary.parties.join(', ') || 'Not found'}</Typography>
                         <Typography variant="body2"><strong>Sections:</strong> {result.summary.sections.join(', ') || 'None'}</Typography>
@@ -194,7 +194,7 @@ export const OcrReview: React.FC = () => {
                         </ul>
                       </Box>
 
-                      <Typography variant="subtitle2" fontWeight={600} sx={{ mb: 1 }}>Per-Line Confidence</Typography>
+                      <Typography variant="subtitle2"  sx={{ mb: 1 }}>Per-Line Confidence</Typography>
                       <Box sx={{ maxHeight: 300, overflowY: 'auto', bgcolor: '#f5f7fa', p: 1, borderRadius: 2 }}>
                         {result.lines.map((line: any, idx: number) => (
                           <Box key={idx} sx={{ mb: 1 }}>
