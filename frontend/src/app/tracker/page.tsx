@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, Calendar, RefreshCcw, Plus, Save, Phone, CheckCircle2, MessageSquare, AlertCircle, Clock, ChevronRight, X, PhoneCall, ExternalLink } from 'lucide-react';
 
 interface Case {
+  id?: string;
   case_number: string;
   parties: string;
   court: string;
@@ -89,11 +90,11 @@ export default function CauseTrackerPage() {
       {/* Header Area */}
       <div className="flex items-end justify-between mb-8">
         <div>
-          <h1 className="font-sans-hero text-4xl font-black tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50 mb-2">
+          <h1 className="font-sans-hero text-4xl font-semibold tracking-tight uppercase text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50 mb-2">
             Cause Tracker
           </h1>
           <p className="text-white/50 text-sm font-medium tracking-wider uppercase flex items-center gap-2">
-            <Calendar size={14} className="text-lime" />
+            <Calendar size={14} className="text-emerald-400" />
             Hearing Schedule & WhatsApp Alerts
           </p>
         </div>
@@ -101,7 +102,7 @@ export default function CauseTrackerPage() {
         <div className="flex gap-4">
           <button 
             onClick={() => setIsAddModalOpen(true)}
-            className="card-dark hover:bg-white/5 px-6 py-3 flex items-center gap-2 rounded-xl text-xs font-bold tracking-widest uppercase transition-all border border-white/10"
+            className="card-dark hover:bg-white/5 px-6 py-3 flex items-center gap-2 rounded-xl text-xs font-bold tracking-tight uppercase transition-all border border-zinc-800"
           >
             <Plus size={16} className="text-blue-400" /> Manually Track
           </button>
@@ -109,7 +110,7 @@ export default function CauseTrackerPage() {
           <button 
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="pill-dark px-6 py-3 flex items-center gap-2 text-xs font-bold tracking-widest uppercase transition-all bg-lime text-black hover:bg-lime/90 disabled:opacity-50"
+            className="pill-dark px-6 py-3 flex items-center gap-2 text-xs font-bold tracking-tight uppercase transition-all bg-emerald-500 text-black hover:bg-emerald-500/90 disabled:opacity-50"
           >
             <RefreshCcw size={16} className={isRefreshing ? "animate-spin" : ""} /> 
             {isRefreshing ? "Syncing..." : "Sync Court List"}
@@ -119,35 +120,35 @@ export default function CauseTrackerPage() {
 
       {/* Stats Widgets */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="card-dark p-6 rounded-2xl border border-white/10 flex flex-col gap-4 relative overflow-hidden group">
+        <div className="card-dark p-6 rounded-lg border border-zinc-800 flex flex-col gap-4 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
-            <CheckCircle2 size={64} className="text-lime" />
+            <CheckCircle2 size={64} className="text-emerald-400" />
           </div>
-          <p className="text-[10px] font-bold tracking-widest uppercase text-white/50">Active Cases</p>
-          <p className="font-sans-hero text-5xl font-black">{cases.length}</p>
+          <p className="text-[10px] font-bold tracking-tight uppercase text-white/50">Active Cases</p>
+          <p className="font-sans-hero text-5xl font-semibold">{cases.length}</p>
         </div>
         
-        <div className="card-dark p-6 rounded-2xl border border-white/10 flex flex-col gap-4 relative overflow-hidden group">
+        <div className="card-dark p-6 rounded-lg border border-zinc-800 flex flex-col gap-4 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
             <Clock size={64} className="text-blue-500" />
           </div>
-          <p className="text-[10px] font-bold tracking-widest uppercase text-white/50">Upcoming Hearings</p>
-          <p className="font-sans-hero text-5xl font-black">{cases.filter(c => c.hearing_date !== 'N/A').length}</p>
+          <p className="text-[10px] font-bold tracking-tight uppercase text-white/50">Upcoming Hearings</p>
+          <p className="font-sans-hero text-5xl font-semibold">{cases.filter(c => c.hearing_date !== 'N/A').length}</p>
         </div>
 
-        <div className="card-dark p-6 rounded-2xl border border-white/10 flex flex-col gap-4 relative overflow-hidden group">
+        <div className="card-dark p-6 rounded-lg border border-zinc-800 flex flex-col gap-4 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
             <PhoneCall size={64} className="text-green-500" />
           </div>
-          <p className="text-[10px] font-bold tracking-widest uppercase text-white/50">WhatsApp Alerts</p>
-          <p className="font-sans-hero text-5xl font-black text-green-400">Active</p>
+          <p className="text-[10px] font-bold tracking-tight uppercase text-white/50">WhatsApp Alerts</p>
+          <p className="font-sans-hero text-5xl font-semibold text-green-400">Active</p>
         </div>
       </div>
 
       {/* Main Table */}
-      <div className="card-dark rounded-2xl border border-white/10 overflow-hidden flex-1 flex flex-col">
-        <div className="p-6 border-b border-white/10 flex items-center justify-between bg-black/40">
-          <h2 className="text-sm font-bold tracking-widest uppercase flex items-center gap-2">
+      <div className="card-dark rounded-lg border border-zinc-800 overflow-hidden flex-1 flex flex-col">
+        <div className="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/50">
+          <h2 className="text-sm font-bold tracking-tight uppercase flex items-center gap-2">
             <AlertCircle size={16} className="text-blue-400" /> Tracked Cause List
           </h2>
         </div>
@@ -163,13 +164,13 @@ export default function CauseTrackerPage() {
           ) : (
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-black/20 text-[10px] font-bold tracking-widest uppercase text-white/50">
-                  <th className="p-4 pl-6 border-b border-white/5">Case No.</th>
-                  <th className="p-4 border-b border-white/5">Parties</th>
-                  <th className="p-4 border-b border-white/5">Court</th>
-                  <th className="p-4 border-b border-white/5">Next Hearing</th>
-                  <th className="p-4 border-b border-white/5">Limitation Deadline</th>
-                  <th className="p-4 pr-6 border-b border-white/5 text-right">Status</th>
+                <tr className="bg-zinc-900/30 text-[10px] font-bold tracking-tight uppercase text-white/50">
+                  <th className="p-4 pl-6 border-b border-zinc-800/50">Case No.</th>
+                  <th className="p-4 border-b border-zinc-800/50">Parties</th>
+                  <th className="p-4 border-b border-zinc-800/50">Court</th>
+                  <th className="p-4 border-b border-zinc-800/50">Next Hearing</th>
+                  <th className="p-4 border-b border-zinc-800/50">Limitation Deadline</th>
+                  <th className="p-4 pr-6 border-b border-zinc-800/50 text-right">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -179,7 +180,7 @@ export default function CauseTrackerPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05 }}
                     key={i} 
-                    className="hover:bg-white/5 border-b border-white/5 transition-colors group"
+                    className="hover:bg-white/5 border-b border-zinc-800/50 transition-colors group"
                   >
                     <td className="p-4 pl-6 font-medium text-sm">{c.case_number}</td>
                     <td className="p-4 text-sm text-white/80">{c.parties}</td>
@@ -199,7 +200,7 @@ export default function CauseTrackerPage() {
                           href={`/client/${c.id || i}`} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 bg-white/5 hover:bg-white/10 px-3 py-1 rounded text-xs font-bold uppercase tracking-widest transition-colors border border-white/10"
+                          className="flex items-center gap-1 bg-white/5 hover:bg-white/10 px-3 py-1 rounded text-xs font-bold uppercase tracking-tight transition-colors border border-zinc-800"
                         >
                           <ExternalLink size={12} /> Client Portal
                         </a>
@@ -221,30 +222,30 @@ export default function CauseTrackerPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#121215] border border-white/10 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl"
+              className="bg-zinc-950 border border-zinc-800 rounded-lg w-full max-w-md overflow-hidden shadow-2xl"
             >
-              <div className="p-6 border-b border-white/10 flex items-center justify-between bg-black/40">
-                <h3 className="font-bold tracking-widest uppercase text-sm">Track New Case</h3>
+              <div className="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/50">
+                <h3 className="font-bold tracking-tight uppercase text-sm">Track New Case</h3>
                 <button onClick={() => setIsAddModalOpen(false)} className="text-white/50 hover:text-white"><X size={20} /></button>
               </div>
               <form onSubmit={handleManualSubmit} className="p-6 flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold tracking-widest uppercase text-white/50">Case Number</label>
-                  <input required value={newCase.case_number} onChange={e => setNewCase({...newCase, case_number: e.target.value})} className="bg-black border border-white/10 rounded-lg p-3 text-sm focus:border-lime outline-none" placeholder="e.g. WP-1234/2026" />
+                  <label className="text-[10px] font-bold tracking-tight uppercase text-white/50">Case Number</label>
+                  <input required value={newCase.case_number} onChange={e => setNewCase({...newCase, case_number: e.target.value})} className="bg-black border border-zinc-800 rounded-lg p-3 text-sm focus:border-emerald-500 outline-none" placeholder="e.g. WP-1234/2026" />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold tracking-widest uppercase text-white/50">Parties</label>
-                  <input required value={newCase.parties} onChange={e => setNewCase({...newCase, parties: e.target.value})} className="bg-black border border-white/10 rounded-lg p-3 text-sm focus:border-lime outline-none" placeholder="e.g. State vs Ali" />
+                  <label className="text-[10px] font-bold tracking-tight uppercase text-white/50">Parties</label>
+                  <input required value={newCase.parties} onChange={e => setNewCase({...newCase, parties: e.target.value})} className="bg-black border border-zinc-800 rounded-lg p-3 text-sm focus:border-emerald-500 outline-none" placeholder="e.g. State vs Ali" />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold tracking-widest uppercase text-white/50">Court</label>
-                  <input required value={newCase.court} onChange={e => setNewCase({...newCase, court: e.target.value})} className="bg-black border border-white/10 rounded-lg p-3 text-sm focus:border-lime outline-none" />
+                  <label className="text-[10px] font-bold tracking-tight uppercase text-white/50">Court</label>
+                  <input required value={newCase.court} onChange={e => setNewCase({...newCase, court: e.target.value})} className="bg-black border border-zinc-800 rounded-lg p-3 text-sm focus:border-emerald-500 outline-none" />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold tracking-widest uppercase text-white/50">Hearing Date</label>
-                  <input required type="date" value={newCase.hearing_date} onChange={e => setNewCase({...newCase, hearing_date: e.target.value})} className="bg-black border border-white/10 rounded-lg p-3 text-sm focus:border-lime outline-none [color-scheme:dark]" />
+                  <label className="text-[10px] font-bold tracking-tight uppercase text-white/50">Hearing Date</label>
+                  <input required type="date" value={newCase.hearing_date} onChange={e => setNewCase({...newCase, hearing_date: e.target.value})} className="bg-black border border-zinc-800 rounded-lg p-3 text-sm focus:border-emerald-500 outline-none [color-scheme:dark]" />
                 </div>
-                <button type="submit" className="mt-4 bg-lime text-black py-4 rounded-xl font-bold tracking-widest uppercase text-sm flex justify-center items-center gap-2 hover:bg-lime/90 transition-colors">
+                <button type="submit" className="mt-4 bg-emerald-500 text-black py-4 rounded-xl font-bold tracking-tight uppercase text-sm flex justify-center items-center gap-2 hover:bg-emerald-500/90 transition-colors">
                   <CheckCircle2 size={18} /> Start Tracking
                 </button>
               </form>
