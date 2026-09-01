@@ -1,8 +1,11 @@
 from fastapi import FastAPI
+from app.database import init_db
+
+init_db()
 from fastapi.middleware.cors import CORSMiddleware
 
 # Import all routers
-from app.api import rag, drafter, ocr, tracker, settings
+from app.api import rag, drafter, ocr, tracker, settings, analyzer, simulation, cases
 
 app = FastAPI(title="Jurista PakLaw-AI", version="1.0.0")
 
@@ -21,6 +24,9 @@ app.include_router(drafter.router)
 app.include_router(ocr.router)
 app.include_router(tracker.router)
 app.include_router(settings.router)
+app.include_router(analyzer.router)
+app.include_router(simulation.router)
+app.include_router(cases.router, prefix="/api/v1/projects", tags=["projects"])
 
 @app.get("/health")
 async def health_check():
