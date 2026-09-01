@@ -142,7 +142,7 @@ const CitationsBlock = ({ citations, searchQuery, onHover }: { citations: any[],
   );
 };
 
-export interface LegalChatProps { onGenerateDraft?: any; onCitationHover?: any; }
+export interface LegalChatProps { onGenerateDraft?: any; onCitationHover?: any; projectId?: string; }
 export const LegalChat: React.FC<LegalChatProps> = ({onGenerateDraft, onCitationHover}) => {
   const [query, setQuery] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -615,6 +615,7 @@ ${ocrData.text}`,
       </div>
     );
   };
+
 
 
 

@@ -1,176 +1,67 @@
-"use client";
-
 import React from 'react';
-import { motion, Variants } from 'framer-motion';
-import { FileUp, MessageSquare, Scale, ShieldAlert, GitCompare, Gavel, Link2, Sparkles, ScrollText } from 'lucide-react';
+import { Bot, ScanSearch, FileSignature, Mic, Scale, FileText, Layout, GitCompare, ShieldAlert, Gavel, Link2, BookOpen } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface WorkspaceHubProps {
-  onSelect: (module: 'ocr' | 'chat' | 'draft' | 'petition' | 'analyze' | 'contradiction' | 'moot' | 'links') => void;
+  onSelect: (module: string) => void;
+  availableModules?: string[];
 }
 
-export function WorkspaceHub({ onSelect }: WorkspaceHubProps) {
-  const containerVars: Variants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.1 }
-    }
-  };
+const ALL_MODULES = [
+  { id: 'chat', label: 'Legal Copilot', icon: Bot, desc: 'Chat directly with your case memory', color: 'emerald' },
+  { id: 'ocr', label: 'OCR Scanner', icon: ScanSearch, desc: 'Extract & ingest documents', color: 'blue' },
+  { id: 'draft', label: 'Petition Drafter', icon: FileSignature, desc: 'Generate drafts from memory', color: 'amber' },
+  { id: 'analyze', label: 'Opponent Analyzer', icon: ShieldAlert, desc: 'Scan opponent arguments', color: 'red' },
+  { id: 'contradiction', label: 'Contradiction Engine', icon: GitCompare, desc: 'Find logical loopholes', color: 'purple' },
+  { id: 'moot', label: 'Moot Simulator', icon: Gavel, desc: 'Practice cross-examination', color: 'rose' },
+  { id: 'links', label: 'Legal Links', icon: Link2, desc: 'Quick law references', color: 'indigo' },
+];
 
-  const itemVars: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
-  };
+export const WorkspaceHub: React.FC<WorkspaceHubProps> = ({ onSelect, availableModules = [] }) => {
+  
+  const modulesToRender = ALL_MODULES.filter(m => availableModules.includes(m.id));
 
   return (
-    <div className="flex-1 overflow-y-auto custom-scrollbar bg-zinc-950 p-8 flex flex-col items-center w-full h-full">
-      <motion.div 
-        variants={containerVars}
-        initial="hidden"
-        animate="show"
-        className="max-w-6xl w-full flex flex-col items-center justify-center min-h-full py-12"
-      >
-        <motion.div variants={itemVars} className="text-center mb-16">
-          <h1 className="text-3xl font-semibold tracking-tight text-zinc-100 mb-3">
-            Jurista Workspace
-          </h1>
-          <p className="text-sm text-zinc-400 max-w-lg mx-auto">
-            Select a module to begin. Context flows seamlessly across documents, chats, and drafts.
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full relative">
-          
-          {/* Module 1: Contradiction Engine */}
-          <motion.div variants={itemVars} className="z-10 w-full">
-            <button 
-              onClick={() => onSelect('contradiction')}
-              className="w-full h-full group relative flex flex-col items-center p-8 bg-zinc-900/30 hover:bg-zinc-800/50 border border-zinc-800 hover:border-zinc-700 rounded-lg transition-colors"
-            >
-              <div className="w-12 h-12 mb-6 rounded-lg bg-zinc-800/50 flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 group-hover:bg-zinc-700/50 transition-colors">
-                <GitCompare size={24} />
-              </div>
-              <h3 className="text-sm font-medium text-zinc-200 mb-2 text-center">Contradiction Engine</h3>
-              <p className="text-xs text-zinc-500 text-center leading-relaxed">
-                Cross-reference evidence to find loopholes.
-              </p>
-            </button>
-          </motion.div>
-
-          {/* Module 2: Analyzer */}
-          <motion.div variants={itemVars} className="z-10 w-full">
-            <button 
-              onClick={() => onSelect('analyze')}
-              className="w-full h-full group relative flex flex-col items-center p-8 bg-zinc-900/30 hover:bg-zinc-800/50 border border-zinc-800 hover:border-zinc-700 rounded-lg transition-colors"
-            >
-              <div className="w-12 h-12 mb-6 rounded-lg bg-zinc-800/50 flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 group-hover:bg-zinc-700/50 transition-colors">
-                <ShieldAlert size={24} />
-              </div>
-              <h3 className="text-sm font-medium text-zinc-200 mb-2 text-center">Opponent Analyzer</h3>
-              <p className="text-xs text-zinc-500 text-center leading-relaxed">
-                Scan opposing briefs for overruled law.
-              </p>
-            </button>
-          </motion.div>
-
-          {/* Module 3: OCR */}
-          <motion.div variants={itemVars} className="z-10 w-full">
-            <button 
-              onClick={() => onSelect('ocr')}
-              className="w-full h-full group relative flex flex-col items-center p-8 bg-zinc-900/30 hover:bg-zinc-800/50 border border-zinc-800 hover:border-zinc-700 rounded-lg transition-colors"
-            >
-              <div className="w-12 h-12 mb-6 rounded-lg bg-zinc-800/50 flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 group-hover:bg-zinc-700/50 transition-colors">
-                <FileUp size={24} />
-              </div>
-              <h3 className="text-sm font-medium text-zinc-200 mb-2 text-center">OCR Engine</h3>
-              <p className="text-xs text-zinc-500 text-center leading-relaxed">
-                Extract facts directly from raw FIRs and evidence images.
-              </p>
-            </button>
-          </motion.div>
-
-          {/* Module 4: Chat */}
-          <motion.div variants={itemVars} className="z-10 w-full">
-            <button 
-              onClick={() => onSelect('chat')}
-              className="w-full h-full group relative flex flex-col items-center p-8 bg-zinc-900/30 hover:bg-zinc-800/50 border border-zinc-800 hover:border-zinc-700 rounded-lg transition-colors"
-            >
-              <div className="w-12 h-12 mb-6 rounded-lg bg-zinc-800/50 flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 group-hover:bg-zinc-700/50 transition-colors">
-                <MessageSquare size={24} />
-              </div>
-              <h3 className="text-sm font-medium text-zinc-200 mb-2 text-center">Legal Chat</h3>
-              <p className="text-xs text-zinc-500 text-center leading-relaxed">
-                Discuss case law and cross-reference extracted facts.
-              </p>
-            </button>
-          </motion.div>
-
-          {/* Module 5: Smart Assembly */}
-          <motion.div variants={itemVars} className="z-10 w-full">
-            <button 
-              onClick={() => onSelect('draft')}
-              className="w-full h-full group relative flex flex-col items-center p-8 bg-zinc-900/30 hover:bg-zinc-800/50 border border-zinc-800 hover:border-zinc-700 rounded-lg transition-colors"
-            >
-              <div className="w-12 h-12 mb-6 rounded-lg bg-zinc-800/50 flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 group-hover:bg-zinc-700/50 transition-colors">
-                <Sparkles size={24} />
-              </div>
-              <h3 className="text-sm font-medium text-zinc-200 mb-2 text-center">Smart Assembly</h3>
-              <p className="text-xs text-zinc-500 text-center leading-relaxed">
-                Auto-generate contracts and notices from raw notes.
-              </p>
-            </button>
-          </motion.div>
-
-          {/* Module 6: Moot Court */}
-          <motion.div variants={itemVars} className="z-10 w-full">
-            <button 
-              onClick={() => onSelect('moot')}
-              className="w-full h-full group relative flex flex-col items-center p-8 bg-zinc-900/30 hover:bg-zinc-800/50 border border-zinc-800 hover:border-zinc-700 rounded-lg transition-colors"
-            >
-              <div className="w-12 h-12 mb-6 rounded-lg bg-zinc-800/50 flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 group-hover:bg-zinc-700/50 transition-colors">
-                <Gavel size={24} />
-              </div>
-              <h3 className="text-sm font-medium text-zinc-200 mb-2 text-center">Moot Court</h3>
-              <p className="text-xs text-zinc-500 text-center leading-relaxed">
-                Litigation sparring simulator for practice.
-              </p>
-            </button>
-          </motion.div>
-
-          {/* Module 7: Quick Links */}
-          <motion.div variants={itemVars} className="z-10 w-full">
-            <button 
-              onClick={() => onSelect('links')}
-              className="w-full h-full group relative flex flex-col items-center p-8 bg-zinc-900/30 hover:bg-zinc-800/50 border border-zinc-800 hover:border-zinc-700 rounded-lg transition-colors"
-            >
-              <div className="w-12 h-12 mb-6 rounded-lg bg-zinc-800/50 flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 group-hover:bg-zinc-700/50 transition-colors">
-                <Link2 size={24} />
-              </div>
-              <h3 className="text-sm font-medium text-zinc-200 mb-2 text-center">Legal Links</h3>
-              <p className="text-xs text-zinc-500 text-center leading-relaxed">
-                Directory of courts, statutes, and e-portals.
-              </p>
-            </button>
-          </motion.div>
-
-          {/* Module 8: Petition Drafter */}
-          <motion.div variants={itemVars} className="z-10 w-full">
-            <button 
-              onClick={() => onSelect('petition')}
-              className="w-full h-full group relative flex flex-col items-center p-8 bg-zinc-900/30 hover:bg-zinc-800/50 border border-zinc-800 hover:border-zinc-700 rounded-lg transition-colors"
-            >
-              <div className="w-12 h-12 mb-6 rounded-lg bg-zinc-800/50 flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 group-hover:bg-zinc-700/50 transition-colors">
-                <ScrollText size={24} />
-              </div>
-              <h3 className="text-sm font-medium text-zinc-200 mb-2 text-center">Petition Drafter</h3>
-              <p className="text-xs text-zinc-500 text-center leading-relaxed">
-                Generate structured court pleadings and forms.
-              </p>
-            </button>
-          </motion.div>
-
+    <div className="flex-1 flex flex-col items-center justify-center bg-zinc-950 w-full h-full relative overflow-hidden p-8">
+      <div className="relative z-10 max-w-5xl w-full flex flex-col items-center">
+        
+        <div className="text-center mb-12">
+          <div className="w-16 h-16 bg-zinc-900 border border-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
+            <Layout size={32} className="text-zinc-400" />
+          </div>
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-100 mb-2">Case Mission Control</h1>
+          <p className="text-zinc-500 max-w-md mx-auto">Select a tool to interact with this case's shared intelligence.</p>
         </div>
-      </motion.div>
+
+        {modulesToRender.length === 0 ? (
+          <div className="p-8 border border-zinc-800 border-dashed rounded-xl text-center">
+            <ShieldAlert size={32} className="mx-auto mb-4 text-zinc-600" />
+            <p className="text-zinc-400 font-bold uppercase tracking-tight">No Modules Enabled</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
+            {modulesToRender.map((mod, idx) => {
+              const Icon = mod.icon;
+              return (
+                <motion.div
+                  key={mod.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  onClick={() => onSelect(mod.id)}
+                  className="bg-zinc-900/30 border border-zinc-800 hover:border-emerald-500/30 rounded-xl p-5 flex flex-col items-center text-center cursor-pointer group transition-all"
+                >
+                  <div className="w-12 h-12 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <Icon size={20} className="text-zinc-400 group-hover:text-emerald-400 transition-colors" />
+                  </div>
+                  <h3 className="text-sm font-bold text-zinc-200 mb-1 tracking-tight">{mod.label}</h3>
+                  <p className="text-[10px] text-zinc-500 uppercase tracking-tight">{mod.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
-}
+};
