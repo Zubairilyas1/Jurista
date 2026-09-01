@@ -7,6 +7,10 @@ import {
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
+import { CreateCaseWizard } from '@/components/CreateCaseWizard';
+import { Plus, Briefcase } from 'lucide-react';
+
+
 const mockChartData = [
   { name: 'Mon', cases: 2, drafts: 4 },
   { name: 'Tue', cases: 3, drafts: 7 },
@@ -34,6 +38,18 @@ export default function Dashboard() {
   const [initials, setInitials] = useState('AD');
   const [upcomingHearings, setUpcomingHearings] = useState<any[]>([]);
   const [isLoadingHearings, setIsLoadingHearings] = useState(true);
+  const [projects, setProjects] = useState<any[]>([]);
+  const [isLoadingProjects, setIsLoadingProjects] = useState(true);
+  const [showWizard, setShowWizard] = useState(false);
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8001/api/v1/projects/')
+      .then(res => res.json())
+      .then(data => setProjects(data))
+      .catch(err => console.error("Could not fetch projects", err))
+      .finally(() => setIsLoadingProjects(false));
+  }, []);
+
 
   useEffect(() => {
     const stored = localStorage.getItem('jurista_user_profile');
@@ -184,41 +200,72 @@ export default function Dashboard() {
 
         </div>
 
-        {/* Right Column: Structured Tools List (Col Span 4) */}
+        {/* Right Column: Active Workspaces (Col Span 4) */}
         <div className="lg:col-span-4 flex flex-col gap-4">
-          <h2 className="text-sm font-medium text-zinc-100">Jurista Modules</h2>
-          <div className="border border-zinc-800 rounded-xl bg-zinc-900/30 overflow-hidden flex flex-col divide-y divide-zinc-800/50">
-            {juristaModules.map((module) => {
-              const Icon = module.icon;
-              return (
-                <button 
-                  key={module.id}
-                  onClick={() => router.push(module.path)}
-                  className="p-4 flex items-center justify-between hover:bg-zinc-800/50 transition-colors text-left group"
-                  aria-label={`Open ${module.name}`}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 rounded bg-zinc-800/50 flex items-center justify-center text-zinc-400 group-hover:text-zinc-200 group-hover:bg-zinc-700/50 transition-colors">
-                      <Icon size={16} />
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-zinc-200 text-sm mb-0.5">{module.name}</h4>
-                      <p className="text-xs text-zinc-500 line-clamp-1">{module.desc}</p>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-medium text-zinc-100">Active Workspaces</h2>
+            <button onClick={() => setShowWizard(true)} className="flex items-center gap-1 bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-tight hover:bg-emerald-500/20 transition-colors border border-emerald-500/20">
+              <Plus size={12} /> New Case
+            </button>
+          </div>
+          
+          <div className="border border-zinc-800 rounded-xl bg-zinc-900/30 overflow-hidden flex flex-col h-[500px] overflow-y-auto custom-scrollbar relative">
+            {isLoadingProjects ? (
+              <div className="flex flex-col divide-y divide-zinc-800/50">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="p-4 flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-lg bg-zinc-800/50 animate-pulse"></div>
+                    <div className="flex flex-col gap-2 flex-1">
+                      <div className="w-24 h-3 bg-zinc-800/50 rounded animate-pulse"></div>
+                      <div className="w-32 h-2 bg-zinc-800/50 rounded animate-pulse"></div>
                     </div>
                   </div>
-                </button>
-              );
-            })}
+                ))}
+              </div>
+            ) : projects.length === 0 ? (
+               <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+                  <Briefcase size={32} className="text-zinc-600 mb-3" />
+                  <h3 className="text-xs font-medium text-zinc-300 mb-1">No Active Cases</h3>
+                  <p className="text-[10px] text-zinc-500 mb-4">Initialize a workspace to begin.</p>
+                  <button onClick={() => setShowWizard(true)} className="px-4 py-2 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 rounded-lg text-xs font-medium transition-colors">
+                    Initialize Workspace
+                  </button>
+               </div>
+            ) : (
+              <div className="flex flex-col divide-y divide-zinc-800/50">
+                {projects.map((project: any) => (
+                  <button 
+                    key={project.id}
+                    onClick={() => window.location.href = `/workspace/${project.id}`}
+                    className="p-5 flex flex-col gap-2 hover:bg-zinc-800/30 transition-colors text-left group"
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <h3 className="text-sm font-bold text-zinc-200 group-hover:text-emerald-400 transition-colors truncate">{project.title}</h3>
+                      <ChevronRight size={14} className="text-zinc-600 group-hover:text-emerald-400 transition-colors" />
+                    </div>
+                    
+                    <div className="flex items-center gap-1.5 flex-wrap mt-1">
+                      {project.active_modules.slice(0, 3).map((mod: string) => (
+                        <span key={mod} className="px-2 py-0.5 bg-zinc-900 border border-zinc-800 text-zinc-400 text-[9px] font-bold uppercase tracking-wider rounded">
+                          {mod}
+                        </span>
+                      ))}
+                      {project.active_modules.length > 3 && (
+                        <span className="px-2 py-0.5 bg-zinc-900 border border-zinc-800 text-zinc-400 text-[9px] font-bold uppercase tracking-wider rounded">
+                          +{project.active_modules.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
       </div>
-
-      <style dangerouslySetInnerHTML={{__html: `
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
-      `}} />
+      
+      {showWizard && <CreateCaseWizard onClose={() => setShowWizard(false)} />}
     </div>
   );
 }
