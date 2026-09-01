@@ -1,48 +1,29 @@
 import os
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, Text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from datetime import datetime
-
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
 from dotenv import load_dotenv, find_dotenv
+
 load_dotenv(find_dotenv(), override=True)
 
-# Use PostgreSQL (or fallback to SQLite for local testing)
+# Neon PostgreSQL fallback to SQLite
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///jurista.db")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
-# For sync operations (Celery, etc.)
-engine = create_engine(DATABASE_URL)
+# Connection pooling optimized for Neon (if Postgres)
+connect_args = {}
+if "sqlite" in DATABASE_URL:
+    connect_args["check_same_thread"] = False
+
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-class Case(Base):
-    __tablename__ = "cases"
-    id = Column(Integer, primary_key=True, index=True)
-    case_number = Column(String, unique=True, index=True)
-    parties = Column(String)
-    court = Column(String)
-    judge = Column(String)
-    hearing_date = Column(DateTime)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+def init_db():
+    # Import all models here to register them with Base
+    import app.models.case
+    Base.metadata.create_all(bind=engine)
+    print("Database tables initialized successfully.")
 
-class Deadline(Base):
-    __tablename__ = "deadlines"
-    id = Column(Integer, primary_key=True, index=True)
-    case_id = Column(Integer, index=True)
-    deadline_type = Column(String)
-    due_date = Column(DateTime)
-    alert_sent = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-class Alert(Base):
-    __tablename__ = "alerts"
-    id = Column(Integer, primary_key=True, index=True)
-    case_id = Column(Integer, index=True)
-    message = Column(Text)
-    sent_via = Column(String)
-    sent_at = Column(DateTime, default=datetime.utcnow)
-
-# Create tables if they don't exist (for first run)
-Base.metadata.create_all(bind=engine)
-print("? PostgreSQL tables ready (or already exist).")
+# Expose legacy models for existing scripts
+from app.models.case import Case, Deadline, Alert
