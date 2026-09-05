@@ -21,10 +21,11 @@ export interface DraftJSON {
 
 interface DraftEditorProps {
   draftData: DraftJSON | null;
+  htmlContent?: string | null;
   petitionType: string;
 }
 
-export default function DraftEditor({ draftData, petitionType }: DraftEditorProps) {
+export default function DraftEditor({ draftData, htmlContent, petitionType }: DraftEditorProps) {
   const [content, setContent] = useState("");
   const [isExporting, setIsExporting] = useState(false);
   const editorRef = useRef<any>(null);
@@ -37,6 +38,10 @@ export default function DraftEditor({ draftData, petitionType }: DraftEditorProp
   const [diffResult, setDiffResult] = useState<{ original: string, new: string } | null>(null);
 
   useEffect(() => {
+    if (htmlContent) {
+      setContent(htmlContent);
+      return;
+    }
     if (!draftData) {
       setContent("");
       return;
@@ -163,15 +168,15 @@ export default function DraftEditor({ draftData, petitionType }: DraftEditorProp
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#121215] overflow-hidden">
+    <div className="flex flex-col h-full bg-zinc-950 overflow-hidden">
       {/* Header */}
       <div className="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+          <div className="w-10 h-10 rounded-xl bg-zinc-900/50 flex items-center justify-center border border-zinc-800">
             <Scale size={20} className="text-emerald-500" />
           </div>
           <div>
-            <h2 className="font-bold text-sm text-zinc-100 uppercase tracking-widest">Draft Editor</h2>
+            <h2 className="font-bold text-sm text-zinc-100 uppercase tracking-tight">Draft Editor</h2>
             <p className="text-[10px] text-zinc-500 tracking-wider uppercase">{petitionType || "No Draft Selected"}</p>
           </div>
         </div>
@@ -179,7 +184,7 @@ export default function DraftEditor({ draftData, petitionType }: DraftEditorProp
         <div className="flex items-center gap-4">
           <button 
             disabled={!content}
-            className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-lg text-xs font-black tracking-widest uppercase flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+            className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-lg text-xs font-semibold tracking-tight uppercase flex items-center gap-2 transition-all shadow-sm"
           >
             <Download size={14} strokeWidth={2.5} />
             Export DOCX
@@ -194,11 +199,12 @@ export default function DraftEditor({ draftData, petitionType }: DraftEditorProp
             <div className="w-20 h-20 rounded-full bg-zinc-900 flex items-center justify-center mb-6 border border-zinc-800">
               <FileText size={32} strokeWidth={1.5} />
             </div>
-            <p className="text-sm font-bold tracking-widest uppercase">Generate a draft to start editing</p>
+            <p className="text-sm font-bold tracking-tight uppercase">Generate a draft to start editing</p>
           </div>
         ) : (
           <>
-            <ReactQuill 
+            // @ts-ignore
+<ReactQuill 
               ref={editorRef}
               theme="snow" 
               value={content} 
@@ -221,7 +227,7 @@ export default function DraftEditor({ draftData, petitionType }: DraftEditorProp
                     left: Math.max(20, selectionBounds.left + (selectionBounds.width / 2) - 150),
                     zIndex: 50
                   }}
-                  className="bg-zinc-950 border border-emerald-500/30 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] p-1.5 flex gap-1"
+                  className="bg-zinc-950 border border-zinc-800 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] p-1.5 flex gap-1"
                 >
                   <button onClick={() => executeAiAction('polish')} className="flex items-center gap-1.5 px-3 py-1.5 hover:bg-zinc-800 rounded-lg text-zinc-300 hover:text-emerald-400 text-xs font-bold transition-colors">
                     <Sparkles size={14} /> Polish
@@ -247,7 +253,7 @@ export default function DraftEditor({ draftData, petitionType }: DraftEditorProp
                     left: Math.max(20, selectionBounds.left + (selectionBounds.width / 2) - 80),
                     zIndex: 50
                   }}
-                  className="bg-zinc-950 border border-emerald-500/50 rounded-xl shadow-2xl px-4 py-2 flex items-center gap-3"
+                  className="bg-zinc-950 border border-zinc-700 rounded-xl shadow-2xl px-4 py-2 flex items-center gap-3"
                 >
                   <div className="w-4 h-4 rounded-full border-2 border-emerald-500 border-t-transparent animate-spin" />
                   <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">AI Thinking...</span>
@@ -265,19 +271,19 @@ export default function DraftEditor({ draftData, petitionType }: DraftEditorProp
                     zIndex: 50,
                     maxWidth: '400px'
                   }}
-                  className="bg-zinc-950 border border-emerald-500/30 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden"
+                  className="bg-zinc-950 border border-zinc-800 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden"
                 >
                   <div className="px-4 py-2 border-b border-zinc-800 bg-zinc-900/50 flex items-center justify-between">
-                    <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest flex items-center gap-1.5">
+                    <span className="text-[10px] font-semibold text-emerald-500 uppercase tracking-tight flex items-center gap-1.5">
                       <Sparkles size={12} /> AI Suggestion
                     </span>
                   </div>
                   
                   <div className="p-4 flex flex-col gap-3 text-sm">
-                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg line-through opacity-70">
+                    <div className="bg-zinc-900/50 border border-zinc-800 text-red-400 p-3 rounded-lg line-through opacity-70">
                       {diffResult.original}
                     </div>
-                    <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 p-3 rounded-lg font-medium shadow-[inset_0_0_20px_rgba(16,185,129,0.05)]">
+                    <div className="bg-zinc-900/50 border border-zinc-800 text-emerald-400 p-3 rounded-lg font-medium shadow-[inset_0_0_20px_rgba(16,185,129,0.05)]">
                       {diffResult.new}
                     </div>
                   </div>
