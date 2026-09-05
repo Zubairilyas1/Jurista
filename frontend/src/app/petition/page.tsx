@@ -84,7 +84,7 @@ export default function PetitionDrafterPage() {
     <div className="w-full h-full flex flex-col p-8 bg-[#0D0D0E] overflow-y-auto text-white">
       
       <div className="mb-8">
-        <h1 className="font-sans-hero text-4xl font-black tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50 mb-2">
+        <h1 className="font-sans-hero text-4xl font-semibold tracking-tight uppercase text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50 mb-2">
           Petition Drafter
         </h1>
         <p className="text-white/50 text-sm font-medium tracking-wider uppercase flex items-center gap-2">
@@ -94,7 +94,7 @@ export default function PetitionDrafterPage() {
       </div>
 
       <div className="max-w-4xl mx-auto w-full flex flex-col gap-6">
-        <div className="card-dark p-6 border-t border-white/10 bg-black/40 flex flex-col gap-4 rounded-2xl">
+        <div className="card-dark p-6 border-t border-zinc-800 bg-zinc-900/50 flex flex-col gap-4 rounded-lg">
           
           <div className="flex gap-4">
             <div className="flex-1 flex flex-col gap-2">
@@ -102,7 +102,7 @@ export default function PetitionDrafterPage() {
               <select 
                 value={petitionType}
                 onChange={(e) => setPetitionType(e.target.value)}
-                className="bg-[#121215] border border-white/10 rounded-xl p-3 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors"
+                className="bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors"
               >
                 <option value="CRPC_497_BAIL">Bail Petition (CrPC 497)</option>
                 <option value="CPC_ORDER39_STAY">Stay Petition (CPC Order 39)</option>
@@ -115,7 +115,7 @@ export default function PetitionDrafterPage() {
               <select 
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="bg-[#121215] border border-white/10 rounded-xl p-3 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors"
+                className="bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors"
               >
                 <option value="bilingual">Bilingual (English / Urdu)</option>
                 <option value="english">English (Standard)</option>
@@ -130,7 +130,7 @@ export default function PetitionDrafterPage() {
                 value={formData.petitioner}
                 onChange={e => setFormData({...formData, petitioner: e.target.value})}
                 placeholder="e.g. سید سجاد حسین"
-                className="bg-[#121215] border border-white/10 rounded-xl p-3 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors"
+                className="bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -139,7 +139,7 @@ export default function PetitionDrafterPage() {
                 value={formData.respondent}
                 onChange={e => setFormData({...formData, respondent: e.target.value})}
                 placeholder="e.g. State"
-                className="bg-[#121215] border border-white/10 rounded-xl p-3 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors"
+                className="bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -147,7 +147,7 @@ export default function PetitionDrafterPage() {
               <input 
                 value={formData.court}
                 onChange={e => setFormData({...formData, court: e.target.value})}
-                className="bg-[#121215] border border-white/10 rounded-xl p-3 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors"
+                className="bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -155,7 +155,7 @@ export default function PetitionDrafterPage() {
               <input 
                 value={formData.case_number}
                 onChange={e => setFormData({...formData, case_number: e.target.value})}
-                className="bg-[#121215] border border-white/10 rounded-xl p-3 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors"
+                className="bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors"
               />
             </div>
           </div>
@@ -167,14 +167,14 @@ export default function PetitionDrafterPage() {
               onChange={e => setFormData({...formData, facts: e.target.value})}
               placeholder="Paste or type the facts of the case here..."
               rows={8}
-              className="bg-[#121215] border border-white/10 rounded-xl p-4 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors resize-y"
+              className="bg-zinc-950 border border-zinc-800 rounded-xl p-4 text-sm font-medium text-white outline-none focus:border-blue-500 transition-colors resize-y"
             />
           </div>
 
           <button 
             onClick={handleDraft}
             disabled={isDrafting}
-            className="pill-dark py-4 mt-6 w-full justify-center text-sm font-bold tracking-widest uppercase bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 flex items-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all"
+            className="pill-dark py-4 mt-6 w-full justify-center text-sm font-bold tracking-tight uppercase bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 flex items-center gap-2 shadow-sm transition-all"
           >
             {isDrafting ? <div className="w-5 h-5 border-2 border-white rounded-full border-t-transparent animate-spin" /> : <Download size={18} />}
             {isDrafting ? 'Generating Draft...' : 'Generate Editable Draft'}
