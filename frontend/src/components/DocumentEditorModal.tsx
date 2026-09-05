@@ -35,8 +35,8 @@ export default function DocumentEditorModal({ isOpen, onClose, initialHtml, peti
       let handle = null;
       let finalFilename = `Petition_${petitionType}.pdf`;
       
-      if (window.showSaveFilePicker) {
-        handle = await window.showSaveFilePicker({
+      if ((window as any).showSaveFilePicker) {
+        handle = await (window as any).showSaveFilePicker({
           suggestedName: finalFilename,
           types: [{
             description: 'PDF Document',
@@ -61,7 +61,8 @@ export default function DocumentEditorModal({ isOpen, onClose, initialHtml, peti
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
 
-      const pdfWorker = html2pdf().set(opt).from(element);
+      const pdfWorker = // @ts-ignore
+html2pdf().set(opt).from(element);
       const pdfBlob = await pdfWorker.output('blob');
       
       if (handle) {
@@ -91,8 +92,8 @@ export default function DocumentEditorModal({ isOpen, onClose, initialHtml, peti
       let handle = null;
       let finalFilename = `Petition_${petitionType}.docx`;
       
-      if (window.showSaveFilePicker) {
-        handle = await window.showSaveFilePicker({
+      if ((window as any).showSaveFilePicker) {
+        handle = await (window as any).showSaveFilePicker({
           suggestedName: finalFilename,
           types: [{
             description: 'Word Document',
@@ -146,8 +147,8 @@ export default function DocumentEditorModal({ isOpen, onClose, initialHtml, peti
         let handle = null;
         let finalFilename = `Petition_${petitionType}.txt`;
         
-        if (window.showSaveFilePicker) {
-          handle = await window.showSaveFilePicker({
+        if ((window as any).showSaveFilePicker) {
+          handle = await (window as any).showSaveFilePicker({
             suggestedName: finalFilename,
             types: [{
               description: 'Text Document',
@@ -205,13 +206,13 @@ export default function DocumentEditorModal({ isOpen, onClose, initialHtml, peti
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="bg-[#121215] border border-white/10 rounded-2xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden relative"
+          className="bg-zinc-950 border border-zinc-800 rounded-lg shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden relative"
         >
           {/* Header */}
-          <div className="p-5 border-b border-white/10 flex items-center justify-between bg-black/40">
+          <div className="p-5 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/50">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-lime/10 flex items-center justify-center">
-                <FileText size={20} className="text-lime" />
+              <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                <FileText size={20} className="text-emerald-400" />
               </div>
               <div>
                 <h2 className="font-sans-hero font-bold text-lg text-white uppercase tracking-wider">Draft Editor</h2>
@@ -220,7 +221,7 @@ export default function DocumentEditorModal({ isOpen, onClose, initialHtml, peti
             </div>
             
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 bg-black/40 rounded-xl p-1 border border-white/10">
+              <div className="flex items-center gap-2 bg-zinc-900/50 rounded-xl p-1 border border-zinc-800">
                 <button 
                   onClick={handleExportWord}
                   disabled={isExporting}
@@ -246,7 +247,8 @@ export default function DocumentEditorModal({ isOpen, onClose, initialHtml, peti
 
           {/* Editor Area */}
           <div className="flex-1 overflow-y-auto bg-white editor-container">
-            <ReactQuill 
+            // @ts-ignore
+<ReactQuill 
               ref={editorRef}
               theme="snow" 
               value={content} 
