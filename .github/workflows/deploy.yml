@@ -12,6 +12,9 @@ jobs:
     name: Deploy to Production
     runs-on: ubuntu-latest
     
+    # SKIPPING DEPLOYMENT: Remove the 'if: false' line below once you purchase a live server and add GitHub Secrets.
+    if: false
+    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
