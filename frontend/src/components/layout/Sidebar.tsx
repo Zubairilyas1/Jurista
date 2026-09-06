@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -7,18 +7,33 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const navItems = [
-  { label: 'Explore', icon: <Globe size={20} strokeWidth={2.5} />, path: '/' },
-  { label: 'Workspace', icon: <Briefcase size={20} strokeWidth={2.5} />, path: '/workspace' },
-  { label: 'Legal Chat', icon: <Scale size={20} strokeWidth={2.5} />, path: '/chat' },
-  { label: 'OCR Review', icon: <ScanText size={20} strokeWidth={2.5} />, path: '/ocr' },
-  { label: 'Petition Drafter', icon: <ScrollText size={20} strokeWidth={2.5} />, path: '/petition' },
-  { label: 'Opponent Analyzer', icon: <ShieldAlert size={20} strokeWidth={2.5} />, path: '/analyze' },
-  { label: 'Contradiction Engine', icon: <GitCompare size={20} strokeWidth={2.5} />, path: '/contradiction' },
-  { label: 'Moot Court', icon: <Gavel size={20} strokeWidth={2.5} />, path: '/moot' },
-  { label: 'Legal Links', icon: <Link2 size={20} strokeWidth={2.5} />, path: '/links' },
-  { label: 'Cause Tracker', icon: <CalendarClock size={20} strokeWidth={2.5} />, path: '/tracker' },
-  { label: 'Settings', icon: <Settings size={20} strokeWidth={2.5} />, path: '/settings' },
+const navGroups = [
+  {
+    id: 'core',
+    items: [
+      { label: 'Explore', icon: <Globe size={20} strokeWidth={2.5} />, path: '/' },
+      { label: 'Workspace', icon: <Briefcase size={20} strokeWidth={2.5} />, path: '/workspace' },
+    ]
+  },
+  {
+    id: 'assistants',
+    items: [
+      { label: 'Legal Chat', icon: <Scale size={20} strokeWidth={2.5} />, path: '/chat' },
+      { label: 'OCR Review', icon: <ScanText size={20} strokeWidth={2.5} />, path: '/ocr' },
+      { label: 'Petition Drafter', icon: <ScrollText size={20} strokeWidth={2.5} />, path: '/petition' },
+      { label: 'Opponent Analyzer', icon: <ShieldAlert size={20} strokeWidth={2.5} />, path: '/analyze' },
+      { label: 'Contradiction Engine', icon: <GitCompare size={20} strokeWidth={2.5} />, path: '/contradiction' },
+      { label: 'Moot Court', icon: <Gavel size={20} strokeWidth={2.5} />, path: '/moot' },
+      { label: 'Legal Links', icon: <Link2 size={20} strokeWidth={2.5} />, path: '/links' },
+    ]
+  },
+  {
+    id: 'system',
+    items: [
+      { label: 'Cause Tracker', icon: <CalendarClock size={20} strokeWidth={2.5} />, path: '/tracker' },
+      { label: 'Settings', icon: <Settings size={20} strokeWidth={2.5} />, path: '/settings' },
+    ]
+  }
 ];
 
 export function Sidebar() {
@@ -79,43 +94,56 @@ export function Sidebar() {
       </div>
 
       {/* Navigation Pills */}
-      <div className="flex flex-col gap-1.5 px-3">
-        {navItems.map((item) => {
-          const active = pathname === item.path || (item.path !== '/' && pathname?.startsWith(item.path));
-          return (
-            <button
-              key={item.path}
-              onClick={() => router.push(item.path)}
-              className={`h-10 rounded-lg flex items-center transition-colors overflow-hidden relative ${isHovered ? 'px-3 justify-start' : 'justify-center'} ${
-                active 
-                  ? 'bg-zinc-800 text-zinc-100 font-medium' 
-                  : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200'
-              }`}
-              title={!isHovered ? item.label : undefined}
-            >
-              <div className="shrink-0 z-10">{item.icon}</div>
-              <AnimatePresence>
-                {isHovered && (
-                  <motion.span 
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -10 }}
-                    className="ml-3 font-medium text-sm tracking-wide whitespace-nowrap z-10"
+      <div className="flex flex-col px-3 flex-1 overflow-y-auto custom-scrollbar">
+        {navGroups.map((group, groupIdx) => (
+          <React.Fragment key={group.id}>
+            {groupIdx > 0 && <div className="border-t border-zinc-800 my-2 mx-2"></div>}
+            <div className="flex flex-col gap-1.5">
+              {group.items.map((item) => {
+                const active = pathname === item.path || (item.path !== '/' && pathname?.startsWith(item.path));
+                return (
+                  <button
+                    key={item.path}
+                    onClick={() => router.push(item.path)}
+                    className={`group h-10 rounded-lg flex items-center transition-colors overflow-visible relative ${isHovered ? 'px-3 justify-start' : 'justify-center'} ${
+                      active 
+                        ? 'bg-zinc-800 text-zinc-100 font-medium' 
+                        : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200'
+                    }`}
                   >
-                    {item.label}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </button>
-          );
-        })}
+                    <div className="shrink-0 z-10">{item.icon}</div>
+                    <AnimatePresence>
+                      {isHovered && (
+                        <motion.span 
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -10 }}
+                          className="ml-3 font-medium text-sm tracking-wide whitespace-nowrap z-10"
+                        >
+                          {item.label}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                    
+                    {/* Tooltip for collapsed state */}
+                    {!isHovered && (
+                      <div className="absolute left-14 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 bg-zinc-800 text-zinc-100 text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap border border-zinc-700">
+                        {item.label}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </React.Fragment>
+        ))}
       </div>
 
       {/* Bottom Action Button */}
-      <div className={`mt-auto ${isHovered ? 'px-3' : 'px-3'}`}>
+      <div className={`mt-auto pt-4 ${isHovered ? 'px-3' : 'px-3'}`}>
         <button 
-          onClick={() => router.push('/chat')}
-          className={`h-10 bg-zinc-100 text-zinc-900 rounded-lg flex items-center hover:bg-white transition-colors overflow-hidden ${isHovered ? 'w-full px-3' : 'w-full justify-center'}`}
+          onClick={() => router.push('/workspace')}
+          className={`group relative h-10 bg-zinc-100 text-zinc-900 rounded-lg flex items-center hover:bg-white transition-colors overflow-visible ${isHovered ? 'w-full px-3' : 'w-full justify-center'}`}
         >
           <Plus size={18} strokeWidth={2.5} className="shrink-0" />
           <AnimatePresence>
@@ -126,10 +154,17 @@ export function Sidebar() {
                 exit={{ opacity: 0 }}
                 className="ml-2 font-semibold text-sm whitespace-nowrap"
               >
-                New Chat
+                New Case
               </motion.span>
             )}
           </AnimatePresence>
+          
+          {/* Tooltip */}
+          {!isHovered && (
+            <div className="absolute left-14 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 bg-zinc-800 text-zinc-100 text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap border border-zinc-700">
+              New Case
+            </div>
+          )}
         </button>
       </div>
       

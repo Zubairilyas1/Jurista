@@ -1,14 +1,13 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
-  Activity, Package, WifiOff, ShieldAlert, GitCompare, Sparkles, ScrollText, Scale, ScanText, Gavel, CalendarClock, ChevronRight, Link2
+  Activity, WifiOff, ShieldAlert, GitCompare, Sparkles, ScrollText, Scale, ScanText, Gavel, CalendarClock, ChevronRight, Link2, Plus, Briefcase
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 import { CreateCaseWizard } from '@/components/CreateCaseWizard';
-import { Plus, Briefcase } from 'lucide-react';
 
 
 const mockChartData = [
@@ -19,17 +18,6 @@ const mockChartData = [
   { name: 'Fri', cases: 4, drafts: 12 },
   { name: 'Sat', cases: 0, drafts: 2 },
   { name: 'Sun', cases: 0, drafts: 1 },
-];
-
-const juristaModules = [
-  { id: 'analyze', name: 'Opponent Analyzer', desc: 'Scan opposing briefs for overruled law', icon: ShieldAlert, path: '/analyze' },
-  { id: 'contradiction', name: 'Contradiction Engine', desc: 'Cross-reference evidence to find loopholes', icon: GitCompare, path: '/contradiction' },
-  { id: 'draft', name: 'Smart Assembly', desc: 'Auto-generate contracts and notices', icon: Sparkles, path: '/workspace' },
-  { id: 'petition', name: 'Petition Drafter', desc: 'Generate structured court pleadings', icon: ScrollText, path: '/petition' },
-  { id: 'chat', name: 'Legal RAG Chat', desc: 'Discuss case law and query statutes', icon: Scale, path: '/chat' },
-  { id: 'ocr', name: 'OCR Engine', desc: 'Extract facts from raw FIRs and images', icon: ScanText, path: '/ocr' },
-  { id: 'moot', name: 'Moot Court', desc: 'Litigation sparring simulator', icon: Gavel, path: '/moot' },
-  { id: 'links', name: 'Legal Links', desc: 'Directory of courts and statutes', icon: Link2, path: '/links' },
 ];
 
 export default function Dashboard() {
@@ -81,16 +69,25 @@ export default function Dashboard() {
   return (
     <div className="w-full h-full flex flex-col p-8 bg-zinc-950 overflow-y-auto custom-scrollbar text-zinc-100">
       
-      {/* Structural Header (Replaced Vibe-Coded Slop) */}
-      <header className="flex items-center justify-between w-full mb-10 border-b border-zinc-800 pb-6">
+      {/* Structural Header */}
+      <header className="flex items-start lg:items-center justify-between w-full mb-10 border-b border-zinc-800 pb-6 flex-col lg:flex-row gap-6">
         <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">
-            Welcome back, {userName.replace(/Adv\.|Advocate/ig, '').trim().split(' ')[0]}
+          <h1 className="text-2xl font-semibold tracking-tight text-white">
+            Welcome back, Advocate {userName.replace(/Adv\.|Advocate/ig, '').trim().split(' ')[0]}
           </h1>
           <p className="text-sm text-zinc-400">System overview and workspace modules</p>
         </div>
         
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-bold tracking-wider text-zinc-300 uppercase">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div> PakLaw AI: Online
+            </span>
+            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-bold tracking-wider text-zinc-400 uppercase">
+              Database: Synced
+            </span>
+          </div>
+
           <div className="flex items-center bg-zinc-900 border border-zinc-800 rounded-lg p-1">
             <button onClick={() => router.push('/tracker')} className="px-4 py-2 text-xs font-medium text-zinc-400 hover:text-zinc-100 transition-colors flex items-center gap-2">
               <Activity size={14} /> Schedule
@@ -100,13 +97,13 @@ export default function Dashboard() {
               <WifiOff size={14} /> Courtroom Mode
             </button>
           </div>
-          <button onClick={() => router.push('/settings')} className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center font-medium text-sm text-zinc-200 border border-zinc-700 hover:bg-zinc-700 transition-colors" aria-label="Settings">
+          <button onClick={() => router.push('/settings')} className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center font-medium text-sm text-zinc-200 border border-zinc-700 hover:bg-zinc-700 transition-colors shrink-0" aria-label="Settings">
             {initials}
           </button>
         </div>
       </header>
 
-      {/* Main Grid Layout (Replaced 3-card generic row) */}
+      {/* Main Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Left Column: Analytics & Data (Col Span 8) */}
@@ -125,20 +122,32 @@ export default function Dashboard() {
               </div>
             </div>
             
-            <div className="border border-zinc-800 rounded-xl bg-zinc-900/30 p-6 h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={mockChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
-                  <XAxis dataKey="name" stroke="#52525b" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#52525b" fontSize={12} tickLine={false} axisLine={false} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px' }}
-                    itemStyle={{ color: '#f4f4f5', fontSize: '12px' }}
-                  />
-                  <Area type="monotone" dataKey="drafts" stroke="#f4f4f5" strokeWidth={2} fillOpacity={0.1} fill="#f4f4f5" />
-                  <Area type="monotone" dataKey="cases" stroke="#52525b" strokeWidth={2} fillOpacity={0.1} fill="#52525b" />
-                </AreaChart>
-              </ResponsiveContainer>
+            <div className="border border-zinc-800 rounded-xl bg-zinc-900/30 p-6 flex flex-col gap-4">
+              <div className="flex gap-4">
+                <div className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                  <span className="text-emerald-400 font-mono text-xs font-bold tracking-tight">14 Drafts Generated</span>
+                </div>
+                <div className="px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg">
+                  <span className="text-zinc-300 font-mono text-xs font-bold tracking-tight">6 Hearings Attended</span>
+                </div>
+              </div>
+
+              <div className="h-[250px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={mockChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                    <XAxis dataKey="name" stroke="#52525b" fontSize={12} tickLine={false} axisLine={false} />
+                    <YAxis stroke="#52525b" fontSize={12} tickLine={false} axisLine={false} />
+                    <Tooltip 
+                      formatter={(value, name) => [value, name === 'drafts' ? 'Hours / Drafts' : 'Cases']}
+                      contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px' }}
+                      itemStyle={{ color: '#f4f4f5', fontSize: '12px' }}
+                    />
+                    <Area activeDot={{ r: 5, strokeWidth: 0, fill: '#f4f4f5' }} type="monotone" dataKey="drafts" stroke="#f4f4f5" strokeWidth={2} fillOpacity={0.1} fill="#f4f4f5" />
+                    <Area activeDot={{ r: 5, strokeWidth: 0, fill: '#52525b' }} type="monotone" dataKey="cases" stroke="#52525b" strokeWidth={2} fillOpacity={0.1} fill="#52525b" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </section>
 
@@ -223,13 +232,26 @@ export default function Dashboard() {
                 ))}
               </div>
             ) : projects.length === 0 ? (
-               <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+               <div className="flex flex-col items-center justify-center h-full p-8 text-center bg-zinc-900/30">
                   <Briefcase size={32} className="text-zinc-600 mb-3" />
-                  <h3 className="text-xs font-medium text-zinc-300 mb-1">No Active Cases</h3>
-                  <p className="text-[10px] text-zinc-500 mb-4">Initialize a workspace to begin.</p>
-                  <button onClick={() => setShowWizard(true)} className="px-4 py-2 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 rounded-lg text-xs font-medium transition-colors">
-                    Initialize Workspace
+                  <h3 className="text-sm font-medium text-zinc-200 mb-1">No Active Cases</h3>
+                  <p className="text-[10px] text-zinc-500 mb-6">Initialize a workspace or start with a template.</p>
+                  
+                  <button onClick={() => setShowWizard(true)} className="w-full mb-6 py-2.5 bg-emerald-500 text-zinc-950 rounded-lg text-xs font-bold uppercase tracking-tight hover:bg-emerald-400 transition-colors">
+                    Start New Workspace
                   </button>
+                  
+                  <div className="w-full flex flex-col gap-2">
+                    <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider text-left mb-1">Quick Templates</div>
+                    <button onClick={() => setShowWizard(true)} className="flex items-center gap-3 p-3 rounded-lg bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-colors group text-left">
+                      <ScrollText size={16} className="text-zinc-400 group-hover:text-emerald-400 transition-colors" />
+                      <span className="text-xs font-medium text-zinc-300 group-hover:text-zinc-100 transition-colors">Draft Bail Application</span>
+                    </button>
+                    <button onClick={() => setShowWizard(true)} className="flex items-center gap-3 p-3 rounded-lg bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-colors group text-left">
+                      <Scale size={16} className="text-zinc-400 group-hover:text-emerald-400 transition-colors" />
+                      <span className="text-xs font-medium text-zinc-300 group-hover:text-zinc-100 transition-colors">Civil Litigation Intake</span>
+                    </button>
+                  </div>
                </div>
             ) : (
               <div className="flex flex-col divide-y divide-zinc-800/50">
