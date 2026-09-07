@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -177,7 +177,7 @@ export default function Dashboard() {
                   <CalendarClock size={24} className="text-zinc-600 mb-3" />
                   <h3 className="text-sm font-medium text-zinc-300 mb-1">No upcoming hearings</h3>
                   <p className="text-xs text-zinc-500 mb-4">Your calendar is clear.</p>
-                  <button onClick={() => router.push('/tracker')} className="px-4 py-2 bg-zinc-100 text-zinc-900 hover:bg-white rounded-lg text-xs font-medium transition-colors">
+                  <button onClick={() => router.push('/tracker')} className="bg-transparent border border-zinc-700 text-zinc-300 hover:bg-zinc-800/50 rounded-lg px-4 py-2 text-sm font-medium transition-colors">
                     Add Case
                   </button>
                 </div>
@@ -213,9 +213,6 @@ export default function Dashboard() {
         <div className="lg:col-span-4 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-medium text-zinc-100">Active Workspaces</h2>
-            <button onClick={() => setShowWizard(true)} className="flex items-center gap-1 bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-tight hover:bg-emerald-500/20 transition-colors border border-emerald-500/20">
-              <Plus size={12} /> New Case
-            </button>
           </div>
           
           <div className="border border-zinc-800 rounded-xl bg-zinc-900/30 overflow-hidden flex flex-col h-[500px] overflow-y-auto custom-scrollbar relative">
