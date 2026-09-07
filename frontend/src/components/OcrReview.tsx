@@ -1,52 +1,18 @@
-"use client";
-
-import React, { useState, useRef } from 'react';
-import {
-  Box,
-  Paper,
-  Typography,
-  Button,
-  TextField,
-  Grid,
-  Card,
-  CardContent,
-  Chip,
-  CircularProgress,
-  Alert,
-  Divider,
-  IconButton,
-  Tooltip,
-  LinearProgress,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-} from '@mui/material';
-import {
-  CloudUpload as CloudUploadIcon,
-  Description as DescriptionIcon,
-  CheckCircle as CheckCircleIcon,
-  Warning as WarningIcon,
-  Edit as EditIcon,
-  Save as SaveIcon,
-  Clear as ClearIcon,
-  Search as SearchIcon,
-} from '@mui/icons-material';
+﻿import React, { useState, useRef } from 'react';
+import { UploadCloud, Search, Trash2, Edit2, CheckCircle2, ScanText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const OcrReview: React.FC = () => {
+export function OcrReview() {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-  const [editedText, setEditedText] = useState<string>('');
+  const [editedText, setEditedText] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
-      setError(null);
-      setResult(null);
     }
   };
 
@@ -90,149 +56,151 @@ export const OcrReview: React.FC = () => {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const renderConfidenceBar = (conf: number) => {
-    let color = '#34a853';
-    if (conf < 0.7) color = '#ea4335';
-    else if (conf < 0.9) color = '#fbbc04';
-    return <LinearProgress variant="determinate" value={conf * 100} sx={{ height: 6, borderRadius: 3, bgcolor: '#e8ecf0', '& .MuiLinearProgress-bar': { bgcolor: color } }} />;
-  };
-
   return (
-    <Box sx={{ maxWidth: 1100, mx: 'auto' }}>
-      <Paper elevation={0} sx={{ p: 3, borderRadius: 3, border: '1px solid #e8ecf0' }}>
-        <Typography variant="h5" sx={{ fontWeight: 600, mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <DescriptionIcon sx={{ color: '#4a90d9' }} /> OCR Review & Correction
-        </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          Upload a PDF or image (JPEG/PNG) to extract text with confidence scoring and structured summary.
-        </Typography>
+    <div className="w-full h-full flex flex-col p-8 bg-zinc-950 overflow-y-auto custom-scrollbar">
+      <div className="max-w-6xl mx-auto w-full flex flex-col gap-8">
+        
+        <header className="flex flex-col gap-2 border-b border-zinc-800 pb-6">
+          <h2 className="text-xl font-bold text-zinc-100 flex items-center gap-2">
+            <ScanText className="text-emerald-500" />
+            OCR Scanner
+          </h2>
+          <p className="text-sm text-zinc-400">Extract facts, parties, and dates from raw FIRs, notices, and handwritten notes.</p>
+        </header>
 
-        <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            accept=".pdf,.jpg,.jpeg,.png"
-            style={{ display: 'none' }}
-          />
-          <Button
-            variant="outlined"
-            startIcon={<CloudUploadIcon />}
-            onClick={() => fileInputRef.current?.click()}
-            sx={{ borderRadius: 2 }}
-          >
-            Choose File
-          </Button>
-          {file && (
-            <Chip
-              label={file.name}
-              onDelete={handleClear}
-              variant="outlined"
-              sx={{ borderRadius: 2 }}
-            />
-          )}
-          <Button
-            variant="contained"
-            onClick={handleUpload}
-            disabled={!file || uploading}
-            startIcon={uploading ? <CircularProgress size={20} /> : <SearchIcon />}
-            sx={{ borderRadius: 2, bgcolor: '#4a90d9', '&:hover': { bgcolor: '#2a70b9' } }}
-          >
-            {uploading ? 'Processing...' : 'Upload & OCR'}
-          </Button>
-          {result && (
-            <Button variant="text" color="error" onClick={handleClear} startIcon={<ClearIcon />}>
-              Clear
-            </Button>
-          )}
-        </Box>
-
-        {error && <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>{error}</Alert>}
-
-        <AnimatePresence>
-          {result && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }}>
-              <Grid container spacing={3}>
-                {/* Text with correction */}
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <Card variant="outlined" sx={{ borderRadius: 2, borderColor: '#e8ecf0', height: '100%' }}>
-                    <CardContent>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                        <Typography variant="subtitle2" >OCR Text (edit below)</Typography>
-                        <Chip icon={<EditIcon />} label="Editable" size="small" sx={{ bgcolor: '#e3f0fd', color: '#4a90d9' }} />
-                      </Box>
-                      <TextField
-                        multiline
-                        fullWidth
-                        minRows={12}
-                        value={editedText}
-                        onChange={(e) => setEditedText(e.target.value)}
-                        variant="outlined"
-                        sx={{ '& .MuiOutlinedInput-root': { bgcolor: '#f5f7fa', borderRadius: 2 } }}
-                      />
-                      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                        <Button variant="contained" color="success" startIcon={<SaveIcon />} onClick={() => alert('Corrections saved (placeholder)')}>
-                          Save Corrections
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Grid>
-
-                {/* Summary and confidence */}
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <Card variant="outlined" sx={{ borderRadius: 2, borderColor: '#e8ecf0', height: '100%' }}>
-                    <CardContent>
-                      <Typography variant="subtitle2"  sx={{ mb: 2 }}>Extracted Summary</Typography>
-                      <Box sx={{ bgcolor: '#f5f7fa', p: 2, borderRadius: 2, mb: 2 }}>
-                        <Typography variant="body2"><strong>Parties:</strong> {result.summary.parties.join(', ') || 'Not found'}</Typography>
-                        <Typography variant="body2"><strong>Sections:</strong> {result.summary.sections.join(', ') || 'None'}</Typography>
-                        <Typography variant="body2"><strong>Events:</strong></Typography>
-                        <ul style={{ margin: 0, paddingLeft: 20 }}>
-                          {result.summary.events.map((ev: string, i: number) => <li key={i}>{ev}</li>)}
-                          {result.summary.events.length === 0 && <li>No events found</li>}
-                        </ul>
-                      </Box>
-
-                      <Typography variant="subtitle2"  sx={{ mb: 1 }}>Per-Line Confidence</Typography>
-                      <Box sx={{ maxHeight: 300, overflowY: 'auto', bgcolor: '#f5f7fa', p: 1, borderRadius: 2 }}>
-                        {result.lines.map((line: any, idx: number) => (
-                          <Box key={idx} sx={{ mb: 1 }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
-                              <Typography variant="caption" sx={{ flex: 1 }}>{line.text}</Typography>
-                              <Chip
-                                label={`${Math.round(line.confidence * 100)}%`}
-                                size="small"
-                                sx={{
-                                  bgcolor: line.confidence > 0.9 ? '#e8f5e9' : line.confidence > 0.7 ? '#fef9e7' : '#fde8e8',
-                                  color: line.confidence > 0.9 ? '#34a853' : line.confidence > 0.7 ? '#fbbc04' : '#ea4335',
-                                  fontSize: '0.6rem',
-                                  height: 20,
-                                  minWidth: 40,
-                                }}
-                              />
-                            </Box>
-                            {renderConfidenceBar(line.confidence)}
-                          </Box>
-                        ))}
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {!result && !uploading && !error && (
-          <Box sx={{ textAlign: 'center', py: 6 }}>
-            <DescriptionIcon sx={{ fontSize: 48, color: '#d0d7de', mb: 2 }} />
-            <Typography variant="body1" color="text.secondary">
-              Upload a PDF or image to extract text.
-            </Typography>
-          </Box>
+        {error && (
+          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium">
+            {error}
+          </div>
         )}
-      </Paper>
-    </Box>
+
+        {!result ? (
+          <div className="flex flex-col gap-4">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept=".pdf,.jpg,.jpeg,.png"
+              className="hidden"
+            />
+            
+            <div 
+              onClick={() => fileInputRef.current?.click()}
+              className="border-2 border-dashed border-zinc-700 bg-zinc-900/50 hover:bg-zinc-800/50 transition-colors rounded-xl p-12 flex flex-col items-center justify-center cursor-pointer text-center group"
+            >
+              <UploadCloud size={40} className="text-zinc-500 group-hover:text-emerald-400 transition-colors mb-4" />
+              <p className="text-sm font-medium text-zinc-300 mb-2">
+                {file ? file.name : "Click to upload or drag & drop"}
+              </p>
+              <p className="text-xs text-zinc-500">Supports PDF, DOCX, and JPG up to 10MB</p>
+            </div>
+
+            <div className="flex justify-center mt-4">
+              <button 
+                onClick={handleUpload}
+                disabled={!file || uploading}
+                className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:hover:bg-emerald-600 text-white text-sm font-bold tracking-tight rounded-xl shadow-sm transition-colors flex items-center gap-2"
+              >
+                {uploading ? (
+                  <span className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Scanning...</span>
+                ) : (
+                  <><Search size={16} /> Process Document</>
+                )}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <AnimatePresence>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              
+              {/* Left Column: Editable OCR Text */}
+              <div className="flex flex-col gap-4 bg-zinc-900/80 border border-zinc-800 rounded-xl p-6">
+                <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
+                  <h3 className="text-sm font-bold text-zinc-200">Extracted Text</h3>
+                  <span className="px-2 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold uppercase tracking-wider rounded flex items-center gap-1">
+                    <Edit2 size={10} /> Editable
+                  </span>
+                </div>
+                
+                <textarea
+                  value={editedText}
+                  onChange={(e) => setEditedText(e.target.value)}
+                  className="w-full h-[400px] bg-zinc-800/60 border border-zinc-700 rounded-xl p-4 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all custom-scrollbar resize-none font-mono"
+                ></textarea>
+
+                <div className="flex justify-between items-center mt-2">
+                  <button onClick={handleClear} className="text-xs text-red-400 hover:text-red-300 font-bold uppercase tracking-tight flex items-center gap-1">
+                    <Trash2 size={14} /> Clear Session
+                  </button>
+                  <button className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold tracking-tight rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                    <CheckCircle2 size={14} /> Save Corrections
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Column: Analytics & Confidence */}
+              <div className="flex flex-col gap-6">
+                <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl p-6 flex flex-col gap-4">
+                  <h3 className="text-sm font-bold text-zinc-200 border-b border-zinc-800 pb-4">Extracted Intelligence</h3>
+                  
+                  <div className="flex flex-col gap-2">
+                    <div className="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50">
+                      <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block mb-1">Parties Identified</span>
+                      <p className="text-sm text-zinc-200">{result.summary?.parties?.join(', ') || 'None found'}</p>
+                    </div>
+                    <div className="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50">
+                      <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block mb-1">Sections / Laws</span>
+                      <p className="text-sm text-emerald-400 font-medium">{result.summary?.sections?.join(', ') || 'None found'}</p>
+                    </div>
+                    <div className="bg-zinc-800/50 p-3 rounded-lg border border-zinc-700/50">
+                      <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block mb-1">Key Events</span>
+                      <ul className="list-disc pl-4 text-sm text-zinc-300">
+                        {result.summary?.events?.length > 0 ? (
+                          result.summary.events.map((ev: string, i: number) => <li key={i}>{ev}</li>)
+                        ) : (
+                          <li>No events found</li>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl p-6 flex flex-col gap-4">
+                  <h3 className="text-sm font-bold text-zinc-200 border-b border-zinc-800 pb-4">Line Confidence Scans</h3>
+                  <div className="h-[200px] overflow-y-auto custom-scrollbar flex flex-col gap-3 pr-2">
+                    {result.lines?.map((line: any, idx: number) => (
+                      <div key={idx} className="flex flex-col gap-1">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs text-zinc-400 truncate pr-4">{line.text}</span>
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                            line.confidence > 0.9 ? 'bg-emerald-500/10 text-emerald-400' :
+                            line.confidence > 0.7 ? 'bg-yellow-500/10 text-yellow-400' :
+                            'bg-red-500/10 text-red-400'
+                          }`}>
+                            {Math.round(line.confidence * 100)}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-zinc-800 rounded-full h-1">
+                          <div 
+                            className={`h-1 rounded-full ${
+                              line.confidence > 0.9 ? 'bg-emerald-500' :
+                              line.confidence > 0.7 ? 'bg-yellow-500' :
+                              'bg-red-500'
+                            }`}
+                            style={{ width: `${Math.round(line.confidence * 100)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+            </motion.div>
+          </AnimatePresence>
+        )}
+
+      </div>
+    </div>
   );
-};
+}
