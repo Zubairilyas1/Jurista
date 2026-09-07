@@ -1,9 +1,9 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { 
-  Globe, Scale, ScanText, ScrollText, CalendarClock, Settings, Plus, Briefcase, Gavel, Link2, ShieldAlert, GitCompare
+  Globe, Scale, ScanText, ScrollText, CalendarClock, Settings, Plus, Briefcase, Gavel, Link2, ShieldAlert, GitCompare, LogOut
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -41,6 +41,7 @@ export function Sidebar() {
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
   const [initials, setInitials] = useState('JN');
+  const [showLogout, setShowLogout] = useState(false);
 
   useEffect(() => {
     const handleStorage = () => {
@@ -70,14 +71,14 @@ export function Sidebar() {
       animate={{ width: isHovered ? 260 : 80 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="h-full flex flex-col py-6 shrink-0 relative z-50 bg-zinc-950 border-r border-zinc-800"
+      onMouseLeave={() => { setIsHovered(false); setShowLogout(false); }}
+      className="h-full flex flex-col py-6 shrink-0 relative z-50 bg-[#0D0D0E] border-r border-zinc-800"
     >
       
       {/* Top Logo Badge */}
       <div className={`flex items-center ${isHovered ? 'px-6 justify-start' : 'justify-center'} mb-10 h-10 overflow-hidden`}>
-        <div className="w-10 h-10 shrink-0 bg-zinc-100 rounded-lg flex items-center justify-center text-zinc-900 font-bold text-sm">
-          {initials}
+        <div className="w-10 h-10 shrink-0 bg-[#18181C] border border-zinc-800 rounded-lg flex items-center justify-center text-white font-sans-hero font-bold text-sm tracking-wider">
+          JX
         </div>
         <AnimatePresence>
           {isHovered && (
@@ -85,7 +86,7 @@ export function Sidebar() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
-              className="ml-3 font-bold tracking-tight text-base text-zinc-100 whitespace-nowrap"
+              className="ml-3 font-sans-hero font-bold tracking-widest uppercase text-sm text-white whitespace-nowrap"
             >
               Jurista
             </motion.span>
@@ -97,7 +98,7 @@ export function Sidebar() {
       <div className="flex flex-col px-3 flex-1 overflow-y-auto custom-scrollbar">
         {navGroups.map((group, groupIdx) => (
           <React.Fragment key={group.id}>
-            {groupIdx > 0 && <div className="border-t border-zinc-800 my-2 mx-2"></div>}
+            {groupIdx > 0 && <div className="border-t border-zinc-800/80 my-2 mx-2"></div>}
             <div className="flex flex-col gap-1.5">
               {group.items.map((item) => {
                 const active = pathname === item.path || (item.path !== '/' && pathname?.startsWith(item.path));
@@ -105,12 +106,13 @@ export function Sidebar() {
                   <button
                     key={item.path}
                     onClick={() => router.push(item.path)}
-                    className={`group h-10 rounded-lg flex items-center transition-colors overflow-visible relative ${isHovered ? 'px-3 justify-start' : 'justify-center'} ${
+                    className={`group h-10 rounded-lg flex items-center transition-all overflow-visible relative ${isHovered ? 'px-3 justify-start' : 'justify-center'} ${
                       active 
-                        ? 'bg-zinc-800 text-zinc-100 font-medium' 
-                        : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200'
+                        ? 'bg-emerald-500/10 text-emerald-400 font-medium' 
+                        : 'text-zinc-500 hover:bg-white/5 hover:text-white'
                     }`}
                   >
+                    {active && <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500 rounded-l-lg shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>}
                     <div className="shrink-0 z-10">{item.icon}</div>
                     <AnimatePresence>
                       {isHovered && (
@@ -118,7 +120,7 @@ export function Sidebar() {
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: -10 }}
-                          className="ml-3 font-medium text-sm tracking-wide whitespace-nowrap z-10"
+                          className="ml-3 font-bold text-xs uppercase tracking-tight whitespace-nowrap z-10"
                         >
                           {item.label}
                         </motion.span>
@@ -127,7 +129,7 @@ export function Sidebar() {
                     
                     {/* Tooltip for collapsed state */}
                     {!isHovered && (
-                      <div className="absolute left-14 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 bg-zinc-800 text-zinc-100 text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap border border-zinc-700">
+                      <div className="absolute left-16 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 bg-zinc-800 text-zinc-100 text-[10px] uppercase font-bold tracking-wider px-2.5 py-1.5 rounded-md border border-zinc-700 shadow-xl whitespace-nowrap">
                         {item.label}
                       </div>
                     )}
@@ -139,33 +141,47 @@ export function Sidebar() {
         ))}
       </div>
 
-      {/* Bottom Action Button */}
-      <div className={`mt-auto pt-4 ${isHovered ? 'px-3' : 'px-3'}`}>
-        <button 
-          onClick={() => router.push('/workspace')}
-          className={`group relative h-10 bg-zinc-100 text-zinc-900 rounded-lg flex items-center hover:bg-white transition-colors overflow-visible ${isHovered ? 'w-full px-3' : 'w-full justify-center'}`}
-        >
-          <Plus size={18} strokeWidth={2.5} className="shrink-0" />
+      {/* User Profile Footer */}
+      <div className={`mt-auto pt-6 px-4 flex flex-col gap-4 border-t border-zinc-800/80 mx-2`}>
+        <div className="relative">
           <AnimatePresence>
-            {isHovered && (
-              <motion.span 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="ml-2 font-semibold text-sm whitespace-nowrap"
+            {showLogout && isHovered && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="absolute bottom-full left-0 mb-2 w-full bg-[#18181C] border border-zinc-800 rounded-xl p-2 shadow-2xl"
               >
-                New Case
-              </motion.span>
+                <button className="w-full flex items-center gap-2 text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 p-2 rounded-lg text-xs font-bold uppercase tracking-tight transition-colors">
+                  <LogOut size={14} /> Sign Out
+                </button>
+              </motion.div>
             )}
           </AnimatePresence>
           
-          {/* Tooltip */}
-          {!isHovered && (
-            <div className="absolute left-14 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 bg-zinc-800 text-zinc-100 text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap border border-zinc-700">
-              New Case
+          <div 
+            onClick={() => isHovered && setShowLogout(!showLogout)}
+            className={`flex items-center gap-3 ${isHovered ? 'cursor-pointer p-2 hover:bg-white/5 rounded-xl transition-colors' : 'justify-center'}`}
+          >
+            <div className="w-9 h-9 shrink-0 bg-zinc-800 border border-zinc-700 rounded-full flex items-center justify-center text-white font-sans-hero font-bold text-sm tracking-wider">
+              {initials}
             </div>
-          )}
-        </button>
+            
+            <AnimatePresence>
+              {isHovered && (
+                <motion.div 
+                  initial={{ opacity: 0, w: 0 }}
+                  animate={{ opacity: 1, w: 'auto' }}
+                  exit={{ opacity: 0, w: 0 }}
+                  className="flex flex-col overflow-hidden"
+                >
+                  <span className="text-sm font-bold text-white tracking-tight truncate">Advocate {initials}</span>
+                  <span className="text-[10px] text-emerald-400 uppercase tracking-widest font-bold">Online</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
       
     </motion.div>
