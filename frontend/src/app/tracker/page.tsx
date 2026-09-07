@@ -1,216 +1,214 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { CalendarClock, Plus, Search, CheckCircle2, Clock, Calendar, AlertCircle, PhoneCall, X, ExternalLink, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Calendar, RefreshCcw, Plus, Save, Phone, CheckCircle2, MessageSquare, AlertCircle, Clock, ChevronRight, X, PhoneCall, ExternalLink } from 'lucide-react';
 
-interface Case {
-  id?: string;
-  case_number: string;
-  parties: string;
-  court: string;
-  hearing_date: string;
-  deadline: string;
-}
-
-export default function CauseTrackerPage() {
-  const [cases, setCases] = useState<Case[]>([]);
+export default function TrackerPage() {
+  const [cases, setCases] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   
-  // Manual Case Form State
   const [newCase, setNewCase] = useState({
     case_number: '',
     parties: '',
-    court: 'High Court',
-    judge: '',
+    court: 'Lahore High Court',
     hearing_date: ''
   });
 
   const fetchCases = async () => {
+    setIsLoading(true);
+    let apiCases = [];
     try {
-      setIsLoading(true);
-      const res = await fetch('http://127.0.0.1:8001/api/v1/tracker/cases');
+      const res = await fetch('http://127.0.0.1:8001/api/v1/cause-list');
       if (res.ok) {
         const data = await res.json();
-        setCases(data.cases || []);
+        apiCases = data.cases || [];
       }
     } catch (e) {
-      console.error(e);
-    } finally {
-      setIsLoading(false);
+      console.log('Backend not reachable. Showing local cases only.');
     }
+    
+    // Merge with localStorage manual cases
+    const local = localStorage.getItem('jurista_manual_cases');
+    if (local) {
+      try {
+        const manualCases = JSON.parse(local);
+        apiCases = [...apiCases, ...manualCases];
+      } catch (e) {}
+    }
+    
+    setCases(apiCases);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     fetchCases();
   }, []);
 
-  const handleRefresh = async () => {
-    try {
-      setIsRefreshing(true);
-      const res = await fetch('http://127.0.0.1:8001/api/v1/tracker/refresh', { method: 'POST' });
-      if (res.ok) {
-        await fetchCases();
-      } else {
-        alert("Scraping failed or Twilio error. Check backend logs.");
-      }
-    } catch (e) {
-      console.error(e);
-      alert("Error refreshing tracker.");
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
-
-  const handleManualSubmit = async (e: React.FormEvent) => {
+  const handleManualSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const res = await fetch('http://127.0.0.1:8001/api/v1/tracker/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newCase)
-      });
-      if (res.ok) {
-        setIsAddModalOpen(false);
-        setNewCase({ case_number: '', parties: '', court: 'High Court', judge: '', hearing_date: '' });
-        await fetchCases();
-      } else {
-        alert("Failed to add case");
-      }
-    } catch (e) {
-      console.error(e);
+    const newEntry = { 
+      ...newCase, 
+      id: `manual_${Date.now()}`,
+      deadline: 'N/A' 
+    };
+    const updatedCases = [...cases, newEntry];
+    setCases(updatedCases);
+    
+    // Save to localStorage
+    const local = localStorage.getItem('jurista_manual_cases');
+    let manualCases = [];
+    if (local) {
+      try { manualCases = JSON.parse(local); } catch (e) {}
     }
+    manualCases.push(newEntry);
+    localStorage.setItem('jurista_manual_cases', JSON.stringify(manualCases));
+    
+    setIsAddModalOpen(false);
+    setNewCase({ case_number: '', parties: '', court: 'Lahore High Court', hearing_date: '' });
   };
 
   return (
-    <div className="w-full h-full flex flex-col p-8 bg-[#0D0D0E] overflow-y-auto text-white">
+    <div className="w-full h-full flex flex-col bg-[#0D0D0E] overflow-hidden text-white selection:bg-emerald-500/30">
       
-      {/* Header Area */}
-      <div className="flex items-end justify-between mb-8">
-        <div>
-          <h1 className="font-sans-hero text-4xl font-semibold tracking-tight uppercase text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50 mb-2">
-            Cause Tracker
-          </h1>
-          <p className="text-white/50 text-sm font-medium tracking-wider uppercase flex items-center gap-2">
-            <Calendar size={14} className="text-emerald-400" />
-            Hearing Schedule & WhatsApp Alerts
-          </p>
+      {/* Header Bar */}
+      <div className="h-20 border-b border-zinc-800 flex items-center justify-between px-8 bg-[#0D0D0E] z-10 shrink-0">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30">
+            <CalendarClock className="text-emerald-400" size={20} />
+          </div>
+          <div className="flex flex-col">
+            <h1 className="font-sans-hero text-xl font-bold tracking-widest uppercase text-white">
+              Cause Tracker
+            </h1>
+            <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">
+              Automated Hearing Alerts
+            </span>
+          </div>
         </div>
         
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={fetchCases}
+            className="text-[10px] font-bold uppercase tracking-widest text-white/50 hover:text-white transition-colors flex items-center gap-2"
+          >
+            <RefreshCw size={14} /> Refresh List
+          </button>
           <button 
             onClick={() => setIsAddModalOpen(true)}
-            className="card-dark hover:bg-white/5 px-6 py-3 flex items-center gap-2 rounded-xl text-xs font-bold tracking-tight uppercase transition-all border border-zinc-800"
+            className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 transition-colors rounded-lg shadow-lg shadow-emerald-950/40"
           >
-            <Plus size={16} className="text-blue-400" /> Manually Track
-          </button>
-          
-          <button 
-            onClick={handleRefresh}
-            disabled={isRefreshing}
-            className="pill-dark px-6 py-3 flex items-center gap-2 text-xs font-bold tracking-tight uppercase transition-all bg-emerald-500 text-black hover:bg-emerald-500/90 disabled:opacity-50"
-          >
-            <RefreshCcw size={16} className={isRefreshing ? "animate-spin" : ""} /> 
-            {isRefreshing ? "Syncing..." : "Sync Court List"}
+            <Plus size={14} /> Track New Case
           </button>
         </div>
       </div>
 
-      {/* Stats Widgets */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="card-dark p-6 rounded-lg border border-zinc-800 flex flex-col gap-4 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
-            <CheckCircle2 size={64} className="text-emerald-400" />
-          </div>
-          <p className="text-[10px] font-bold tracking-tight uppercase text-white/50">Active Cases</p>
-          <p className="font-sans-hero text-5xl font-semibold">{cases.length}</p>
-        </div>
+      <div className="flex-1 p-8 overflow-y-auto custom-scrollbar max-w-7xl mx-auto w-full flex flex-col gap-6">
         
-        <div className="card-dark p-6 rounded-lg border border-zinc-800 flex flex-col gap-4 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Clock size={64} className="text-blue-500" />
-          </div>
-          <p className="text-[10px] font-bold tracking-tight uppercase text-white/50">Upcoming Hearings</p>
-          <p className="font-sans-hero text-5xl font-semibold">{cases.filter(c => c.hearing_date !== 'N/A').length}</p>
-        </div>
-
-        <div className="card-dark p-6 rounded-lg border border-zinc-800 flex flex-col gap-4 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
-            <PhoneCall size={64} className="text-green-500" />
-          </div>
-          <p className="text-[10px] font-bold tracking-tight uppercase text-white/50">WhatsApp Alerts</p>
-          <p className="font-sans-hero text-5xl font-semibold text-green-400">Active</p>
-        </div>
-      </div>
-
-      {/* Main Table */}
-      <div className="card-dark rounded-lg border border-zinc-800 overflow-hidden flex-1 flex flex-col">
-        <div className="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/50">
-          <h2 className="text-sm font-bold tracking-tight uppercase flex items-center gap-2">
-            <AlertCircle size={16} className="text-blue-400" /> Tracked Cause List
-          </h2>
-        </div>
-        
-        <div className="flex-1 overflow-auto">
-          {isLoading ? (
-            <div className="h-full flex items-center justify-center text-white/50">Loading cases...</div>
-          ) : cases.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-white/30 gap-4">
-              <Calendar size={48} className="opacity-50" />
-              <p className="text-sm font-medium tracking-wider uppercase">No cases currently tracked</p>
+        {/* KPI Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 shrink-0">
+          <div className="bg-[#18181C] border border-zinc-800 p-6 rounded-xl flex flex-col gap-2 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Calendar size={64} className="text-white" />
             </div>
-          ) : (
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-zinc-900/30 text-[10px] font-bold tracking-tight uppercase text-white/50">
-                  <th className="p-4 pl-6 border-b border-zinc-800/50">Case No.</th>
-                  <th className="p-4 border-b border-zinc-800/50">Parties</th>
-                  <th className="p-4 border-b border-zinc-800/50">Court</th>
-                  <th className="p-4 border-b border-zinc-800/50">Next Hearing</th>
-                  <th className="p-4 border-b border-zinc-800/50">Limitation Deadline</th>
-                  <th className="p-4 pr-6 border-b border-zinc-800/50 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cases.map((c, i) => (
-                  <motion.tr 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    key={i} 
-                    className="hover:bg-white/5 border-b border-zinc-800/50 transition-colors group"
-                  >
-                    <td className="p-4 pl-6 font-medium text-sm">{c.case_number}</td>
-                    <td className="p-4 text-sm text-white/80">{c.parties}</td>
-                    <td className="p-4 text-sm text-white/60">{c.court}</td>
-                    <td className="p-4">
-                      <span className="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-xs font-bold tracking-wider">
-                        {c.hearing_date}
-                      </span>
-                    </td>
-                    <td className="p-4 text-sm text-red-400">{c.deadline}</td>
-                    <td className="p-4 pr-6 text-right">
-                      <div className="flex items-center justify-end gap-3">
-                        <div className="inline-flex items-center gap-1 text-green-400 text-xs font-bold uppercase tracking-wider">
-                          <CheckCircle2 size={12} /> Alert Set
+            <p className="text-[10px] font-bold tracking-widest uppercase text-white/50">Total Tracked Cases</p>
+            <p className="font-sans-hero text-4xl font-bold text-white">{cases.length}</p>
+          </div>
+          
+          <div className="bg-[#18181C] border border-zinc-800 p-6 rounded-xl flex flex-col gap-2 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Clock size={64} className="text-emerald-500" />
+            </div>
+            <p className="text-[10px] font-bold tracking-widest uppercase text-white/50">Upcoming Hearings</p>
+            <p className="font-sans-hero text-4xl font-bold text-emerald-400">{cases.filter(c => c.hearing_date !== 'N/A').length}</p>
+          </div>
+
+          <div className="bg-[#18181C] border border-zinc-800 p-6 rounded-xl flex flex-col gap-2 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+              <PhoneCall size={64} className="text-emerald-500" />
+            </div>
+            <p className="text-[10px] font-bold tracking-widest uppercase text-white/50">WhatsApp Alerts</p>
+            <p className="font-sans-hero text-2xl font-bold text-emerald-400 mt-2">ACTIVE</p>
+          </div>
+        </div>
+
+        {/* Main Table */}
+        <div className="bg-[#18181C] border border-zinc-800 rounded-xl flex-1 flex flex-col min-h-[400px]">
+          
+          <div className="flex-1 overflow-auto custom-scrollbar">
+            {isLoading ? (
+              <div className="h-full flex flex-col items-center justify-center gap-4 text-white/50">
+                <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-[10px] font-bold tracking-widest uppercase">Syncing with Court Database...</p>
+              </div>
+            ) : cases.length === 0 ? (
+              <div className="h-full flex flex-col items-center justify-center text-center gap-4">
+                <div className="w-20 h-20 rounded-full bg-[#0D0D0E] border border-zinc-800 flex items-center justify-center">
+                  <Calendar size={32} className="text-white/20" />
+                </div>
+                <div>
+                  <h2 className="font-sans-hero text-xl font-bold tracking-widest uppercase text-white mb-2">No Tracked Hearings Found</h2>
+                  <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest max-w-xs">Track a new case manually or sync your dashboard to receive updates.</p>
+                </div>
+                <button 
+                  onClick={() => setIsAddModalOpen(true)}
+                  className="mt-2 px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest transition-colors rounded-lg"
+                >
+                  Track New Case
+                </button>
+              </div>
+            ) : (
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-[#0D0D0E]/50 text-[9px] font-bold tracking-widest uppercase text-white/50 border-b border-zinc-800 sticky top-0">
+                    <th className="p-4 pl-6">Case No.</th>
+                    <th className="p-4">Parties</th>
+                    <th className="p-4">Court</th>
+                    <th className="p-4">Next Hearing</th>
+                    <th className="p-4">Limitation Deadline</th>
+                    <th className="p-4 pr-6 text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cases.map((c, i) => (
+                    <motion.tr 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      key={i} 
+                      className="hover:bg-white/5 border-b border-zinc-800/50 transition-colors group"
+                    >
+                      <td className="p-4 pl-6 font-bold text-xs uppercase tracking-wider">{c.case_number}</td>
+                      <td className="p-4 text-xs font-medium text-white/80">{c.parties}</td>
+                      <td className="p-4 text-xs font-medium text-white/60">{c.court}</td>
+                      <td className="p-4">
+                        <span className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-widest uppercase">
+                          {c.hearing_date}
+                        </span>
+                      </td>
+                      <td className="p-4 text-xs font-bold text-rose-400 tracking-wider uppercase">{c.deadline}</td>
+                      <td className="p-4 pr-6 text-right">
+                        <div className="flex items-center justify-end gap-3">
+                          <div className="inline-flex items-center gap-1.5 text-emerald-400 text-[9px] font-bold uppercase tracking-widest">
+                            <CheckCircle2 size={12} /> Alert Set
+                          </div>
+                          <a 
+                            href={`/client/${c.id || i}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 bg-[#0D0D0E] hover:bg-white/10 px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-colors border border-zinc-800 text-white/80"
+                          >
+                            <ExternalLink size={12} /> Portal
+                          </a>
                         </div>
-                        <a 
-                          href={`/client/${c.id || i}`} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 bg-white/5 hover:bg-white/10 px-3 py-1 rounded text-xs font-bold uppercase tracking-tight transition-colors border border-zinc-800"
-                        >
-                          <ExternalLink size={12} /> Client Portal
-                        </a>
-                      </div>
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
       </div>
 
@@ -222,31 +220,56 @@ export default function CauseTrackerPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-zinc-950 border border-zinc-800 rounded-lg w-full max-w-md overflow-hidden shadow-2xl"
+              className="bg-[#18181C] border border-zinc-800 w-full max-w-md shadow-2xl p-8"
             >
-              <div className="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/50">
-                <h3 className="font-bold tracking-tight uppercase text-sm">Track New Case</h3>
-                <button onClick={() => setIsAddModalOpen(false)} className="text-white/50 hover:text-white"><X size={20} /></button>
+              <div className="flex items-center justify-between mb-8">
+                <h3 className="font-sans-hero text-xl font-bold tracking-widest uppercase text-white">Track New Case</h3>
+                <button onClick={() => setIsAddModalOpen(false)} className="text-white/50 hover:text-white transition-colors"><X size={20} /></button>
               </div>
-              <form onSubmit={handleManualSubmit} className="p-6 flex flex-col gap-4">
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold tracking-tight uppercase text-white/50">Case Number</label>
-                  <input required value={newCase.case_number} onChange={e => setNewCase({...newCase, case_number: e.target.value})} className="bg-black border border-zinc-800 rounded-lg p-3 text-sm focus:border-emerald-500 outline-none" placeholder="e.g. WP-1234/2026" />
+              
+              <form onSubmit={handleManualSubmit} className="flex flex-col gap-8">
+                <div className="flex flex-col gap-3">
+                  <label className="text-[10px] font-bold tracking-widest uppercase text-white/50">Case Number</label>
+                  <input 
+                    required 
+                    value={newCase.case_number} 
+                    onChange={e => setNewCase({...newCase, case_number: e.target.value})} 
+                    className="bg-transparent border-b border-zinc-800 pb-3 text-white placeholder-white/20 font-medium focus:border-emerald-500 outline-none transition-colors rounded-none" 
+                    placeholder="e.g. WP-1234/2026" 
+                  />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold tracking-tight uppercase text-white/50">Parties</label>
-                  <input required value={newCase.parties} onChange={e => setNewCase({...newCase, parties: e.target.value})} className="bg-black border border-zinc-800 rounded-lg p-3 text-sm focus:border-emerald-500 outline-none" placeholder="e.g. State vs Ali" />
+                <div className="flex flex-col gap-3">
+                  <label className="text-[10px] font-bold tracking-widest uppercase text-white/50">Parties</label>
+                  <input 
+                    required 
+                    value={newCase.parties} 
+                    onChange={e => setNewCase({...newCase, parties: e.target.value})} 
+                    className="bg-transparent border-b border-zinc-800 pb-3 text-white placeholder-white/20 font-medium focus:border-emerald-500 outline-none transition-colors rounded-none" 
+                    placeholder="e.g. State vs Ali" 
+                  />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold tracking-tight uppercase text-white/50">Court</label>
-                  <input required value={newCase.court} onChange={e => setNewCase({...newCase, court: e.target.value})} className="bg-black border border-zinc-800 rounded-lg p-3 text-sm focus:border-emerald-500 outline-none" />
+                <div className="flex flex-col gap-3">
+                  <label className="text-[10px] font-bold tracking-widest uppercase text-white/50">Court</label>
+                  <input 
+                    required 
+                    value={newCase.court} 
+                    onChange={e => setNewCase({...newCase, court: e.target.value})} 
+                    className="bg-transparent border-b border-zinc-800 pb-3 text-white placeholder-white/20 font-medium focus:border-emerald-500 outline-none transition-colors rounded-none" 
+                  />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold tracking-tight uppercase text-white/50">Hearing Date</label>
-                  <input required type="date" value={newCase.hearing_date} onChange={e => setNewCase({...newCase, hearing_date: e.target.value})} className="bg-black border border-zinc-800 rounded-lg p-3 text-sm focus:border-emerald-500 outline-none [color-scheme:dark]" />
+                <div className="flex flex-col gap-3">
+                  <label className="text-[10px] font-bold tracking-widest uppercase text-white/50">Next Hearing Date</label>
+                  <input 
+                    required 
+                    type="date" 
+                    value={newCase.hearing_date} 
+                    onChange={e => setNewCase({...newCase, hearing_date: e.target.value})} 
+                    className="bg-transparent border-b border-zinc-800 pb-3 text-white placeholder-white/20 font-medium focus:border-emerald-500 outline-none transition-colors rounded-none [color-scheme:dark]" 
+                  />
                 </div>
-                <button type="submit" className="mt-4 bg-emerald-500 text-black py-4 rounded-xl font-bold tracking-tight uppercase text-sm flex justify-center items-center gap-2 hover:bg-emerald-500/90 transition-colors">
-                  <CheckCircle2 size={18} /> Start Tracking
+                
+                <button type="submit" className="mt-4 bg-emerald-600 hover:bg-emerald-500 text-white py-5 font-bold tracking-widest uppercase text-[10px] flex justify-center items-center gap-2 transition-colors shadow-lg shadow-emerald-950/40">
+                  START TRACKING
                 </button>
               </form>
             </motion.div>
