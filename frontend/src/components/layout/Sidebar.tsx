@@ -5,6 +5,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { 
   Globe, Scale, ScanText, ScrollText, CalendarClock, Settings, Plus, Briefcase, Gavel, Link2, ShieldAlert, GitCompare, LogOut
 } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navGroups = [
@@ -40,8 +42,9 @@ export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
-  const [initials, setInitials] = useState('JN');
+  const [initials, setInitials] = useState('ZA');
   const [showLogout, setShowLogout] = useState(false);
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleStorage = () => {
@@ -72,7 +75,8 @@ export function Sidebar() {
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => { setIsHovered(false); setShowLogout(false); }}
-      className="h-full flex flex-col py-6 shrink-0 relative z-50 bg-[#0D0D0E] border-r border-zinc-800"
+      className="h-full flex flex-col py-6 shrink-0 relative z-50 border-r theme-transition"
+      style={{ backgroundColor: 'var(--bg-base)', borderColor: 'var(--border)' }}
     >
       
       {/* Top Logo Badge */}
@@ -141,8 +145,13 @@ export function Sidebar() {
         ))}
       </div>
 
+      {/* Theme Toggle */}
+      <div className="px-4 pb-2 mx-2">
+        <ThemeToggle collapsed={!isHovered} />
+      </div>
+
       {/* User Profile Footer */}
-      <div className={`mt-auto pt-6 px-4 flex flex-col gap-4 border-t border-zinc-800/80 mx-2`}>
+      <div className="pt-4 px-4 pb-6 mx-2 flex flex-col gap-4 border-t" style={{ borderColor: 'var(--border)' }}>
         <div className="relative">
           <AnimatePresence>
             {showLogout && isHovered && (
@@ -152,7 +161,7 @@ export function Sidebar() {
                 exit={{ opacity: 0, y: 10 }}
                 className="absolute bottom-full left-0 mb-2 w-full bg-[#18181C] border border-zinc-800 rounded-xl p-2 shadow-2xl"
               >
-                <button className="w-full flex items-center gap-2 text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 p-2 rounded-lg text-xs font-bold uppercase tracking-tight transition-colors">
+                <button onClick={() => logout()} className="w-full flex items-center gap-2 text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 p-2 rounded-lg text-xs font-bold uppercase tracking-tight transition-colors">
                   <LogOut size={14} /> Sign Out
                 </button>
               </motion.div>
@@ -163,19 +172,19 @@ export function Sidebar() {
             onClick={() => isHovered && setShowLogout(!showLogout)}
             className={`flex items-center gap-3 ${isHovered ? 'cursor-pointer p-2 hover:bg-white/5 rounded-xl transition-colors' : 'justify-center'}`}
           >
-            <div className="w-9 h-9 shrink-0 bg-zinc-800 border border-zinc-700 rounded-full flex items-center justify-center text-white font-sans-hero font-bold text-sm tracking-wider">
-              {initials}
+            <div className="w-9 h-9 shrink-0 bg-zinc-800 border border-zinc-700 rounded-full flex items-center justify-center text-white font-sans-hero font-bold text-sm tracking-wider uppercase">
+              {user?.full_name ? user.full_name[0] : (user?.email ? user.email[0] : 'J')}
             </div>
             
             <AnimatePresence>
               {isHovered && (
                 <motion.div 
-                  initial={{ opacity: 0, w: 0 }}
-                  animate={{ opacity: 1, w: 'auto' }}
-                  exit={{ opacity: 0, w: 0 }}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -8 }}
                   className="flex flex-col overflow-hidden"
                 >
-                  <span className="text-sm font-bold text-white tracking-tight truncate">Advocate {initials}</span>
+                  <span className="text-sm font-bold text-white tracking-tight truncate">{user?.full_name || user?.email || 'Advocate'}</span>
                   <span className="text-[10px] text-emerald-400 uppercase tracking-widest font-bold">Online</span>
                 </motion.div>
               )}
