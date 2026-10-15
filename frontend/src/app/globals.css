@@ -2,10 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────
+   CSS Custom Properties – Theme Variables
+   Toggle is controlled by adding/removing
+   the `light` class on <html>
+───────────────────────────────────────── */
+:root {
+  /* Dark mode is default */
+  --bg-base:      #0D0D0E;
+  --bg-surface:   #18181C;
+  --bg-elevated:  #1F1F24;
+  --bg-input:     rgba(39, 39, 42, 0.6);   /* zinc-800/60 */
+  --border:       #27272a;                  /* zinc-800 */
+  --border-subtle:#3f3f46;                  /* zinc-700 */
+  --text-primary: #ffffff;
+  --text-muted:   #a1a1aa;                  /* zinc-400 */
+  --text-faint:   #52525b;                  /* zinc-600 */
+  --accent:       #10b981;                  /* emerald-500 */
+  --accent-hover: #34d399;                  /* emerald-400 */
+  --accent-dim:   rgba(16, 185, 129, 0.1);
+  --accent-border:rgba(16, 185, 129, 0.3);
+  --scrollbar-bg: #26262B;
+  --scrollbar-hover: #36363E;
+  --danger:       #f43f5e;
+  --danger-dim:   rgba(244, 63, 94, 0.1);
+}
+
+html.light {
+  --bg-base:      #F5F5F3;
+  --bg-surface:   #FFFFFF;
+  --bg-elevated:  #F0F0EE;
+  --bg-input:     rgba(244, 244, 245, 0.8);  /* zinc-100 */
+  --border:       #e4e4e7;                    /* zinc-200 */
+  --border-subtle:#d4d4d8;                    /* zinc-300 */
+  --text-primary: #09090b;                    /* zinc-950 */
+  --text-muted:   #71717a;                    /* zinc-500 */
+  --text-faint:   #a1a1aa;                    /* zinc-400 */
+  --accent:       #059669;                    /* emerald-600 */
+  --accent-hover: #10b981;                    /* emerald-500 */
+  --accent-dim:   rgba(5, 150, 105, 0.1);
+  --accent-border:rgba(5, 150, 105, 0.3);
+  --scrollbar-bg: #e4e4e7;
+  --scrollbar-hover: #d4d4d8;
+  --danger:       #e11d48;
+  --danger-dim:   rgba(225, 29, 72, 0.08);
+}
+
+/* ─────────────────────────────────────────
+   Semantic Utility Classes
+───────────────────────────────────────── */
+@layer utilities {
+  .bg-base       { background-color: var(--bg-base); }
+  .bg-surface    { background-color: var(--bg-surface); }
+  .bg-elevated   { background-color: var(--bg-elevated); }
+  .bg-input-field{ background-color: var(--bg-input); }
+  .border-theme  { border-color: var(--border); }
+  .border-subtle { border-color: var(--border-subtle); }
+  .text-primary  { color: var(--text-primary); }
+  .text-muted-theme { color: var(--text-muted); }
+  .text-faint    { color: var(--text-faint); }
+  .accent        { color: var(--accent); }
+  .bg-accent-dim { background-color: var(--accent-dim); }
+}
+
 @layer base {
   body {
-    @apply bg-[#0D0D0E] text-white antialiased overflow-hidden;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
     font-family: 'Inter', sans-serif;
+    @apply antialiased overflow-hidden;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
@@ -14,71 +80,52 @@
     font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
   }
 
-  /* Utility classes for the new dark theme */
+  /* Legacy card/pill utilities – kept for compatibility */
   .card-dark {
-    @apply bg-[#18181C] rounded-3xl border border-white/5 shadow-md relative overflow-hidden;
+    background-color: var(--bg-surface);
+    border-color: var(--border);
+    @apply rounded-3xl border shadow-md relative overflow-hidden;
   }
   
   .pill-dark {
-    @apply bg-[#26262B] rounded-full flex items-center justify-center text-white/90 hover:bg-[#323238] transition-colors cursor-pointer border border-white/5;
+    background-color: var(--bg-elevated);
+    border-color: var(--border);
+    @apply rounded-full flex items-center justify-center hover:opacity-80 transition-colors cursor-pointer border;
+    color: var(--text-primary);
   }
 
   .text-muted {
-    @apply text-[#8E8E93];
+    color: var(--text-muted);
   }
 
-  .text-lime {
-    @apply text-[#B0FF2A];
-  }
+  .text-lime  { @apply text-[#B0FF2A]; }
+  .text-orange{ @apply text-[#FF881B]; }
+  .bg-lime    { @apply bg-[#B0FF2A]; }
+  .bg-orange  { @apply bg-[#FF881B]; }
 
-  .text-orange {
-    @apply text-[#FF881B];
-  }
-
-  .bg-lime {
-    @apply bg-[#B0FF2A];
-  }
-
-  .bg-orange {
-    @apply bg-[#FF881B];
-  }
-
-  /* Custom scrollbar for dark theme */
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-[#26262B] rounded-full;
+    background-color: var(--scrollbar-bg);
+    border-radius: 9999px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-[#36363E];
+    background-color: var(--scrollbar-hover);
   }
 
-  /* Glowing Orb Animation (used in Chat) */
+  /* Glowing Orb Animation */
   .glowing-orb {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
+    width: 120px; height: 120px; border-radius: 50%;
     background: radial-gradient(circle at 30% 30%, #d8b4fe 0%, #a855f7 50%, #7e22ce 100%);
-    box-shadow: 
-      0 0 40px 10px rgba(168, 85, 247, 0.3),
-      inset -10px -10px 20px rgba(0,0,0,0.1),
-      inset 10px 10px 20px rgba(255,255,255,0.8);
+    box-shadow: 0 0 40px 10px rgba(168,85,247,0.3), inset -10px -10px 20px rgba(0,0,0,0.1), inset 10px 10px 20px rgba(255,255,255,0.8);
     animation: float 6s ease-in-out infinite;
     position: relative;
   }
-
   .glowing-orb::after {
     content: '';
     position: absolute;
-    top: -20px;
-    left: -20px;
-    right: -20px;
-    bottom: -20px;
+    top: -20px; left: -20px; right: -20px; bottom: -20px;
     border-radius: 50%;
     background: inherit;
     filter: blur(20px);
@@ -86,14 +133,19 @@
     z-index: -1;
     animation: pulse-glow 4s ease-in-out infinite;
   }
+
+  /* Theme transition – smooth swap */
+  .theme-transition {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
 }
 
 @keyframes float {
   0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-10px) scale(1.02); }
+  50%       { transform: translateY(-10px) scale(1.02); }
 }
 
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.1); }
+  50%       { opacity: 0.5; transform: scale(1.1); }
 }
