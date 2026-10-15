@@ -10,12 +10,14 @@ def generate_uuid():
 class Project(Base):
     __tablename__ = "projects"
     id = Column(String, primary_key=True, default=generate_uuid, index=True)
+    user_id = Column(String, ForeignKey("users.id"), nullable=True) # Set to True temporarily for migration, but logic will enforce it
     title = Column(String, index=True)
     status = Column(String, default="active")
     created_at = Column(DateTime, default=datetime.utcnow)
     
     features = relationship("ProjectFeature", back_populates="project", uselist=False)
     brain = relationship("ProjectBrain", back_populates="project", uselist=False)
+    user = relationship("User")
 
 class ProjectFeature(Base):
     __tablename__ = "project_features"
@@ -38,6 +40,7 @@ class ProjectBrain(Base):
 class Case(Base):
     __tablename__ = "cases"
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(String, ForeignKey("users.id"), nullable=True)
     case_number = Column(String, unique=True, index=True)
     parties = Column(String)
     court = Column(String)

@@ -5,6 +5,8 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from app.core.tracker import CauseListTracker
 from app.database import SessionLocal, Case, Deadline
+from app.api.auth import get_current_user
+from app.models.user import User
 
 router = APIRouter(prefix="/api/v1/tracker", tags=["Tracker"])
 tracker = CauseListTracker()
@@ -17,8 +19,8 @@ def get_db():
         db.close()
 
 @router.get("/cases")
-async def get_tracked_cases(db: Session = Depends(get_db)):
-    cases = db.query(Case).all()
+async def get_tracked_cases(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    cases = db.query(Case).filter(Case.user_id == current_user.id).all()
     result = []
     for c in cases:
         deadlines = db.query(Deadline).filter(Deadline.case_id == c.id).all()
@@ -49,17 +51,38 @@ class ManualCase(BaseModel):
     hearing_date: str
 
 @router.post("/add")
-async def add_manual_case(case_data: ManualCase, db: Session = Depends(get_db)):
+async def add_manual_case(case_data: ManualCase, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     try:
         data_dict = {
             "case_number": case_data.case_number,
             "parties": case_data.parties,
             "court": case_data.court,
             "judge": case_data.judge,
-            "hearing_date": case_data.hearing_date
+            "hearing_date": case_data.hearing_date,
+            "user_id": current_user.id
         }
+        # Assuming tracker.store_case is updated to handle user_id, 
+        # but to be safe we'll create the Case object manually here if it doesn't
         deadline = tracker.compute_deadline(case_data.hearing_date)
-        tracker.store_case(db, data_dict, deadline)
+        
+        # Manually create to ensure user_id is injected correctly
+        new_case = Case(
+            user_id=current_user.id,
+            case_number=case_data.case_number,
+            parties=case_data.parties,
+            court=case_data.court,
+            judge=case_data.judge,
+            hearing_date=datetime.strptime(case_data.hearing_date, "%Y-%m-%d") if case_data.hearing_date else None
+        )
+        db.add(new_case)
+        db.commit()
+        db.refresh(new_case)
+        
+        if deadline:
+            new_deadline = Deadline(case_id=new_case.id, deadline_type="Next Hearing", due_date=deadline)
+            db.add(new_deadline)
+            db.commit()
+            
         return {"status": "success", "message": f"Case {case_data.case_number} added successfully."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

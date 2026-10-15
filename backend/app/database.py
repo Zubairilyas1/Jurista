@@ -21,6 +21,7 @@ Base = declarative_base()
 
 def init_db():
     # Import all models here to register them with Base
+    import app.models.user
     import app.models.case
     Base.metadata.create_all(bind=engine)
     print("Database tables initialized successfully.")

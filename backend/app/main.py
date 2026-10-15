@@ -5,7 +5,7 @@ init_db()
 from fastapi.middleware.cors import CORSMiddleware
 
 # Import all routers
-from app.api import rag, drafter, ocr, tracker, settings, analyzer, simulation, cases
+from app.api import rag, drafter, ocr, tracker, settings, analyzer, simulation, cases, auth
 
 app = FastAPI(title="Jurista PakLaw-AI", version="1.0.0")
 
@@ -19,6 +19,7 @@ app.add_middleware(
 )
 
 # Include routers
+app.include_router(auth.router, prefix="/api/v1")
 app.include_router(rag.router)
 app.include_router(drafter.router)
 app.include_router(ocr.router)
