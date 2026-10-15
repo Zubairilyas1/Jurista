@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { CalendarClock, Plus, Search, CheckCircle2, Clock, Calendar, AlertCircle, PhoneCall, X, ExternalLink, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/context/AuthContext';
 
 export default function TrackerPage() {
   const [cases, setCases] = useState<any[]>([]);
@@ -16,11 +17,17 @@ export default function TrackerPage() {
     hearing_date: ''
   });
 
+  const { token } = useAuth();
+
   const fetchCases = async () => {
     setIsLoading(true);
     let apiCases = [];
     try {
-      const res = await fetch('http://127.0.0.1:8001/api/v1/cause-list');
+      const res = await fetch('http://127.0.0.1:8001/api/v1/tracker/cases', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (res.ok) {
         const data = await res.json();
         apiCases = data.cases || [];
@@ -46,8 +53,23 @@ export default function TrackerPage() {
     fetchCases();
   }, []);
 
-  const handleManualSubmit = (e: React.FormEvent) => {
+  const handleManualSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Attempt to save to backend
+    try {
+      await fetch('http://127.0.0.1:8001/api/v1/tracker/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(newCase)
+      });
+    } catch (err) {
+      console.error("Failed to save to backend", err);
+    }
+
     const newEntry = { 
       ...newCase, 
       id: `manual_${Date.now()}`,
@@ -56,7 +78,7 @@ export default function TrackerPage() {
     const updatedCases = [...cases, newEntry];
     setCases(updatedCases);
     
-    // Save to localStorage
+    // Save to localStorage as fallback
     const local = localStorage.getItem('jurista_manual_cases');
     let manualCases = [];
     if (local) {
